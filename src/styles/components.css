@@ -1,0 +1,23 @@
+@layer components {
+  .autofill-text:-webkit-autofill {
+    -webkit-text-fill-color: white;
+  }
+
+  .form-input {
+    @apply bg-transparent outline-none py-2 px-0 text-lg font-medium w-full border-0 border-b border-inherit focus:ring-transparent focus:border-inherit;
+
+    &:-webkit-autofill {
+      -webkit-box-shadow: 0 0 0px 1000px theme('colors.jet-black') inset;
+      -webkit-text-fill-color: theme('colors.bright-white');
+    }
+  }
+
+  .form-select {
+    @apply bg-transparent bg-right outline-none py-2 px-0 text-lg font-medium w-full border-b border-0 border-inherit focus:ring-transparent focus:border-inherit;
+
+    &:-webkit-autofill {
+      -webkit-box-shadow: 0 0 0px 1000px theme('colors.jet-black') inset;
+      -webkit-text-fill-color: theme('colors.bright-white');
+    }
+  }
+}

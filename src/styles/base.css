@@ -1,0 +1,9 @@
+@layer base {
+  html {
+    @apply scroll-smooth;
+  }
+
+  body {
+    @apply antialiased font-montserrat bg-black text-bright-white;
+  }
+}

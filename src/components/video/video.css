@@ -1,0 +1,14 @@
+.video-player {
+  .video-js.vjs-fluid:not(.vjs-audio-only-mode),
+  .video-js.vjs-16-9:not(.vjs-audio-only-mode),
+  .video-js.vjs-4-3:not(.vjs-audio-only-mode),
+  .video-js.vjs-9-16:not(.vjs-audio-only-mode),
+  .video-js.vjs-1-1:not(.vjs-audio-only-mode) {
+    @apply h-full;
+    /* @apply pt-0; */
+  }
+
+  .video-js video {
+    @apply object-cover;
+  }
+}

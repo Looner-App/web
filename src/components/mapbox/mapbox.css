@@ -1,0 +1,10 @@
+.mapbox {
+  &__map {
+    position: absolute;
+    inset: 0;
+  }
+
+  .mapboxgl-popup-close-button {
+    @apply text-jet-black right-2 top-0 text-xl outline-none hover:bg-transparent hover:opacity-50 transition;
+  }
+}

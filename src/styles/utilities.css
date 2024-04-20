@@ -1,0 +1,21 @@
+@layer utilities {
+  .rich-text {
+    @apply space-y-2;
+
+    p:empty {
+      @apply min-h-1;
+    }
+
+    ol {
+      @apply list-decimal pl-5;
+    }
+
+    ul {
+      @apply list-disc pl-5;
+    }
+
+    a {
+      @apply underline;
+    }
+  }
+}
