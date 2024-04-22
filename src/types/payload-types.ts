@@ -213,6 +213,26 @@ export interface Page {
             blockName?: string | null;
             blockType: 'map-items';
           }
+        | {
+            sectionID?: string | null;
+            title?: {
+              slate?:
+                | {
+                    [k: string]: unknown;
+                  }[]
+                | null;
+              html?: string | null;
+            };
+            id?: string | null;
+            blockName?: string | null;
+            blockType: 'cards';
+            cardsList: {
+              id?: string | null;
+              title?: string;
+              description: string;
+              cardVariant?: ('default' | 'primary' | 'secondary') | null;
+            }[];
+          }
       )[]
     | null;
   meta?: {

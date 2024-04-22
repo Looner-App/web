@@ -23,6 +23,7 @@
   },
   "dependencies": {
     "@headlessui/react": "1.7.18",
+    "classnames": "2.5.1",
     "date-fns": "3.4.0",
     "gsap": "3.12.5",
     "mapbox-gl": "3.2.0",
