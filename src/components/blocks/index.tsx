@@ -5,12 +5,14 @@ import { MapItemsPayload } from './map-items';
 import { TextContentPayload } from './text-content';
 
 import { CardsPayload } from './cards';
+import { RoadmapPayload } from './roadmap';
 
 const blockComponents = {
   'intro-content': IntroContentPayload,
   'map-items': MapItemsPayload,
   'text-content': TextContentPayload,
   cards: CardsPayload,
+  roadmap: RoadmapPayload,
 };
 
 export const Blocks: React.FC<{

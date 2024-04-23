@@ -7,5 +7,10 @@ interface CardsPayloadProps {
 }
 
 export const CardsPayload = ({ data, id }: CardsPayloadProps) => {
-  return <Cards data={data} id={id} />;
+  const dataPayload = {
+    title: data.title?.html || undefined,
+    description: data.description?.html || undefined,
+    cardsList: data.cardsList,
+  };
+  return <Cards data={dataPayload} id={id} />;
 };

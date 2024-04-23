@@ -226,12 +226,27 @@ export interface Page {
             id?: string | null;
             blockName?: string | null;
             blockType: 'cards';
+            description?: {
+              slate?:
+                | {
+                    [k: string]: unknown;
+                  }[]
+                | null;
+              html?: string | null;
+            };
             cardsList: {
-              id?: string | null;
-              title?: string;
+              title: string;
               description: string;
               cardVariant?: ('default' | 'primary' | 'secondary') | null;
             }[];
+          }
+        | {
+            sectionID?: string | null;
+            id?: string | null;
+            blockName?: string | null;
+            blockType: 'roadmap';
+            image: string | Media;
+            imageMobile: string | Media;
           }
       )[]
     | null;
