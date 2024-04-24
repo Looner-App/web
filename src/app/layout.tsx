@@ -1,5 +1,5 @@
 import type { Metadata, Viewport } from 'next';
-import { Header } from '@/components/layout';
+import { Footer, Header } from '@/components/layout';
 import { MenuProvider } from '@/libs/context';
 import { mergeStyle } from '@/libs/helper';
 import { fonts } from '@/fonts';
@@ -29,7 +29,7 @@ export default function RootLayout({
           <div className="min-h-[calc(100vh-120px)] flex flex-col justify-center">
             <main className="w-full">{children}</main>
           </div>
-          {/* <Footer /> */}
+          <Footer />
         </MenuProvider>
       </body>
     </html>

@@ -26,19 +26,9 @@ export const Cards = ({ data, className, ...props }: CardsProps) => {
       className={classnames(className, `container my-10 px-14 text-white`)}
       {...props}
     >
-      {title && (
-        <div
-          className="text-2xl md:text-4xl xl:text-6xl leading-normal md:leading-tight xl:leading-tight tracking-wider font-extrabold"
-          dangerouslySetInnerHTML={{ __html: title }}
-        />
-      )}
+      {title && <div dangerouslySetInnerHTML={{ __html: title }} />}
 
-      {description && (
-        <div
-          className="text-sm md:text-2xl mt-4 md:mt-8 md:leading-normal"
-          dangerouslySetInnerHTML={{ __html: description }}
-        />
-      )}
+      {description && <div dangerouslySetInnerHTML={{ __html: description }} />}
 
       <ul className="grid lg:grid-flow-col gap-6 text-center">
         {Children.toArray(

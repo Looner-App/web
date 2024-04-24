@@ -191,6 +191,9 @@ export interface Page {
                     archive?: string | null;
                     url?: string | null;
                     label: string;
+                    displayIcon: boolean;
+                    icon?: string | null;
+                    iconPosition?: ('left' | 'right') | null;
                   };
                   id?: string | null;
                 }[]
@@ -198,6 +201,8 @@ export interface Page {
             id?: string | null;
             blockName?: string | null;
             blockType: 'intro-content';
+            cardVariant?: ('default' | 'primary' | 'secondary') | null;
+            imagePosition?: ('left' | 'right') | null;
           }
         | {
             sectionID?: string | null;

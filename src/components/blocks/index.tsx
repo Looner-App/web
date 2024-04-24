@@ -21,7 +21,7 @@ export const Blocks: React.FC<{
   const hasBlocks = blocks && Array.isArray(blocks) && blocks.length > 0;
 
   return (
-    <>
+    <div className="flex flex-col gap-52">
       {hasBlocks &&
         blocks.map((block, _i) => {
           const { sectionID, blockType } = block;
@@ -48,6 +48,6 @@ export const Blocks: React.FC<{
             );
           }
         })}
-    </>
+    </div>
   );
 };
