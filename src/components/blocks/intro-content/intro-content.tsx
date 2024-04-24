@@ -34,7 +34,7 @@ export const IntroContent = ({ data, ...props }: IIntroContent) => {
       >
         <div
           className={classNames(`flex flex-col gap-12`, {
-            'items-center': !data.image,
+            'items-center justify-center': !data.image,
           })}
         >
           {data.title && (

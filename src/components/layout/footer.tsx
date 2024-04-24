@@ -5,10 +5,15 @@ import { LinkPayload } from '@/components/link';
 export const Footer = async () => {
   const settings = await getGlobal({ slug: `settings` });
   const socialLinks = settings?.socialLinks;
+  const header = await getGlobal({ slug: `header` });
 
   return (
     <footer className="bg-jet-black border-t mt-10">
-      <div className="container py-10">
+      <div className="container py-10 flex space-x-12 justify-between">
+        <div>
+          &copy; {new Date().getFullYear()} {header?.logo?.title} all rights
+          reserved
+        </div>
         {socialLinks && (
           <ul className="flex justify-center space-x-8 text-2xl">
             {socialLinks.instagram && (

@@ -14,53 +14,70 @@ export const ImagePayload = ({
   blur = true,
   ...props
 }: IImagePayload) => {
-  let imageUrl = ``;
-  let width = 0;
-  let height = 0;
-
-  // Get image props by sizes
   if (typeof src !== `string`) {
-    const { sizes, base64, alt: srcAlt } = src;
+    let url = src.url;
+    let width = src.width;
+    let height = src.height;
 
-    if (sizes && size !== `full`) {
-      const imageSize = sizes[size];
-      if (imageSize) {
-        imageUrl = imageSize.url || ``;
-        width = imageSize.width || 0;
-        height = imageSize.height || 0;
-      }
-    } else {
-      // Fallback to 'large' if size not found or 'full'
-      const imageSize = sizes ? sizes[`large`] : undefined;
-      if (imageSize) {
-        imageUrl = imageSize.url || ``;
-        width = imageSize.width || 0;
-        height = imageSize.height || 0;
-      }
+    // Get image props by sizes
+    switch (size) {
+      case `thumbnail`:
+        if (src.sizes?.thumbnail?.url) {
+          url = src.sizes.thumbnail.url;
+        }
+        if (src.sizes?.thumbnail?.width) {
+          width = src.sizes.thumbnail.width;
+        }
+        if (src.sizes?.thumbnail?.height) {
+          height = src.sizes.thumbnail.height;
+        }
+        break;
+      case `medium`:
+        if (src.sizes?.medium?.url) {
+          url = src.sizes.medium.url;
+        }
+        if (src.sizes?.medium?.width) {
+          width = src.sizes.medium.width;
+        }
+        if (src.sizes?.medium?.height) {
+          height = src.sizes.medium.height;
+        }
+        break;
+      case `large`:
+        if (src.sizes?.large?.url) {
+          url = src.sizes.large.url;
+        }
+        if (src.sizes?.large?.width) {
+          width = src.sizes.large.width;
+        }
+        if (src.sizes?.large?.height) {
+          height = src.sizes.large.height;
+        }
+        break;
+    }
+
+    // Set image width & height when no fill
+    if (!props.fill && !props.width && !props.height) {
+      width && (props.width = width);
+      height && (props.height = height);
     }
 
     // Set image placeholder image base64
-    if (blur && base64) {
-      props.blurDataURL = base64;
+    if (blur && src.base64) {
+      props.blurDataURL = src.base64;
       props.placeholder = `blur`;
     }
 
     // Set alt from payload image data if empty
-    if (!alt) alt = srcAlt;
+    if (!alt) alt = src.alt;
 
     // Set src url image
-    src = imageUrl;
+    src = String(url);
   }
 
   // Prevent payload deleted images return string ID
   if (typeof src === `string` && src[0] !== `/` && !src.includes(`http`)) {
     src = ``;
-  }
-
-  // Set image width & height when no fill
-  if (!props.fill && !props.width && !props.height) {
-    props.width = width;
-    props.height = height;
   }
 
   return <Image src={src} alt={alt} {...props} />;
