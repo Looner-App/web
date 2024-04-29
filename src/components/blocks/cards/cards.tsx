@@ -32,7 +32,7 @@ export const Cards = ({ data, className, ...props }: CardsProps) => {
 
       <ul className="grid lg:grid-flow-col gap-6 text-center">
         {Children.toArray(
-          data.cardsList.map((card) => (
+          (data.cardsList || []).map((card) => (
             <li className="p-8">
               <Card title={card.title} description={card.description} />
             </li>

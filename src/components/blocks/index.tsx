@@ -2,17 +2,17 @@ import { Page } from '@/types/payload-types';
 
 import { IntroContentPayload } from './intro-content';
 import { MapItemsPayload } from './map-items';
-import { TextContentPayload } from './text-content';
 
 import { CardsPayload } from './cards';
 import { RoadmapPayload } from './roadmap';
+import { LeaderboardPayload } from './roadmap copy';
 
 const blockComponents = {
   'intro-content': IntroContentPayload,
   'map-items': MapItemsPayload,
-  'text-content': TextContentPayload,
   cards: CardsPayload,
   roadmap: RoadmapPayload,
+  leaderboard: LeaderboardPayload,
 };
 
 export const Blocks: React.FC<{

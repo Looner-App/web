@@ -20,10 +20,7 @@ export const IntroContentPayload = ({ data, id }: IBlockPayload) => {
         ? data.image.caption.html
         : undefined,
     imagePosition: data.imagePosition || undefined,
-    displayIcon:
-      data.links && data.links.length > 0
-        ? data.links[0].link.displayIcon
-        : false,
+    displayIcon: data?.links?.[0]?.link?.displayIcon || false,
     icon:
       data.links && data.links.length > 0 ? data.links[0].link.icon : undefined,
     iconPosition:

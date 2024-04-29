@@ -7,8 +7,8 @@ import classnames from 'classnames';
 export type RoadmapProps = React.HTMLAttributes<HTMLElement> & {
   data: {
     id?: string | null;
-    image: string | Media;
-    imageMobile: string | Media;
+    image?: string | Media | null;
+    imageMobile?: string | Media | null;
   };
 };
 
@@ -19,7 +19,7 @@ export const Roadmap = ({ className, data, ...props }: RoadmapProps) => {
       {...props}
     >
       <div className="max-lg:hidden">
-        {typeof data.image === `object` && (
+        {data.image && typeof data.image === `object` && (
           <figure>
             <ImagePayload
               src={data.image}
@@ -32,7 +32,7 @@ export const Roadmap = ({ className, data, ...props }: RoadmapProps) => {
         )}
       </div>
       <div className="lg:hidden">
-        {typeof data.image === `object` && (
+        {data.imageMobile && typeof data.imageMobile === `object` && (
           <figure>
             <ImagePayload
               src={data.imageMobile}

@@ -14,12 +14,19 @@ export interface Config {
     media: Media;
     users: User;
     redirects: Redirect;
+    mints: Mint;
+    'deploy-collection': DeployCollection;
+    'rewards-program': RewardsProgram;
+    referral: Referral;
+    points: Points;
     'payload-preferences': PayloadPreference;
     'payload-migrations': PayloadMigration;
   };
   globals: {
     settings: Settings;
     header: Header;
+    owlProtocol: OwlProtocol;
+    core: Core;
   };
 }
 /**
@@ -60,6 +67,36 @@ export interface Category {
   slug?: string | null;
   title: string;
   shortTitle?: string | null;
+  deployedCollection?: (string | null) | DeployCollection;
+  rewardProgram?: (string | null) | RewardsProgram;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "deploy-collection".
+ */
+export interface DeployCollection {
+  id: string;
+  title: string;
+  details: {
+    name: string;
+    symbol: string;
+    collectionAddress?: string | null;
+  };
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "rewards-program".
+ */
+export interface RewardsProgram {
+  id: string;
+  title: string;
+  details: {
+    pointsPerClaim: number;
+  };
   updatedAt: string;
   createdAt: string;
 }
@@ -126,6 +163,9 @@ export interface User {
   roles?: ('admin' | 'user')[] | null;
   createdAt: string;
   updatedAt: string;
+  address?: string | null;
+  referralCode?: string | null;
+  invitationReferralCode?: string | null;
   email: string;
   resetPasswordToken?: string | null;
   resetPasswordExpiration?: string | null;
@@ -148,20 +188,6 @@ export interface Page {
     | (
         | {
             sectionID?: string | null;
-            content?: {
-              slate?:
-                | {
-                    [k: string]: unknown;
-                  }[]
-                | null;
-              html?: string | null;
-            };
-            id?: string | null;
-            blockName?: string | null;
-            blockType: 'text-content';
-          }
-        | {
-            sectionID?: string | null;
             title?: {
               slate?:
                 | {
@@ -171,6 +197,7 @@ export interface Page {
               html?: string | null;
             };
             image?: string | Media | null;
+            imagePosition?: ('left' | 'right') | null;
             desc?: {
               slate?:
                 | {
@@ -191,18 +218,17 @@ export interface Page {
                     archive?: string | null;
                     url?: string | null;
                     label: string;
-                    displayIcon: boolean;
+                    displayIcon?: boolean | null;
                     icon?: string | null;
                     iconPosition?: ('left' | 'right') | null;
                   };
                   id?: string | null;
                 }[]
               | null;
+            cardVariant?: ('default' | 'primary' | 'secondary') | null;
             id?: string | null;
             blockName?: string | null;
             blockType: 'intro-content';
-            cardVariant?: ('default' | 'primary' | 'secondary') | null;
-            imagePosition?: ('left' | 'right') | null;
           }
         | {
             sectionID?: string | null;
@@ -228,9 +254,6 @@ export interface Page {
                 | null;
               html?: string | null;
             };
-            id?: string | null;
-            blockName?: string | null;
-            blockType: 'cards';
             description?: {
               slate?:
                 | {
@@ -239,19 +262,32 @@ export interface Page {
                 | null;
               html?: string | null;
             };
-            cardsList: {
-              title: string;
-              description: string;
-              cardVariant?: ('default' | 'primary' | 'secondary') | null;
-            }[];
+            cardsList?:
+              | {
+                  title: string;
+                  description: string;
+                  cardVariant?: ('default' | 'primary' | 'secondary') | null;
+                  id?: string | null;
+                }[]
+              | null;
+            id?: string | null;
+            blockName?: string | null;
+            blockType: 'cards';
           }
         | {
             sectionID?: string | null;
+            image?: string | Media | null;
+            imageMobile?: string | Media | null;
             id?: string | null;
             blockName?: string | null;
             blockType: 'roadmap';
-            image: string | Media;
-            imageMobile: string | Media;
+          }
+        | {
+            sectionID?: string | null;
+            rewardsProgram?: (string | null) | RewardsProgram;
+            id?: string | null;
+            blockName?: string | null;
+            blockType: 'leaderboard';
           }
       )[]
     | null;
@@ -279,6 +315,44 @@ export interface Redirect {
     } | null;
     url?: string | null;
   };
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "mints".
+ */
+export interface Mint {
+  id: string;
+  tokenId?: string | null;
+  claimable?: (string | null) | Item;
+  user?: (string | null) | User;
+  category?: (string | null) | Category;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "referral".
+ */
+export interface Referral {
+  id: string;
+  title?: string | null;
+  referralCode?: string | null;
+  points?: number | null;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "points".
+ */
+export interface Points {
+  id: string;
+  user?: (string | null) | User;
+  rewardProgram?: (string | null) | RewardsProgram;
+  rewardsPointsEarned?: number | null;
+  claimable?: (string | null) | Item;
   updatedAt: string;
   createdAt: string;
 }
@@ -355,11 +429,37 @@ export interface Header {
             archive?: string | null;
             url?: string | null;
             label: string;
+            displayIcon?: boolean | null;
+            icon?: string | null;
+            iconPosition?: ('left' | 'right') | null;
           };
           id?: string | null;
         }[]
       | null;
   };
+  updatedAt?: string | null;
+  createdAt?: string | null;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "owlProtocol".
+ */
+export interface OwlProtocol {
+  id: string;
+  API: string;
+  xApiKey: string;
+  projectId: string;
+  chainId: number;
+  updatedAt?: string | null;
+  createdAt?: string | null;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "core".
+ */
+export interface Core {
+  id: string;
+  pointsPerReferral: number;
   updatedAt?: string | null;
   createdAt?: string | null;
 }
