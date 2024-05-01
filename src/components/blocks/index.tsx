@@ -5,7 +5,7 @@ import { MapItemsPayload } from './map-items';
 
 import { CardsPayload } from './cards';
 import { RoadmapPayload } from './roadmap';
-import { LeaderboardPayload } from './roadmap copy';
+import { LeaderboardPayload } from './leaderboard';
 
 const blockComponents = {
   'intro-content': IntroContentPayload,
