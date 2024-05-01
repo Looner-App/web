@@ -2,9 +2,15 @@
 
 import classNames from 'classnames';
 
+import {
+  Card as CardComponent,
+  CardProps as CardComponentProps,
+} from '@/components/card/Card';
+
 export type CardProps = React.HTMLAttributes<HTMLElement> & {
   title: string;
   description: string;
+  cardVariant: CardComponentProps['cardVariant'];
 };
 
 export const Card = ({
@@ -14,12 +20,12 @@ export const Card = ({
   ...props
 }: CardProps) => {
   return (
-    <div
+    <CardComponent
       {...props}
-      className={classNames([className, `flex flex-col gap-6 p-6`])}
+      className={classNames([className, `flex flex-col text-center`])}
     >
       <h2 className="font-cyberbang text-3xl leading-normal">{title}</h2>
-      <p className="text-center p-4">{description}</p>
-    </div>
+      <p className="text-center p-4 text-lg">{description}</p>
+    </CardComponent>
   );
 };

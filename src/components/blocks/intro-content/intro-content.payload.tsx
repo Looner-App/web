@@ -29,6 +29,7 @@ export const IntroContentPayload = ({ data, id }: IBlockPayload) => {
         ? data.links[0].link.iconPosition
         : undefined,
     displaySocialMedia: Boolean(data.displaySocialMedia),
+    cardVariant: data.cardVariant,
   };
 
   return <BlockComponent data={dataPayload} id={id} />;

@@ -25,7 +25,7 @@ export default function RootLayout({
       <body className={mergeStyle(`mt-[90px] lg:mt-[100px]`, fonts.variable)}>
         <MenuProvider>
           <Header />
-          <main className="w-full min-h-[calc(100vh-120px)] flex flex-col justify-center pt-30 pb-52">
+          <main className="w-full min-h-[calc(100vh-120px)] flex flex-col h-full mt-40 mb-52">
             {children}
           </main>
           <Footer />

@@ -45,11 +45,15 @@ export const Cards = ({ data, className, ...props }: CardsProps) => {
         )}
       </div>
 
-      <ul className="grid lg:grid-flow-col gap-6 text-center">
+      <ul className="flex lg:space-x-8 max-lg:flex-col max-lg:space-y-8">
         {Children.toArray(
           (data.cardsList || []).map((card) => (
             <li>
-              <Card title={card.title} description={card.description} />
+              <Card
+                title={card.title}
+                description={card.description}
+                cardVariant={card.cardVariant}
+              />
             </li>
           )),
         )}
