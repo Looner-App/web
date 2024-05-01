@@ -21,6 +21,7 @@ export const Card = ({
             alt="Card Background"
             fill
             className="w-full h-full object-fill object-center container"
+            quality={100}
           />
         )}
 
@@ -30,6 +31,7 @@ export const Card = ({
             alt="Card Background"
             fill
             className="w-full h-full object-fill object-center"
+            quality={100}
           />
         )}
       </div>

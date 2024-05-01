@@ -1,7 +1,13 @@
-import { getUser } from '@/libs/api';
+import { get, getUser } from '@/libs/api';
 import { Image } from '@/components/image';
 import { ButtonLogout } from './button-logout';
 import { MenuItem } from './menu-item';
+import { AvatarThumbnail } from '@/components/avatar/Thumbnail';
+import { Card } from '@/components/card';
+import { BsBoxArrowInRight } from 'react-icons/bs';
+import { headers } from 'next/headers';
+import { ButtonReferral } from './button-referral';
+import { Points } from '@/types/payload-types';
 
 export default async function Layout({
   children,
@@ -9,9 +15,46 @@ export default async function Layout({
   children: React.ReactNode;
 }) {
   const user = await getUser();
-  const userID = Number(user?.id);
+
+  const doc = await get(`points`, {
+    where: {
+      user: {
+        equals: user?.id,
+      },
+    },
+  });
+
+  const points: Points[] = doc.docs;
+
+  const myPoints = points.reduce(
+    (acc, curr) => acc + (curr.rewardsPointsEarned || 0),
+    0,
+  );
+
+  const { referralPoints, rewardsProgramPoints } = points.reduce(
+    (acc, curr) => {
+      acc.referralPoints +=
+        curr.referrals?.reduce(
+          (acc, curr) => acc + (curr.rewardsPointsEarned || 0),
+          0,
+        ) || 0;
+      acc.rewardsProgramPoints +=
+        curr.claims?.reduce(
+          (acc, curr) => acc + (curr.rewardsPointsEarned || 0),
+          0,
+        ) || 0;
+      return acc;
+    },
+    {
+      referralPoints: 0,
+      rewardsProgramPoints: 0,
+    },
+  );
+
   const name = String(user?.name);
-  const country = user?.country || `-`;
+
+  /// get the url from
+  const host = headers().get(`host`);
 
   const menuItems = [
     {
@@ -27,58 +70,68 @@ export default async function Layout({
   ];
 
   return (
-    <div className="container overflow-hidden py-5">
-      <div className="space-y-5 md:space-y-0 md:flex md:space-x-5 lg:space-x-10">
-        <div className="bg-jet-black rounded-md p-8 md:flex-shrink h-fit border">
-          <div className="flex md:flex-col space-x-5 md:space-x-0 md:space-y-8">
-            <div>
-              <Image
-                src={`https://robohash.org/${userID}`}
-                alt={name}
-                width={180}
-                height={180}
-                className="rounded-full overflow-hidden max-w-[70px] md:max-w-none mx-auto"
-                priority
-              />
-              <a
-                href="https://robohash.org"
-                target="_blank"
-                className="block text-center mt-3 text-[8px] md:text-[10px]"
-              >
-                © Robohash.org
-              </a>
+    <div className="container grid grid-cols-12 max-lg:gap-y-12 lg:gap-x-12">
+      <div className="col-span-12 lg:col-span-4">
+        <Card cardVariant={`secondary`} className="bg-zinc-900">
+          <div className="grid grid-cols-12 p-8 gap-y-6 gap-x-4">
+            <div className="col-span-6 lg:col-span-5 flex">
+              <AvatarThumbnail user={user} width={180} height={180} />
             </div>
-
-            <div className="flex flex-col md:space-y-2">
-              <div className="text-lg">
-                Hello, <span className="font-black">{name}</span>
-              </div>
-              <div className="text-sm">{country}</div>
-            </div>
-          </div>
-
-          <div className="mt-6">
-            <ButtonLogout className="w-full text-xs border border-white text-white transition duration-300 hocustive:bg-white hocustive:text-jet-black uppercase font-medium rounded px-4 py-2" />
-          </div>
-        </div>
-
-        <div className="md:flex-grow space-y-5 flex flex-col overflow-x-hidden">
-          <div className="bg-jet-black rounded-md flex-shrink-0 px-5 py-2 border">
-            <div className="overflow-x-auto py-2">
-              <ul className="flex space-x-5 uppercase text-sm font-bold w-full">
-                {menuItems.map((item, _i) => (
-                  <MenuItem key={_i} href={item.href} segment={item.segment}>
-                    {item.label}
-                  </MenuItem>
-                ))}
+            <div className="col-span-6 lg:col-span-7">
+              <ul className="flex flex-col space-y-4">
+                <li>
+                  <span className="font-black">{name}</span>
+                </li>
+                <li className="flex space-x-4 items-center">
+                  <span>My points</span>
+                  <span>
+                    <Image
+                      src="/point.svg"
+                      alt="point"
+                      width={20}
+                      height={20}
+                    />
+                  </span>
+                  <span className="font-bold">{myPoints}</span>
+                </li>
+                <li>
+                  <ButtonLogout className="text-xs border border-white text-white transition duration-300 hocustive:bg-white hocustive:text-jet-black uppercase font-medium rounded px-3 py-1">
+                    <BsBoxArrowInRight />
+                  </ButtonLogout>
+                </li>
               </ul>
             </div>
+            <div className="col-span-12 mb-6">
+              <ul className="w-full flex flex-col space-y-4">
+                <li className="flex space-x-4 items-center justify-between">
+                  <span>Challenge points</span>
+                  <span className="font-bold">{rewardsProgramPoints}</span>
+                </li>
+                <li className="flex space-x-4 items-center justify-between">
+                  <span>Referral points</span>
+                  <span className="font-bold">{referralPoints}</span>
+                </li>
+              </ul>
+            </div>
+            <div className="col-span-12">
+              <div>
+                <ButtonReferral baseURL={`${host}`} user={user} />
+              </div>
+            </div>
           </div>
-
-          <div className="bg-jet-black rounded-md p-8 flex-grow border">
-            {children}
-          </div>
-        </div>
+        </Card>
+      </div>
+      <div className="col-span-12 lg:col-span-8 flex flex-col space-y-12">
+        <Card cardVariant={`secondary`} className="bg-zinc-900">
+          <ul className="flex space-x-5 uppercase text-sm font-bold w-full p-8">
+            {menuItems.map((item, _i) => (
+              <MenuItem key={_i} href={item.href} segment={item.segment}>
+                {item.label}
+              </MenuItem>
+            ))}
+          </ul>
+        </Card>
+        {children}
       </div>
     </div>
   );

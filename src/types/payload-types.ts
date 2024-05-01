@@ -368,18 +368,18 @@ export interface Referral {
 export interface Points {
   id: string;
   user?: User;
-  rewardsProgram?: (string | null) | RewardsProgram;
+  rewardsProgram?: RewardsProgram;
   rewardsPointsEarned?: number | null;
   claims?:
     | {
-        claimable?: (string | null) | Item;
+        claimable?: Item;
         rewardsPointsEarned?: number | null;
         id?: string | null;
       }[]
     | null;
   referrals?:
     | {
-        referral?: (string | null) | User;
+        referral?: User;
         rewardsPointsEarned?: number | null;
         id?: string | null;
       }[]

@@ -10,7 +10,7 @@ export interface IMapItems extends React.HTMLAttributes<HTMLElement> {
 export const MapItems = ({ data, ...props }: IMapItems) => {
   return (
     <section className="block-map-items" {...props}>
-      <div className="container my-4 lg:my-10 text-white flex flex-col gap-24">
+      <div className="container my-4 lg:my-10 text-white flex flex-col gap-12">
         {data.title && (
           <div
             className="font-cyberbang text-xl lg:text-3xl leading-normal text-center"

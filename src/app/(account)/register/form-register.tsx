@@ -2,8 +2,8 @@
 
 import { LinkPayload } from '@/components/link';
 import { getCountries, mergeStyle } from '@/libs/helper';
-import { useRouter } from 'next/navigation';
-import { useRef, useState } from 'react';
+import { useRouter, useSearchParams } from 'next/navigation';
+import { useEffect, useRef, useState } from 'react';
 import { useForm, SubmitHandler } from 'react-hook-form';
 import ReCAPTCHA from 'react-google-recaptcha';
 
@@ -16,6 +16,7 @@ type Inputs = {
   country: string;
   password: string;
   confirmPassword: string;
+  invitationReferralCode: string;
 };
 
 export interface IFormRegister
@@ -44,10 +45,12 @@ export const FormRegister = ({ data, ...props }: IFormRegister) => {
   const {
     register,
     handleSubmit,
+    setValue,
     formState: { isSubmitting },
   } = useForm<Inputs>();
 
   const router = useRouter();
+  const searchParams = useSearchParams();
 
   const [message, setMessage] = useState(``);
   const [isError, setIsError] = useState(false);
@@ -105,6 +108,14 @@ export const FormRegister = ({ data, ...props }: IFormRegister) => {
     }
   };
 
+  useEffect(() => {
+    const queryParamsFromSearchParams = searchParams.get(`referral`);
+    console.log(queryParamsFromSearchParams);
+    if (queryParamsFromSearchParams) {
+      setValue(`invitationReferralCode`, queryParamsFromSearchParams);
+    }
+  }, [searchParams, setValue]);
+
   return (
     <>
       <form onSubmit={handleSubmit(onSubmit)} {...props}>
@@ -152,6 +163,17 @@ export const FormRegister = ({ data, ...props }: IFormRegister) => {
                   <option key={_i}>{country.name}</option>
                 ))}
               </select>
+            </label>
+          </div>
+
+          <div>
+            <label>
+              <span className="text-sm">Referral Code</span>
+              <input
+                type="text"
+                className="form-input"
+                {...register(`invitationReferralCode`)}
+              />
             </label>
           </div>
 
