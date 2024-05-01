@@ -2,6 +2,7 @@ import * as reactIcons from 'react-icons/bs';
 import { ImagePayload, IImagePayload } from '@/components/image';
 import { LinkPayload, ILinkPayload } from '@/components/link';
 import classNames from 'classnames';
+import { SocialLinks } from '@/components/SocialLinks';
 
 export interface IIntroContent extends React.HTMLAttributes<HTMLElement> {
   data: {
@@ -18,17 +19,20 @@ export interface IIntroContent extends React.HTMLAttributes<HTMLElement> {
   };
 }
 
-export const IntroContent = ({ data, ...props }: IIntroContent) => {
+export const IntroContent = async ({ data, ...props }: IIntroContent) => {
   const Icon = data.icon
     ? reactIcons[data.icon as keyof typeof reactIcons]
     : null;
 
   return (
-    <section className="container grid grid-cols-2 gap-24" {...props}>
+    <section
+      className="container grid grid-cols-2 gap-y-24 lg:gap-x-24"
+      {...props}
+    >
       <div
         className={classNames(`flex items-center w-full`, {
-          'order-1': data.imagePosition === `left`,
-          'order-0': data.imagePosition === `right`,
+          'lg:order-1': data.imagePosition === `left`,
+          'lg:order-0': data.imagePosition === `right`,
           'col-span-2 lg:col-span-1': data.image,
           'col-span-2 justify-center': !data.image,
         })}
@@ -40,7 +44,7 @@ export const IntroContent = ({ data, ...props }: IIntroContent) => {
         >
           {data.title && (
             <div
-              className="font-cyberbang text-5xl lg:text-7xl leading-normal"
+              className="font-cyberbang text-5xl lg:text-7xl leading-normal max-lg:text-center"
               dangerouslySetInnerHTML={{ __html: data.title }}
             />
           )}
@@ -48,7 +52,7 @@ export const IntroContent = ({ data, ...props }: IIntroContent) => {
           {data.desc && (
             <div
               className={classNames([
-                `text-xl leading-8`,
+                `text-xl leading-8 max-lg:text-center`,
                 {
                   'text-center': !data.image,
                   'text-left': data.image,
@@ -59,10 +63,10 @@ export const IntroContent = ({ data, ...props }: IIntroContent) => {
           )}
 
           {data.link && typeof data.link === `object` && (
-            <div className="flex space-x-1">
+            <div className="flex space-x-1 max-lg:items-center max-lg:justify-center">
               <LinkPayload
                 href={data.link}
-                className="bg-azure-blue text-white transition hocustive:bg-white hocustive:text-black rounded-lg font-semibold md:py-3 py-2 md:px-6 px-4 disabled:opacity-50 text-sm md:text-lg flex w-fit items-center space-x-2"
+                className="bg-azure-blue text-white transition hocustive:bg-white hocustive:text-black rounded-lg font-semibold py-3 px-6  disabled:opacity-50 text-lg flex w-fit items-center space-x-2"
               >
                 {data.displayIcon && Icon && (
                   <Icon
@@ -86,6 +90,9 @@ export const IntroContent = ({ data, ...props }: IIntroContent) => {
               </LinkPayload>
             </div>
           )}
+          <div className="flex max-lg:justify-center">
+            {data.displaySocialMedia && <SocialLinks />}
+          </div>
         </div>
       </div>
 
@@ -94,8 +101,8 @@ export const IntroContent = ({ data, ...props }: IIntroContent) => {
           className={classNames(
             `col-span-2 lg:col-span-1 flex items-center justify-center`,
             {
-              'order-0': data.imagePosition === `left`,
-              'order-1': data.imagePosition === `right`,
+              'lg:order-0': data.imagePosition === `left`,
+              'lg:order-1': data.imagePosition === `right`,
             },
           )}
         >

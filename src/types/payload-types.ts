@@ -282,6 +282,22 @@ export interface Page {
             id?: string | null;
             blockName?: string | null;
             blockType: 'roadmap';
+            title?: {
+              slate?:
+                | {
+                    [k: string]: unknown;
+                  }[]
+                | null;
+              html?: string | null;
+            };
+            description?: {
+              slate?:
+                | {
+                    [k: string]: unknown;
+                  }[]
+                | null;
+              html?: string | null;
+            };
           }
         | {
             sectionID?: string | null;

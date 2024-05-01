@@ -27,12 +27,12 @@ export const LeaderboardPoint = async ({
   }, [point.claims]);
 
   return (
-    <tr>
-      <td>{position}</td>
-      <td>{point.user?.name}</td>
-      <td>{challengePoints}</td>
-      <td>{referralPoints}</td>
-      <td>{point.rewardsPointsEarned}</td>
+    <tr className="border-b border-zinc-500">
+      <td className="p-3 text-center text-xl font-bold">{position}</td>
+      <td className="p-3">{point.user?.name}</td>
+      <td className="p-3">{challengePoints}</td>
+      <td className="p-3">{referralPoints}</td>
+      <td className="p-3">{point.rewardsPointsEarned}</td>
     </tr>
   );
 };

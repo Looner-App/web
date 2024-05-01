@@ -10,6 +10,8 @@ export const RoadmapPayload = ({ data, id }: RoadmapPayloadProps) => {
   const dataPayload = {
     image: data.image,
     imageMobile: data.imageMobile,
+    title: data.title?.html || undefined,
+    description: data.description?.html || undefined,
   };
   return <Roadmap data={dataPayload} id={id} />;
 };

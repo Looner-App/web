@@ -25,21 +25,21 @@ export const Cards = ({ data, className, ...props }: CardsProps) => {
     <section
       className={classnames(
         className,
-        `container lg:my-10 lg:px-14 text-white flex flex-col gap-12`,
+        `container lg:my-10 lg:px-14 text-white flex flex-col gap-24`,
       )}
       {...props}
     >
-      <div className="flex flex-col justify-center items-center">
+      <div className="flex flex-col justify-center items-center gap-12">
         {title && (
           <div
-            className="font-cyberbang text-7xl leading-normal text-center"
+            className="font-cyberbang text-5xl lg:text-7xl leading-normal max-lg:text-center"
             dangerouslySetInnerHTML={{ __html: title }}
           />
         )}
 
         {description && (
           <div
-            className="text-xl leading-8 text-center"
+            className="text-xl leading-8 text-center lg:max-w-[28rem]"
             dangerouslySetInnerHTML={{ __html: description }}
           />
         )}
