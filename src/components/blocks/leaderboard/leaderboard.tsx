@@ -3,6 +3,7 @@ import classnames from 'classnames';
 import { Points } from '@/types/payload-types';
 import { Children } from 'react';
 import LeaderboardPoint from './point';
+import ScrollBar from '@/components/Scrollbar';
 
 export type LeaderboardProps = React.HTMLAttributes<HTMLElement> & {
   data: Points[];
@@ -19,7 +20,7 @@ export const Leaderboard = async ({
       {...props}
     >
       <h1 className="text-center">Leaderboard</h1>
-      <div className="w-full">
+      <ScrollBar className="w-full">
         <table className="table-fixed border-separate border-spacing-y-6 max-lg:min-w-[40rem] w-full">
           <thead className="text-left">
             <tr>
@@ -38,7 +39,7 @@ export const Leaderboard = async ({
             )}
           </tbody>
         </table>
-      </div>
+      </ScrollBar>
     </section>
   );
 };
