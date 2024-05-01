@@ -28,5 +28,5 @@ export const LeaderboardPayload = async ({
     sort: `~rewardsPointsEarned`,
   });
 
-  return <Leaderboard data={doc.docs} id={id} />;
+  return <Leaderboard data={doc.docs} cardVariant={data.cardVariant} id={id} />;
 };

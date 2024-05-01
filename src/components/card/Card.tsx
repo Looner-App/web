@@ -23,12 +23,22 @@ export const Card = ({
             className="w-full h-full object-fill object-center container"
           />
         )}
+
+        {cardVariant === `secondary` && (
+          <Image
+            src="/card-background-secondary.png"
+            alt="Card Background"
+            fill
+            className="w-full h-full object-fill object-center"
+          />
+        )}
       </div>
       <div
         className={classNames([
           `relative z-[1]`,
           {
             'p-8 m-8': cardVariant === `primary`,
+            'p-px': cardVariant === `secondary`,
           },
         ])}
       >

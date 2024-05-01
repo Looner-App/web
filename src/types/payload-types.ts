@@ -305,6 +305,7 @@ export interface Page {
             id?: string | null;
             blockName?: string | null;
             blockType: 'leaderboard';
+            cardVariant?: ('default' | 'primary' | 'secondary') | null;
           }
       )[]
     | null;
