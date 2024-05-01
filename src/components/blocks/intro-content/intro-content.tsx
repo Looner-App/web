@@ -44,7 +44,7 @@ export const IntroContent = async ({ data, ...props }: IIntroContent) => {
         >
           {data.title && (
             <div
-              className="font-cyberbang text-5xl lg:text-7xl leading-normal max-lg:text-center"
+              className="font-cyberbang text-5xl lg:text-7xl lg:leading-[1.375] max-lg:text-center"
               dangerouslySetInnerHTML={{ __html: data.title }}
             />
           )}
