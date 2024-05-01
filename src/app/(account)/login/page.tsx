@@ -1,5 +1,6 @@
 import { LinkPayload } from '@/components/link';
 import { FormLogin } from './form-login';
+import { Card } from '@/components/card';
 
 export default async function Login({
   searchParams,
@@ -20,24 +21,25 @@ export default async function Login({
 
   return (
     <div className="container w-fit overflow-hidden py-4">
-      <div className="bg-jet-black p-10 rounded-lg border">
-        <FormLogin data={{ linkRedirect }} />
-
-        <div className="flex mt-10 flex-col space-y-4 items-center text-lg font-medium">
-          <LinkPayload
-            href={linkForgotPassword}
-            className="transition hocustive:opacity-50"
-          >
-            Forgot Password
-          </LinkPayload>
-          <LinkPayload
-            href={linkRegister}
-            className="transition hocustive:opacity-50"
-          >
-            Create Account
-          </LinkPayload>
+      <Card cardVariant={`secondary`} className="bg-zinc-900">
+        <div className="p-8">
+          <FormLogin data={{ linkRedirect }} />
+          <div className="flex mt-10 flex-col space-y-4 items-center text-lg font-medium">
+            <LinkPayload
+              href={linkForgotPassword}
+              className="transition hocustive:opacity-50"
+            >
+              Forgot Password
+            </LinkPayload>
+            <LinkPayload
+              href={linkRegister}
+              className="transition hocustive:opacity-50"
+            >
+              Create Account
+            </LinkPayload>
+          </div>
         </div>
-      </div>
+      </Card>
     </div>
   );
 }

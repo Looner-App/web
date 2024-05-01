@@ -1,3 +1,4 @@
+import { Card } from '@/components/card';
 import { FormRegister } from './form-register';
 
 export default async function Register({
@@ -12,9 +13,11 @@ export default async function Register({
 
   return (
     <div className="container w-fit overflow-hidden py-4">
-      <div className="bg-jet-black p-10 rounded-lg border">
-        <FormRegister data={{ linkRedirect }} />
-      </div>
+      <Card cardVariant={`secondary`} className="bg-zinc-900">
+        <div className="p-8">
+          <FormRegister data={{ linkRedirect }} />
+        </div>
+      </Card>
     </div>
   );
 }

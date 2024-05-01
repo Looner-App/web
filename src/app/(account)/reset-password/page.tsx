@@ -1,5 +1,6 @@
 import { notFound } from 'next/navigation';
 import { FormResetPassword } from './form-reset-password';
+import { Card } from '@/components/card';
 
 export default async function ResetPassword({
   searchParams,
@@ -14,9 +15,11 @@ export default async function ResetPassword({
 
   return (
     <div className="container w-fit overflow-hidden py-4">
-      <div className="bg-jet-black p-10 rounded-lg border">
-        <FormResetPassword data={{ token }} />
-      </div>
+      <Card cardVariant={`secondary`} className="bg-zinc-900">
+        <div className="p-8 text-center">
+          <FormResetPassword data={{ token }} />
+        </div>
+      </Card>
     </div>
   );
 }

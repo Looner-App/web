@@ -1,3 +1,4 @@
+import { Card } from '@/components/card';
 import { FormForgotPassword } from './form-forgot-password';
 
 export default async function ForgotPassword({
@@ -12,9 +13,11 @@ export default async function ForgotPassword({
 
   return (
     <div className="container w-fit overflow-hidden py-4">
-      <div className="bg-jet-black p-10 rounded-lg border">
-        <FormForgotPassword data={{ linkRedirect }} />
-      </div>
+      <Card cardVariant={`secondary`} className="bg-zinc-900">
+        <div className="p-8">
+          <FormForgotPassword data={{ linkRedirect }} />
+        </div>
+      </Card>
     </div>
   );
 }
