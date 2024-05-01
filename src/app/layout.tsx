@@ -23,12 +23,11 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={mergeStyle(`mt-[90px] lg:mt-[100px]`, fonts.variable)}>
-        <div className="bg-grid" />
         <MenuProvider>
           <Header />
-          <div className="min-h-[calc(100vh-120px)] flex flex-col justify-center">
-            <main className="w-full">{children}</main>
-          </div>
+          <main className="w-full min-h-[calc(100vh-120px)] flex flex-col justify-center pt-30 pb-52">
+            {children}
+          </main>
           <Footer />
         </MenuProvider>
       </body>

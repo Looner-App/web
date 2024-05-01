@@ -8,7 +8,7 @@ export const Footer = async () => {
   const header = await getGlobal({ slug: `header` });
 
   return (
-    <footer className="bg-jet-black border-t mt-10">
+    <footer className="bg-gray-950 border-t mt-10">
       <div className="container py-10 flex space-x-12 justify-between">
         <div>
           &copy; {new Date().getFullYear()} {header?.logo?.title} all rights

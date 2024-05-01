@@ -5,5 +5,7 @@
 
   body {
     @apply antialiased font-montserrat bg-black text-bright-white;
+    background-image: url('/background.png');
+    @apply object-contain object-center;
   }
 }

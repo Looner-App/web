@@ -15,7 +15,10 @@ export type RoadmapProps = React.HTMLAttributes<HTMLElement> & {
 export const Roadmap = ({ className, data, ...props }: RoadmapProps) => {
   return (
     <section
-      className={classnames(className, `container my-10 px-14 text-white`)}
+      className={classnames(
+        className,
+        `container lg:my-10 lg:px-14 text-white`,
+      )}
       {...props}
     >
       <div className="max-lg:hidden">

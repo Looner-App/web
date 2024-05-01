@@ -23,17 +23,32 @@ export const Cards = ({ data, className, ...props }: CardsProps) => {
 
   return (
     <section
-      className={classnames(className, `container my-10 px-14 text-white`)}
+      className={classnames(
+        className,
+        `container lg:my-10 lg:px-14 text-white flex flex-col gap-12`,
+      )}
       {...props}
     >
-      {title && <div dangerouslySetInnerHTML={{ __html: title }} />}
+      <div className="flex flex-col justify-center items-center">
+        {title && (
+          <div
+            className="font-cyberbang text-7xl leading-normal text-center"
+            dangerouslySetInnerHTML={{ __html: title }}
+          />
+        )}
 
-      {description && <div dangerouslySetInnerHTML={{ __html: description }} />}
+        {description && (
+          <div
+            className="text-xl leading-8 text-center"
+            dangerouslySetInnerHTML={{ __html: description }}
+          />
+        )}
+      </div>
 
       <ul className="grid lg:grid-flow-col gap-6 text-center">
         {Children.toArray(
           (data.cardsList || []).map((card) => (
-            <li className="p-8">
+            <li>
               <Card title={card.title} description={card.description} />
             </li>
           )),

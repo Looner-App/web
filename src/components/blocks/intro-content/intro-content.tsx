@@ -14,6 +14,7 @@ export interface IIntroContent extends React.HTMLAttributes<HTMLElement> {
     displayIcon: boolean;
     icon?: string | null;
     iconPosition?: ('left' | 'right') | null;
+    displaySocialMedia?: boolean;
   };
 }
 
@@ -25,11 +26,11 @@ export const IntroContent = ({ data, ...props }: IIntroContent) => {
   return (
     <section className="container grid grid-cols-2 gap-24" {...props}>
       <div
-        className={classNames(`flex items-center`, {
+        className={classNames(`flex items-center w-full`, {
           'order-1': data.imagePosition === `left`,
           'order-0': data.imagePosition === `right`,
           'col-span-2 lg:col-span-1': data.image,
-          'col-span-2': !data.image,
+          'col-span-2 justify-center': !data.image,
         })}
       >
         <div
@@ -39,14 +40,20 @@ export const IntroContent = ({ data, ...props }: IIntroContent) => {
         >
           {data.title && (
             <div
-              className="font-cyberbang text-7xl leading-normal"
+              className="font-cyberbang text-5xl lg:text-7xl leading-normal"
               dangerouslySetInnerHTML={{ __html: data.title }}
             />
           )}
 
           {data.desc && (
             <div
-              className="text-xl leading-8"
+              className={classNames([
+                `text-xl leading-8`,
+                {
+                  'text-center': !data.image,
+                  'text-left': data.image,
+                },
+              ])}
               dangerouslySetInnerHTML={{ __html: data.desc }}
             />
           )}
@@ -84,13 +91,16 @@ export const IntroContent = ({ data, ...props }: IIntroContent) => {
 
       {data.image && (
         <div
-          className={classNames(`col-span-2 lg:col-span-1 flex items-center`, {
-            'order-0': data.imagePosition === `left`,
-            'order-1': data.imagePosition === `right`,
-          })}
+          className={classNames(
+            `col-span-2 lg:col-span-1 flex items-center justify-center`,
+            {
+              'order-0': data.imagePosition === `left`,
+              'order-1': data.imagePosition === `right`,
+            },
+          )}
         >
           {typeof data.image === `object` && (
-            <figure>
+            <figure className="p-8">
               <ImagePayload
                 src={data.image}
                 blur={false}

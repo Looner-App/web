@@ -16,7 +16,10 @@ export const Leaderboard = async ({
 }: LeaderboardProps) => {
   return (
     <section
-      className={classnames(className, `container my-10 px-14 text-white`)}
+      className={classnames(
+        className,
+        `container çg:my-10 lg:px-14 text-white`,
+      )}
       {...props}
     >
       <h1 className="text-center">Leaderboard</h1>

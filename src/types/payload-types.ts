@@ -225,6 +225,7 @@ export interface Page {
                   id?: string | null;
                 }[]
               | null;
+            displaySocialMedia?: boolean | null;
             cardVariant?: ('default' | 'primary' | 'secondary') | null;
             id?: string | null;
             blockName?: string | null;
