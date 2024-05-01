@@ -34,8 +34,8 @@ const config: Config = {
       container: {
         center: true,
         padding: {
-          DEFAULT: '1rem',
-          lg: '2rem',
+          DEFAULT: `1rem`,
+          lg: `2rem`,
         },
       },
       fontFamily: {
@@ -43,6 +43,7 @@ const config: Config = {
         'neometric-alt': [`var(--font-neometric-alt)`],
         montserrat: [`var(--font-montserrat)`],
         'montserrat-alt': [`var(--font-montserrat-alt)`],
+        cyberbang: [`var(--font-cyberbang)`],
       },
     },
   },
@@ -58,14 +59,14 @@ const config: Config = {
       strategy: `class`,
     }),
     tailwindPlugin(({ addUtilities, addVariant }) => {
-      addVariant('hocus', ['&:hover', '&:focus']);
-      addVariant('hoctive', ['&:hover', '&:active']);
-      addVariant('foctive', ['&:focus', '&:active']);
-      addVariant('hocustive', ['&:hover', '&:focus', '&:active']);
+      addVariant(`hocus`, [`&:hover`, `&:focus`]);
+      addVariant(`hoctive`, [`&:hover`, `&:active`]);
+      addVariant(`foctive`, [`&:focus`, `&:active`]);
+      addVariant(`hocustive`, [`&:hover`, `&:focus`, `&:active`]);
 
-      addVariant('mobile-menu-open', [
-        '&.mobile-menu-open',
-        '.mobile-menu-open &',
+      addVariant(`mobile-menu-open`, [
+        `&.mobile-menu-open`,
+        `.mobile-menu-open &`,
       ]);
 
       addUtilities({ '.rich-text': {} });

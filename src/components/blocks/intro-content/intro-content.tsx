@@ -23,7 +23,7 @@ export const IntroContent = ({ data, ...props }: IIntroContent) => {
     : null;
 
   return (
-    <section className="container grid grid-cols-2 gap-12" {...props}>
+    <section className="container grid grid-cols-2 gap-24" {...props}>
       <div
         className={classNames(`flex items-center`, {
           'order-1': data.imagePosition === `left`,
@@ -38,10 +38,18 @@ export const IntroContent = ({ data, ...props }: IIntroContent) => {
           })}
         >
           {data.title && (
-            <div dangerouslySetInnerHTML={{ __html: data.title }} />
+            <div
+              className="font-cyberbang text-7xl leading-normal"
+              dangerouslySetInnerHTML={{ __html: data.title }}
+            />
           )}
 
-          {data.desc && <div dangerouslySetInnerHTML={{ __html: data.desc }} />}
+          {data.desc && (
+            <div
+              className="text-xl leading-8"
+              dangerouslySetInnerHTML={{ __html: data.desc }}
+            />
+          )}
 
           {data.link && typeof data.link === `object` && (
             <div className="flex space-x-1">

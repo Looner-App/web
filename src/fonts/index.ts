@@ -2,6 +2,16 @@
 
 import localFont from 'next/font/local';
 
+export const cyberbang = localFont({
+  variable: '--font-cyberbang',
+  display: 'swap',
+  src: [
+    {
+      path: './cyberbang/cyberbang.otf',
+    },
+  ],
+});
+
 export const neometric = localFont({
   variable: '--font-neometric',
   display: 'swap',
@@ -167,6 +177,6 @@ export const montserratAlt = localFont({
 });
 
 export const fonts = {
-  className: `${neometric.className} ${neometricAlt.className} ${montserrat.className} ${montserratAlt.className}`,
-  variable: `${neometric.variable} ${neometricAlt.variable} ${montserrat.variable} ${montserratAlt.variable}`,
+  className: `${neometric.className} ${neometricAlt.className} ${montserrat.className} ${montserratAlt.className} ${cyberbang.className}`,
+  variable: `${neometric.variable} ${neometricAlt.variable} ${montserrat.variable} ${montserratAlt.variable} ${cyberbang.variable}`,
 };
