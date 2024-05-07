@@ -1,3 +1,5 @@
+export const dynamic = `force-dynamic`;
+
 import { Page } from '@/types/payload-types';
 import { Leaderboard } from './leaderboard';
 import { get } from '@/libs/api';

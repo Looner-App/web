@@ -1,0 +1,10 @@
+version: '3'
+services:
+  looner-next-v6:
+    # image: ghcr.io/looner-app/web:main
+    # local image \/
+    image: looner-web:latest
+    ports:
+      - '3000:3000'
+    env_file:
+      - .env
