@@ -19,7 +19,7 @@ RUN yarn build
 
 ## Runtime Image
 FROM base AS runner
-LABEL org.opencontainers.image.source=https://github.com/wellitongervickas/looner-frontend
+LABEL org.opencontainers.image.source=https://github.com/looner-app/web
 ENV NEXT_TELEMETRY_DISABLED 1
 ENV PORT 3000
 ENV NEXT_SHARP_PATH=/usr/local/lib/node_modules/sharp
