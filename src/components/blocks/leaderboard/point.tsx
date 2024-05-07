@@ -2,7 +2,6 @@ import { Points } from '@/types/payload-types';
 import { useMemo } from 'react';
 import Image from 'next/image';
 import { AvatarThumbnail } from '@/components/avatar/Thumbnail';
-
 export type LeaderboardPointProps = {
   position: number;
   point: Points;

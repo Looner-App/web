@@ -19,9 +19,11 @@ export const Card = ({
           <Image
             src="/card-background.png"
             alt="Card Background"
+            sizes="(max-width: 640px) 100vw, (max-width: 1024px) 100vw, 1024px"
             fill
-            className="w-full h-full object-fill object-center container"
+            className="w-full h-full object-fill object-center container "
             quality={100}
+            priority
           />
         )}
 
@@ -30,8 +32,10 @@ export const Card = ({
             src="/card-background-secondary.png"
             alt="Card Background"
             fill
-            className="w-full h-full object-fill object-center"
+            className="w-full h-full object-fill object-center "
+            sizes="(max-width: 640px) 100vw, (max-width: 1024px) 100vw, 1024px"
             quality={100}
+            priority
           />
         )}
       </div>

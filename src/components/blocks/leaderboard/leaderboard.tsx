@@ -1,22 +1,34 @@
 import classnames from 'classnames';
-
-import { Points } from '@/types/payload-types';
-// import { Children } from 'react';
-// import LeaderboardPoint from './point';
+import { RewardsProgram } from '@/types/payload-types';
+import dynamic from 'next/dynamic';
 import ScrollBar from '@/components/Scrollbar';
+
 import {
   Card as CardComponent,
   CardProps as CardComponentProps,
 } from '@/components/card/Card';
 
 export type LeaderboardProps = React.HTMLAttributes<HTMLElement> & {
-  data: Points[];
+  data: {
+    rewardsProgram?: RewardsProgram;
+  };
   cardVariant: CardComponentProps['cardVariant'];
 };
 
+const LeaderboardPoints = dynamic(() => import(`./points`), {
+  ssr: true,
+  loading: () => (
+    <tr>
+      <td colSpan={5} className="bg-zinc-900 p-3 text-center">
+        Loading players...
+      </td>
+    </tr>
+  ),
+});
+
 export const Leaderboard = async ({
   className,
-  // data,
+  data,
   cardVariant,
   ...props
 }: LeaderboardProps) => {
@@ -44,11 +56,7 @@ export const Leaderboard = async ({
               </tr>
             </thead>
             <tbody className="bg-zinc-900">
-              {/* {Children.toArray(
-                data.map((point, index) => (
-                  <LeaderboardPoint point={point} position={index + 1} />
-                )),
-              )} */}
+              <LeaderboardPoints rewardsProgram={data.rewardsProgram} />
             </tbody>
           </table>
         </CardComponent>
