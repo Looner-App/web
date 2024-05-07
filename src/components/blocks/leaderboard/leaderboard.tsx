@@ -1,8 +1,8 @@
 import classnames from 'classnames';
 
 import { Points } from '@/types/payload-types';
-import { Children } from 'react';
-import LeaderboardPoint from './point';
+// import { Children } from 'react';
+// import LeaderboardPoint from './point';
 import ScrollBar from '@/components/Scrollbar';
 import {
   Card as CardComponent,
@@ -16,7 +16,7 @@ export type LeaderboardProps = React.HTMLAttributes<HTMLElement> & {
 
 export const Leaderboard = async ({
   className,
-  data,
+  // data,
   cardVariant,
   ...props
 }: LeaderboardProps) => {
@@ -44,11 +44,11 @@ export const Leaderboard = async ({
               </tr>
             </thead>
             <tbody className="bg-zinc-900">
-              {Children.toArray(
+              {/* {Children.toArray(
                 data.map((point, index) => (
                   <LeaderboardPoint point={point} position={index + 1} />
                 )),
-              )}
+              )} */}
             </tbody>
           </table>
         </CardComponent>

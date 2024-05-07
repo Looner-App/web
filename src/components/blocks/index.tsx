@@ -5,14 +5,14 @@ import { MapItemsPayload } from './map-items';
 
 import { CardsPayload } from './cards';
 import { RoadmapPayload } from './roadmap';
-// import { LeaderboardPayload } from './leaderboard';
+import { LeaderboardPayload } from './leaderboard';
 
 const blockComponents = {
   'intro-content': IntroContentPayload,
   'map-items': MapItemsPayload,
   cards: CardsPayload,
   roadmap: RoadmapPayload,
-  // leaderboard: LeaderboardPayload,
+  leaderboard: LeaderboardPayload,
 };
 
 export const Blocks: React.FC<{
@@ -27,12 +27,12 @@ export const Blocks: React.FC<{
           const { sectionID, blockType } = block;
 
           if (blockType && blockType in blockComponents) {
-            // @ts-expect-error: perbaiki aku
             const Block = blockComponents[blockType];
 
             return (
               <Block
                 key={`block-${_i}`}
+                // @ts-expect-error: perbaiki aku
                 data={block}
                 id={sectionID || undefined}
               />
