@@ -1,6 +1,6 @@
 version: '3'
 services:
-  looner-next-v6:
+  looner-app-web:
     image: ghcr.io/looner-app/web:main
     # or use local image
     # image: looner-web:latest

@@ -3,15 +3,15 @@ import { Page } from '@/types/payload-types';
 import { IntroContentPayload } from './intro-content';
 import { MapItemsPayload } from './map-items';
 
-// import { CardsPayload } from './cards';
-// import { RoadmapPayload } from './roadmap';
+import { CardsPayload } from './cards';
+import { RoadmapPayload } from './roadmap';
 // import { LeaderboardPayload } from './leaderboard';
 
 const blockComponents = {
   'intro-content': IntroContentPayload,
   'map-items': MapItemsPayload,
-  // cards: CardsPayload,
-  // roadmap: RoadmapPayload,
+  cards: CardsPayload,
+  roadmap: RoadmapPayload,
   // leaderboard: LeaderboardPayload,
 };
 
