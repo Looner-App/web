@@ -110,7 +110,6 @@ export const FormRegister = ({ data, ...props }: IFormRegister) => {
 
   useEffect(() => {
     const queryParamsFromSearchParams = searchParams.get(`referral`);
-    console.log(queryParamsFromSearchParams);
     if (queryParamsFromSearchParams) {
       setValue(`invitationReferralCode`, queryParamsFromSearchParams);
     }
