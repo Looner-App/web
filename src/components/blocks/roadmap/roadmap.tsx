@@ -3,6 +3,7 @@
 import { ImagePayload } from '@/components/image';
 import { Media } from '@/types/payload-types';
 import classnames from 'classnames';
+import Stronger from '@/components/Stronger';
 
 export type RoadmapProps = React.HTMLAttributes<HTMLElement> & {
   data: {
@@ -27,10 +28,9 @@ export const Roadmap = ({ className, data, ...props }: RoadmapProps) => {
     >
       <div className="flex flex-col justify-center items-center gap-12">
         {title && (
-          <div
-            className="font-cyberbang text-5xl lg:text-7xl leading-normal max-lg:text-center"
-            dangerouslySetInnerHTML={{ __html: title }}
-          />
+          <div className="font-cyberbang text-5xl lg:text-7xl leading-normal max-lg:text-center">
+            <Stronger message={title} />
+          </div>
         )}
 
         {description && (

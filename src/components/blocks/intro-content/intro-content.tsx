@@ -8,6 +8,7 @@ import {
   Card as CardComponent,
   CardProps as CardComponentProps,
 } from '@/components/card/Card';
+import Stronger from '@/components/Stronger';
 
 export interface IIntroContent extends React.HTMLAttributes<HTMLElement> {
   data: {
@@ -49,8 +50,10 @@ export const IntroContent = async ({ data, ...props }: IIntroContent) => {
             {data.title && (
               <div
                 className="font-cyberbang text-5xl lg:text-7xl lg:leading-[1.375] max-lg:text-center lg:text-left"
-                dangerouslySetInnerHTML={{ __html: data.title }}
-              />
+                // dangerouslySetInnerHTML={{ __html: data.title }}
+              >
+                <Stronger message={data.title} />
+              </div>
             )}
 
             {data.desc && (

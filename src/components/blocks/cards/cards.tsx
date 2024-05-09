@@ -4,6 +4,7 @@ import { Page } from '@/types/payload-types';
 import { Children } from 'react';
 import classnames from 'classnames';
 import { Card } from './card';
+import Stronger from '@/components/Stronger';
 
 type CardsList = Extract<
   NonNullable<Page['layout']>[0],
@@ -31,10 +32,9 @@ export const Cards = ({ data, className, ...props }: CardsProps) => {
     >
       <div className="flex flex-col justify-center items-center gap-12">
         {title && (
-          <div
-            className="font-cyberbang text-5xl lg:text-7xl leading-normal max-lg:text-center"
-            dangerouslySetInnerHTML={{ __html: title }}
-          />
+          <div className="font-cyberbang text-5xl lg:text-7xl leading-normal max-lg:text-center">
+            <Stronger message={title} />
+          </div>
         )}
 
         {description && (

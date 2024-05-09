@@ -1,0 +1,15 @@
+.strongfy {
+  position: static;
+  overflow: hidden;
+}
+
+.strongfy-container {
+  background-image: url('/card-background-secondary.png');
+  object-fit: fill;
+  background-repeat: no-repeat;
+  object-position: center;
+  background-size: 100% 90%;
+  padding: 1rem;
+  background-position: center center;
+  background-origin: border-box;
+}
