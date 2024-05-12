@@ -21,8 +21,7 @@ export default async function Account() {
     },
   });
 
-  const points: Points[] = doc.docs;
-
+  const points: Points[] = doc?.docs || [];
   const data: IClaimedItems['data'] = {
     items: [],
     claims: points.map((point) => point.claims).flat() as Points['claims'],

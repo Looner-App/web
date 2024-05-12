@@ -21,8 +21,7 @@ export const Header = async () => {
     },
   });
 
-  const points: Points[] = doc.docs;
-
+  const points: Points[] = doc?.docs || [];
   const myPoints = points.reduce(
     (acc, curr) => acc + (curr.rewardsPointsEarned || 0),
     0,
