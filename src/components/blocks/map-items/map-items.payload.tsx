@@ -23,30 +23,32 @@ export const MapItemsPayload = async ({ data, id }: IBlockPayload) => {
       // initZoom: 10,
       markers:
         items && items.docs.length
-          ? items.docs.map((item) => ({
-              lng: item.location[0],
-              lat: item.location[1],
-              status: item.claimedBy && item.claimedAt ? `looted` : `live`,
-              title: item.title,
-              desc: item.desc?.html || undefined,
-              image:
-                item.image && typeof item.image === `object`
-                  ? String(item.image.sizes?.large?.url)
+          ? items.docs.map((item) => {
+              return {
+                lng: item.location[0],
+                lat: item.location[1],
+                status: item.claimedBy && item.claimedAt ? `looted` : `live`,
+                title: item.title,
+                desc: item.desc?.html || undefined,
+                image:
+                  item.image && typeof item.image === `object`
+                    ? String(item.image.url)
+                    : undefined,
+                createdAt: new Date(item.createdAt),
+                claimedBy:
+                  typeof item.claimedBy === `object` && item.claimedBy?.name
+                    ? item.claimedBy.name
+                    : undefined,
+                claimedDuration: item.claimedAt
+                  ? formatDistance(item.claimedAt, item.createdAt)
                   : undefined,
-              createdAt: new Date(item.createdAt),
-              claimedBy:
-                typeof item.claimedBy === `object` && item.claimedBy?.name
-                  ? item.claimedBy.name
-                  : undefined,
-              claimedDuration: item.claimedAt
-                ? formatDistance(item.claimedAt, item.createdAt)
-                : undefined,
-              publicUniqueLink: item?.publicUniqueLink || false,
-              uniqueLink:
-                item?.publicUniqueLink && item?.uniqueLink
-                  ? item.uniqueLink
-                  : undefined,
-            }))
+                publicUniqueLink: item?.publicUniqueLink || false,
+                uniqueLink:
+                  item?.publicUniqueLink && item?.uniqueLink
+                    ? item.uniqueLink
+                    : undefined,
+              };
+            })
           : [],
     },
   };
