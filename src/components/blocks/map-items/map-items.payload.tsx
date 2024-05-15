@@ -41,6 +41,11 @@ export const MapItemsPayload = async ({ data, id }: IBlockPayload) => {
               claimedDuration: item.claimedAt
                 ? formatDistance(item.claimedAt, item.createdAt)
                 : undefined,
+              publicUniqueLink: item?.publicUniqueLink || false,
+              uniqueLink:
+                item?.publicUniqueLink && item?.uniqueLink
+                  ? item.uniqueLink
+                  : undefined,
             }))
           : [],
     },

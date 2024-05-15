@@ -37,6 +37,7 @@ export interface Item {
   id: string;
   title: string;
   category: string | Category;
+  publicUniqueLink?: boolean | null;
   barcode?: string | null;
   uniqueLink?: string | null;
   /**
