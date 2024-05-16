@@ -87,7 +87,7 @@ export const Header = async () => {
                           className="border border-zinc-700 rounded-full"
                         />
                       </span>
-                      <span>{myPoints}</span>
+                      <span className="font-sans">{myPoints}</span>
                     </div>
                     <div className="bg-zinc-700 px-2 py-1 rounded-md">
                       <AvatarThumbnail user={user} className="rounded-full" />

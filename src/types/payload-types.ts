@@ -434,6 +434,7 @@ export interface Settings {
     tiktok?: string | null;
     twitter?: string | null;
     youtube?: string | null;
+    telegram?: string | null;
   };
   updatedAt?: string | null;
   createdAt?: string | null;

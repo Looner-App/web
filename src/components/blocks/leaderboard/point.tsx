@@ -29,7 +29,9 @@ export const LeaderboardPoint = async ({
 
   return (
     <tr className="border-b border-zinc-500">
-      <td className="p-3 text-center text-xl font-bold">{position}</td>
+      <th scope="row" className="p-3 text-xl font-bold text-center">
+        {position}
+      </th>
       <td className="p-3 flex space-x-2 items-center">
         <span>
           <AvatarThumbnail user={point?.user} />
@@ -40,7 +42,7 @@ export const LeaderboardPoint = async ({
       <td className="p-3">{referralPoints}</td>
       <td className="p-3 flex space-x-2 items-center">
         <span>
-          <Image src="/loot.svg" alt="loot" width={20} height={20} />
+          <Image src="/point.svg" alt="loot" width={20} height={20} />
         </span>
         <span>{point.rewardsPointsEarned}</span>
       </td>

@@ -43,16 +43,29 @@ export const Leaderboard = async ({
       <h1 className="font-cyberbang text-xl lg:text-3xl leading-normal text-center">
         Leaderboard
       </h1>
-      <ScrollBar className="w-full">
-        <CardComponent cardVariant={cardVariant}>
-          <table className="table-fixed border-collapse max-lg:min-w-[40rem] w-full">
-            <thead className="text-left bg-zinc-700">
+      <ScrollBar className="w-full overflow-x-auto">
+        <CardComponent
+          cardVariant={cardVariant}
+          className="max-lg:min-w-[60rem]"
+        >
+          <table className="table-auto border-collapse w-full text-left rtl:text-right">
+            <thead className="bg-zinc-700">
               <tr>
-                <th className="p-3 text-center">Rank</th>
-                <th className="p-3">Player</th>
-                <th className="p-3">Challege points</th>
-                <th className="p-3">Referral points</th>
-                <th className="p-3">Total points</th>
+                <th scope="col" className="p-3 text-center">
+                  Rank
+                </th>
+                <th scope="col" className="p-3">
+                  Player
+                </th>
+                <th scope="col" className="p-3">
+                  Challege points
+                </th>
+                <th scope="col" className="p-3">
+                  Referral points
+                </th>
+                <th scope="col" className="p-3">
+                  Total points
+                </th>
               </tr>
             </thead>
             <tbody className="bg-zinc-900">

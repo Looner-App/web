@@ -1,4 +1,10 @@
-import { FaInstagram, FaTiktok, FaXTwitter, FaYoutube } from 'react-icons/fa6';
+import {
+  FaInstagram,
+  FaTelegram,
+  FaTiktok,
+  FaXTwitter,
+  FaYoutube,
+} from 'react-icons/fa6';
 import { getGlobal } from '@/libs/api';
 import { LinkPayload } from '@/components/link';
 
@@ -50,6 +56,17 @@ export const SocialLinks = async () => {
               title="Youtube"
             >
               <FaYoutube />
+            </LinkPayload>
+          </li>
+        )}
+        {socialLinks.telegram && (
+          <li>
+            <LinkPayload
+              href={socialLinks.telegram}
+              target="_blank"
+              title="Telegram"
+            >
+              <FaTelegram />
             </LinkPayload>
           </li>
         )}
