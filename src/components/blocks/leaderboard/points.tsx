@@ -22,7 +22,7 @@ export const Leaderboard = async ({ rewardsProgram }: LeaderboardProps) => {
         },
       ],
     },
-    sort: `~rewardsPointsEarned`,
+    sort: `-rewardsPointsEarned`,
   });
 
   const docs: Points[] = result.docs;
