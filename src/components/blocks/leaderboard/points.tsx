@@ -23,6 +23,7 @@ export const Leaderboard = async ({ rewardsProgram }: LeaderboardProps) => {
       ],
     },
     sort: `-rewardsPointsEarned`,
+    limit: 100,
   });
 
   const docs: Points[] = result.docs;
