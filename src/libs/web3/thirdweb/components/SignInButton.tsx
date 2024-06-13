@@ -27,7 +27,7 @@ export const SignInButton = () => {
           return result.isLoggedIn;
         },
         doLogin: async (params) => {
-          const result = await fetch(`${BASE_API_URL}/api/auth`, {
+          const result = await fetch(`${BASE_API_URL}/api/user/auth`, {
             method: `POST`,
             headers: {
               'Content-Type': `application/json`,
