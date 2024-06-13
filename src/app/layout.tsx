@@ -7,7 +7,7 @@ import '@/styles/app.css';
 
 /// web3 / wallet providers
 import { WalletProvider } from '@/libs/web3/thirdweb/components/Provider';
-import Web3Provider from '@/libs/web3/wagmi/components/Provider';
+import { Web3Provider } from '@/libs/web3/wagmi/components/Provider';
 
 export const metadata: Metadata = {
   title: process.env.NEXT_PUBLIC_SITE_NAME,

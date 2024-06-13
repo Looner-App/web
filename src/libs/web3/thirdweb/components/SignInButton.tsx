@@ -3,10 +3,12 @@
 import { ConnectButton } from 'thirdweb/react';
 import { client } from '@/libs/web3/thirdweb/client';
 import { wallets } from '@/libs/web3/thirdweb/wallets';
-// import { useRouter } from 'next/navigation.js'
+import { useRouter } from 'next/navigation';
+
+const BASE_API_URL = `http://localhost:3001`;
 
 export const SignInButton = () => {
-  // const router = useRouter()
+  const router = useRouter();
   return (
     <ConnectButton
       client={client({ clientId: `4d6615a2994abbcdcc071396807c0140` })}
@@ -17,36 +19,38 @@ export const SignInButton = () => {
         size: `compact`,
         showThirdwebBranding: false,
       }}
-      // auth={{
-      //   isLoggedIn: async () => {
-      //     const result = await fetch(`/api/auth/account`).then((res) =>
-      //       res.json(),
-      //     );
-      //     return result.isLoggedIn;
-      //   },
-      //   doLogin: async (params) => {
-      //     await fetch(`/api/auth/login`, {
-      //       method: `POST`,
-      //       headers: {
-      //         'Content-Type': `application/json`,
-      //       },
-      //       body: JSON.stringify(params),
-      //     }).then((res) => res.json());
+      auth={{
+        isLoggedIn: async () => {
+          const result = await fetch(
+            `${BASE_API_URL}/api/users/auth/account`,
+          ).then((res) => res.json());
+          return result.isLoggedIn;
+        },
+        doLogin: async (params) => {
+          const result = await fetch(`${BASE_API_URL}/api/auth`, {
+            method: `POST`,
+            headers: {
+              'Content-Type': `application/json`,
+            },
+            body: JSON.stringify(params),
+          }).then((res) => res.json());
 
-      //     // if (result.token) {
-      //     //   router.replace('/admin')
-      //     // }
-      //   },
-      //   getLoginPayload: async ({ address }) => {
-      //     const result = await fetch(`/api/auth/login?address=${address}`).then(
-      //       (res) => res.json(),
-      //     );
-      //     return result;
-      //   },
-      //   doLogout: async () => {
-      //     return fetch(`/api/auth/logout`).then((res) => res.json());
-      //   },
-      // }}
+          if (result.token) {
+            router.replace(`/test`);
+          }
+        },
+        getLoginPayload: async ({ address }) => {
+          const result = await fetch(
+            `${BASE_API_URL}/api/users/auth/login?address=${address}`,
+          ).then((res) => res.json());
+          return result;
+        },
+        doLogout: async () => {
+          return fetch(`${BASE_API_URL}/api/users/auth/logout`).then((res) =>
+            res.json(),
+          );
+        },
+      }}
     />
   );
 };
