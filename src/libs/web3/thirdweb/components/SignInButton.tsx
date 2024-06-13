@@ -21,13 +21,16 @@ export const SignInButton = () => {
       }}
       auth={{
         isLoggedIn: async () => {
-          const result = await fetch(
-            `${BASE_API_URL}/api/users/auth/account`,
-          ).then((res) => res.json());
+          const result = await fetch(`${BASE_API_URL}/api/users/auth/account`, {
+            credentials: `include`,
+            // headers: {
+            //   jwt: cookies().get(`jwt`)?.value,
+            // },
+          }).then((res) => res.json());
           return result.isLoggedIn;
         },
         doLogin: async (params) => {
-          const result = await fetch(`${BASE_API_URL}/api/user/auth`, {
+          const result = await fetch(`${BASE_API_URL}/api/users/auth`, {
             method: `POST`,
             headers: {
               'Content-Type': `application/json`,
