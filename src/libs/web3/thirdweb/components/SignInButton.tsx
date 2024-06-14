@@ -5,8 +5,6 @@ import { client } from '@/libs/web3/thirdweb/client';
 import { wallets } from '@/libs/web3/thirdweb/wallets';
 import { useRouter } from 'next/navigation';
 
-const BASE_API_URL = `http://localhost:3001`;
-
 export const SignInButton = () => {
   const router = useRouter();
   return (
@@ -20,17 +18,16 @@ export const SignInButton = () => {
         showThirdwebBranding: false,
       }}
       auth={{
-        isLoggedIn: async () => {
-          const result = await fetch(`${BASE_API_URL}/api/users/auth/account`, {
-            credentials: `include`,
-            // headers: {
-            //   jwt: cookies().get(`jwt`)?.value,
-            // },
+        getLoginPayload: async ({ address }) => {
+          const { data } = await fetch(`/api/auth?address=${address}`, {
+            method: `GET`,
           }).then((res) => res.json());
-          return result.isLoggedIn;
+
+          return data;
         },
+
         doLogin: async (params) => {
-          const result = await fetch(`${BASE_API_URL}/api/users/auth`, {
+          const { data } = await fetch(`/api/auth`, {
             method: `POST`,
             headers: {
               'Content-Type': `application/json`,
@@ -38,20 +35,22 @@ export const SignInButton = () => {
             body: JSON.stringify(params),
           }).then((res) => res.json());
 
-          if (result.token) {
-            router.replace(`/test`);
+          if (data.token) {
+            router.replace(`/account`);
           }
         },
-        getLoginPayload: async ({ address }) => {
-          const result = await fetch(
-            `${BASE_API_URL}/api/users/auth/login?address=${address}`,
-          ).then((res) => res.json());
-          return result;
+
+        isLoggedIn: async () => {
+          const { data } = await fetch(`/api/auth/account`, {
+            method: `GET`,
+          }).then((res) => res.json());
+          return data.isLoggedIn;
         },
+
         doLogout: async () => {
-          return fetch(`${BASE_API_URL}/api/users/auth/logout`).then((res) =>
-            res.json(),
-          );
+          await fetch(`/api/auth/logout`, {
+            method: `GET`,
+          }).then((res) => res.json());
         },
       }}
     />
