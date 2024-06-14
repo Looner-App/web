@@ -82,6 +82,8 @@ export async function POST(request: NextRequest) {
       message,
       data,
     },
-    { status },
+    {
+      status,
+    },
   );
 }

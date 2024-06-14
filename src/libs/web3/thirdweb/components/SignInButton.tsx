@@ -12,14 +12,24 @@ export const SignInButton = () => {
       client={client({ clientId: `4d6615a2994abbcdcc071396807c0140` })}
       wallets={wallets}
       theme={`dark`}
-      connectButton={{ label: `Connect` }}
+      connectButton={{ label: `Passwordless Connect` }}
+      signInButton={{
+        label: `Sign In`,
+      }}
       connectModal={{
         size: `compact`,
         showThirdwebBranding: false,
       }}
+      onConnect={(wallet) => {
+        if (wallet.getAccount()?.address) {
+          setTimeout(() => {
+            router.refresh();
+          }, 500);
+        }
+      }}
       auth={{
         getLoginPayload: async ({ address }) => {
-          const { data } = await fetch(`/api/auth?address=${address}`, {
+          const { data } = await fetch(`/api/users/auth?address=${address}`, {
             method: `GET`,
           }).then((res) => res.json());
 
@@ -27,30 +37,33 @@ export const SignInButton = () => {
         },
 
         doLogin: async (params) => {
-          const { data } = await fetch(`/api/auth`, {
+          await fetch(`/api/users/auth`, {
             method: `POST`,
             headers: {
               'Content-Type': `application/json`,
             },
             body: JSON.stringify(params),
           }).then((res) => res.json());
-
-          if (data.token) {
-            router.replace(`/account`);
-          }
         },
 
         isLoggedIn: async () => {
-          const { data } = await fetch(`/api/auth/account`, {
+          const { data } = await fetch(`/api/users/auth/account`, {
             method: `GET`,
           }).then((res) => res.json());
+
+          if (data.isLoggedIn) {
+            router.push(`/account`);
+          }
+
           return data.isLoggedIn;
         },
 
         doLogout: async () => {
-          await fetch(`/api/auth/logout`, {
-            method: `GET`,
+          await fetch(`/api/users/auth/logout`, {
+            method: `POST`,
           }).then((res) => res.json());
+
+          router.push(`/`);
         },
       }}
     />
