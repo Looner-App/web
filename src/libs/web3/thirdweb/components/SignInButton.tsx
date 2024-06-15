@@ -12,20 +12,13 @@ export const SignInButton = () => {
       client={client({ clientId: `4d6615a2994abbcdcc071396807c0140` })}
       wallets={wallets}
       theme={`dark`}
-      connectButton={{ label: `Passwordless Connect` }}
+      connectButton={{ label: `Connect` }}
       signInButton={{
         label: `Sign In`,
       }}
       connectModal={{
         size: `compact`,
         showThirdwebBranding: false,
-      }}
-      onConnect={(wallet) => {
-        if (wallet.getAccount()?.address) {
-          setTimeout(() => {
-            router.refresh();
-          }, 500);
-        }
       }}
       auth={{
         getLoginPayload: async ({ address }) => {
@@ -37,23 +30,26 @@ export const SignInButton = () => {
         },
 
         doLogin: async (params) => {
-          await fetch(`/api/users/auth`, {
+          const { data } = await fetch(`/api/users/auth`, {
             method: `POST`,
             headers: {
               'Content-Type': `application/json`,
             },
             body: JSON.stringify(params),
           }).then((res) => res.json());
+
+          if (data.token) {
+            setTimeout(() => {
+              router.push(`/account`);
+              router.refresh();
+            }, 500);
+          }
         },
 
         isLoggedIn: async () => {
           const { data } = await fetch(`/api/users/auth/account`, {
             method: `GET`,
           }).then((res) => res.json());
-
-          if (data.isLoggedIn) {
-            router.push(`/account`);
-          }
 
           return data.isLoggedIn;
         },
@@ -63,7 +59,10 @@ export const SignInButton = () => {
             method: `POST`,
           }).then((res) => res.json());
 
-          router.push(`/`);
+          setTimeout(() => {
+            router.push(`/`);
+            router.refresh();
+          }, 500);
         },
       }}
     />

@@ -8,7 +8,6 @@ import { BsBoxArrowInRight } from 'react-icons/bs';
 import { headers } from 'next/headers';
 import { ButtonReferral } from './button-referral';
 import { Points } from '@/types/payload-types';
-import SignInButton from '@/libs/web3/thirdweb/components/SignInButton';
 
 export default async function Layout({
   children,
@@ -120,7 +119,6 @@ export default async function Layout({
               </div>
             </div>
           </div>
-          <SignInButton />
         </Card>
       </div>
       <div className="col-span-12 lg:col-span-8 flex flex-col space-y-12">

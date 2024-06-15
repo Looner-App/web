@@ -12,10 +12,5 @@ export async function POST() {
 
   cookies().delete(`jwt`);
 
-  return Response.json(
-    { message: `Success` },
-    {
-      status: 200,
-    },
-  );
+  return Response.json({ message: `Success` });
 }
