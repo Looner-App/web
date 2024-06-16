@@ -1,6 +1,6 @@
 'use client';
 
-import { getCountries, mergeStyle } from '@/libs/helper';
+import { mergeStyle } from '@/libs/helper';
 import { useState } from 'react';
 import { useForm, SubmitHandler } from 'react-hook-form';
 import { User } from '@/types/payload-types';
@@ -9,10 +9,6 @@ import { useRouter } from 'next/navigation';
 type Inputs = {
   id: string;
   name: string;
-  instagram: string;
-  country: string;
-  password: string;
-  confirmPassword: string;
 };
 
 export interface IFormAccountSettings
@@ -27,7 +23,6 @@ export const FormAccountSettings = ({
   ...props
 }: IFormAccountSettings) => {
   const user = data.user;
-  const countries = getCountries();
 
   const router = useRouter();
 
@@ -35,21 +30,12 @@ export const FormAccountSettings = ({
     register,
     handleSubmit,
     formState: { isSubmitting },
-    resetField,
   } = useForm<Inputs>();
 
   const [message, setMessage] = useState(``);
   const [isError, setIsError] = useState(false);
 
   const onSubmit: SubmitHandler<Inputs> = async (data) => {
-    // Validate change password
-    if (data.password && data.password !== data.confirmPassword) {
-      setIsError(true);
-      setMessage(`Confirm password doesn't match`);
-
-      return;
-    }
-
     try {
       data[`id`] = user.id;
 
@@ -65,9 +51,6 @@ export const FormAccountSettings = ({
         setIsError(false);
         setMessage(result.message);
 
-        resetField(`password`);
-        resetField(`confirmPassword`);
-
         router.refresh();
       } else {
         setIsError(true);
@@ -82,18 +65,6 @@ export const FormAccountSettings = ({
     <form onSubmit={handleSubmit(onSubmit)} {...props}>
       <div className="flex flex-col space-y-6">
         <div>
-          <label className="opacity-30">
-            <span className="text-sm">Email</span>
-            <input
-              type="email"
-              className="form-input"
-              defaultValue={user.email}
-              readOnly
-            />
-          </label>
-        </div>
-
-        <div>
           <label>
             <span className="text-sm">Name</span>
             <input
@@ -101,56 +72,6 @@ export const FormAccountSettings = ({
               className="form-input"
               defaultValue={user.name || ``}
               {...register(`name`)}
-            />
-          </label>
-        </div>
-
-        <div>
-          <label>
-            <span className="text-sm">Instagram</span>
-            <input
-              type="text"
-              className="form-input"
-              defaultValue={user.instagram || ``}
-              {...register(`instagram`)}
-            />
-          </label>
-        </div>
-
-        <div>
-          <label>
-            <span className="text-sm">Country</span>
-            <select
-              className="form-select"
-              defaultValue={user.country || undefined}
-              {...register(`country`)}
-            >
-              <option value="">-</option>
-              {countries.map((country, _i) => (
-                <option key={_i}>{country.name}</option>
-              ))}
-            </select>
-          </label>
-        </div>
-
-        <div>
-          <label>
-            <span className="text-sm">Change Password</span>
-            <input
-              type="password"
-              className="form-input"
-              {...register(`password`)}
-            />
-          </label>
-        </div>
-
-        <div>
-          <label>
-            <span className="text-sm">Confirm Change Password</span>
-            <input
-              type="password"
-              className="form-input"
-              {...register(`confirmPassword`)}
             />
           </label>
         </div>

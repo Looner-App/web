@@ -1,10 +1,8 @@
 import { get, getUser } from '@/libs/api';
 import { Image } from '@/components/image';
-import { ButtonLogout } from './button-logout';
 import { MenuItem } from './menu-item';
 import { AvatarThumbnail } from '@/components/avatar/Thumbnail';
 import { Card } from '@/components/card';
-import { BsBoxArrowInRight } from 'react-icons/bs';
 import { headers } from 'next/headers';
 import { ButtonReferral } from './button-referral';
 import { Points } from '@/types/payload-types';
@@ -93,11 +91,6 @@ export default async function Layout({
                     />
                   </span>
                   <span className="font-bold">{myPoints}</span>
-                </li>
-                <li>
-                  <ButtonLogout className="text-xs border border-white text-white transition duration-300 hocustive:bg-white hocustive:text-jet-black uppercase font-medium rounded px-3 py-1">
-                    <BsBoxArrowInRight />
-                  </ButtonLogout>
                 </li>
               </ul>
             </div>

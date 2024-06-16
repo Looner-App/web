@@ -21,10 +21,9 @@ export const Header = async () => {
   });
 
   const points: Points[] = doc?.docs || [];
-  const myPoints = points.reduce(
-    (acc, curr) => acc + (curr.rewardsPointsEarned || 0),
-    0,
-  );
+  const myPoints = user?.id
+    ? points.reduce((acc, curr) => acc + (curr.rewardsPointsEarned || 0), 0)
+    : 0;
 
   const title = header?.logo.title;
   const logo = header?.logo.image;
@@ -71,6 +70,19 @@ export const Header = async () => {
                     )}
                   </li>
                 ))}
+              {user && (
+                <li>
+                  <LinkPayload
+                    href="/account"
+                    className={mergeStyle(
+                      `relative transition duration-300 before:bg-fade-white before:w-0 before:h-px before:absolute before:-bottom-1 before:left-1/2 before:-translate-x-1/2 before:transition-all before:duration-300`,
+                      `before:hocustive:w-full`,
+                    )}
+                  >
+                    Account
+                  </LinkPayload>
+                </li>
+              )}
             </ul>
             <WalletButton user={user} myPoints={myPoints} />
           </div>
