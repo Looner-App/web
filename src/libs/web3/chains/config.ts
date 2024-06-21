@@ -18,3 +18,20 @@ export const allowedChainsConfig = reduce(
     }),
   {} as { [key: number]: Chain },
 );
+
+export const thirdwebChains = allowedChains.map((chain) => ({
+  name: chain.name,
+  id: chain.id,
+  rpc: chain.rpcUrls.default.http[0],
+  nativeCurrency: chain.nativeCurrency,
+  testnet: !!chain.testnet as true, /// PR: https://github.com/thirdweb-dev/js/pull/3338/files,
+  blockExplorers: chain.blockExplorers?.default
+    ? [
+        {
+          name: chain.blockExplorers.default.name!,
+          url: chain.blockExplorers.default.url!,
+          apiUrl: chain.blockExplorers.default.apiUrl!,
+        },
+      ]
+    : [],
+}));

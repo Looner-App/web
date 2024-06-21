@@ -5,7 +5,7 @@ import { client } from '@/libs/web3/thirdweb/client';
 import { wallets } from '@/libs/web3/thirdweb/wallets';
 import { useRouter } from 'next/navigation';
 import { toEllipsis } from '@/libs/helper';
-import { allowedChains } from '../../chains/config';
+import { thirdwebChains } from '../../chains/config';
 import './signin-button.css';
 
 export const SignInButton = () => {
@@ -19,22 +19,8 @@ export const SignInButton = () => {
         })}
         wallets={wallets}
         theme={`dark`}
-        chains={allowedChains.map((chain) => ({
-          name: chain.name,
-          id: chain.id,
-          rpc: chain.rpcUrls.default.http[0],
-          nativeCurrency: chain.nativeCurrency,
-          testnet: !!chain.testnet as true, /// PR: https://github.com/thirdweb-dev/js/pull/3338/files,
-          blockExplorers: chain.blockExplorers?.default
-            ? [
-                {
-                  name: chain.blockExplorers.default.name!,
-                  url: chain.blockExplorers.default.url!,
-                  apiUrl: chain.blockExplorers.default.apiUrl!,
-                },
-              ]
-            : [],
-        }))}
+        chain={thirdwebChains[0]}
+        chains={thirdwebChains}
         connectButton={{
           label: `Connect`,
           style: {
