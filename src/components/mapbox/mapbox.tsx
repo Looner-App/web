@@ -2,9 +2,9 @@
 
 import { Switch } from '@headlessui/react';
 import { format } from 'date-fns';
-import { useRef, useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import mapboxgl, { MarkerOptions } from 'mapbox-gl';
-import { mergeStyle } from '@/libs/helper';
+import { harversine, mergeStyle } from '@/libs/helper';
 
 import 'mapbox-gl/dist/mapbox-gl.css';
 import './mapbox.css';
@@ -41,10 +41,26 @@ export const Mapbox = ({ data, className, ...props }: IMapbox) => {
   const [showMarkerLive, setMarkerLive] = useState(true);
   const [showMarkerLooted, setMarkerLooted] = useState(true);
 
+  // Check if location is near the user
+
+  const isNearUser = (
+    from: {
+      lat: number;
+      lng: number;
+    },
+    to: {
+      lat: number;
+      lng: number;
+    },
+    threshold = 30,
+  ) => {
+    const distance = harversine(from.lat, from.lng, to.lat, to.lng);
+    return distance <= threshold;
+  };
+
   // Initialize map when component mounts
   useEffect(() => {
     if (!mapContainerRef.current) return;
-
     const map = new mapboxgl.Map({
       container: mapContainerRef.current,
       style:
@@ -53,19 +69,18 @@ export const Mapbox = ({ data, className, ...props }: IMapbox) => {
       center: [initLng, initLat],
       zoom: initZoom,
     });
-
     // Add geolocate control to the map.
-    map.addControl(
-      new mapboxgl.GeolocateControl({
-        positionOptions: {
-          enableHighAccuracy: true,
-        },
-        // When active the map will receive updates to the device's location as it changes.
-        trackUserLocation: true,
-        // Draw an arrow next to the location dot to indicate which direction the device is heading.
-        showUserHeading: true,
-      }),
-    );
+    const geolocate = new mapboxgl.GeolocateControl({
+      positionOptions: {
+        enableHighAccuracy: true,
+      },
+      // When active the map will receive updates to the device's location as it changes.
+      trackUserLocation: true,
+      // Draw an arrow next to the location dot to indicate which direction the device is heading.
+      showUserLocation: false,
+    });
+    // Add to mapbox
+    map.addControl(geolocate);
 
     // Add navigation control (the +/- zoom buttons)
     map.addControl(new mapboxgl.NavigationControl(), `top-right`);
@@ -117,6 +132,31 @@ export const Mapbox = ({ data, className, ...props }: IMapbox) => {
         .addTo(map);
     });
 
+    // listen coords
+    geolocate.on(`geolocate`, (e: any) => {
+      const lat = e?.coords?.latitude;
+      const lng = e?.coords?.longitude;
+      // change html popup content
+      data.markers.forEach((item, _i) => {
+        if (!mapMarkersRef.current[_i] || mapMarkersRef.current[_i] == null) {
+          return;
+        }
+        if (!mapContainerRef.current) return;
+        const _marker = mapMarkersRef.current[_i] as HTMLDivElement;
+        const isNear = isNearUser(
+          { lat: lat, lng: lng },
+          { lat: item.lat, lng: item.lng },
+        );
+        if (isNear) {
+          _marker
+            .getElementsByClassName(`pulse-marker`)[0]
+            .classList.add(`bg-green-500`);
+          _marker
+            .getElementsByClassName(`point-marker`)[0]
+            .classList.add(`bg-green-500`);
+        }
+      });
+    });
     // Clean up on unmount
     return () => map.remove();
   }, []);
@@ -220,8 +260,8 @@ export const Mapbox = ({ data, className, ...props }: IMapbox) => {
               ref={(e) => e && (mapMarkersRef.current[_i] = e)}
               className={`mapbox__marker--live relative flex items-center justify-center h-[14px] w-[14px]`}
             >
-              <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-bright-blue opacity-50" />
-              <span className="relative inline-flex rounded-full h-2/3 w-2/3 bg-bright-blue" />
+              <span className="pulse-marker animate-ping absolute inline-flex h-full w-full rounded-full bg-bright-blue opacity-50" />
+              <span className="point-marker relative inline-flex rounded-full h-2/3 w-2/3 bg-bright-blue" />
             </div>
           ),
         )}
