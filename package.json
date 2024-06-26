@@ -6,6 +6,7 @@
   "license": "MIT",
   "scripts": {
     "dev": "next",
+    "dev:ssl": "next --experimental-https",
     "build": "next build",
     "start": "next start",
     "gas": "next build && next start",
@@ -65,6 +66,7 @@
     "prettier": "3.2.5",
     "tailwind-merge": "2.2.1",
     "tailwindcss": "3.4.1",
+    "types-aframe-react": "1.0.2",
     "typescript": "5.4.2"
   }
 }

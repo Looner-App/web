@@ -6,6 +6,7 @@ import { MapItemsPayload } from './map-items';
 import { CardsPayload } from './cards';
 import { RoadmapPayload } from './roadmap';
 import { LeaderboardPayload } from './leaderboard';
+import { ArExperiencePayload } from './ar-experience';
 
 const blockComponents = {
   'intro-content': IntroContentPayload,
@@ -13,6 +14,7 @@ const blockComponents = {
   cards: CardsPayload,
   roadmap: RoadmapPayload,
   leaderboard: LeaderboardPayload,
+  'ar-experience': ArExperiencePayload,
 };
 
 export const Blocks: React.FC<{
