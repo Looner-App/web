@@ -16,8 +16,8 @@ export const getUser = async (): Promise<User | null> => {
     );
 
     return result?.user || null;
-  } catch {
-    console.log(`Error getting user data.`);
+  } catch (e) {
+    console.log(`Error getting user data.`, e);
     return null;
   }
 };
