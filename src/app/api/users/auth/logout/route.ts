@@ -1,6 +1,7 @@
 import { fetchPayload } from '@/libs/api';
 import { cookies } from 'next/headers';
 
+/// generate payload
 export async function POST() {
   await fetchPayload(`/users/logout`, `POST`, {
     headers: {
@@ -9,10 +10,7 @@ export async function POST() {
     },
   });
 
-  cookies().delete(`payload-token`);
+  cookies().delete(`jwt`);
 
-  return Response.json({
-    message: `Logout success`,
-    data: {},
-  });
+  return Response.json({ message: `Success` });
 }

@@ -8,7 +8,7 @@ export async function middleware(request: NextRequest) {
   // Redirect if user access /account
   if (!user && pathname === `account`) {
     const redirectTo = request.nextUrl.clone();
-    redirectTo.pathname = `/login`;
+    redirectTo.pathname = `/`;
 
     return NextResponse.redirect(redirectTo.toString());
   }
