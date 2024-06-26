@@ -7,7 +7,7 @@ import { ButtonMobileMenu } from './button-mobile-menu';
 import { BackdropMobileMenu } from './backdrop-mobile-menu';
 // import { get, getGlobal, getUser } from '@/libs/api';
 // import { Points } from '@/types/payload-types';
-import { getGlobal, getUser } from '@/libs/api';
+import { getGlobal } from '@/libs/api';
 
 // import dynamic from 'next/dynamic';
 
@@ -22,7 +22,7 @@ import { getGlobal, getUser } from '@/libs/api';
 
 export const Header = async () => {
   const header = await getGlobal({ slug: `header` });
-  const user = await getUser();
+  // const user = await getUser();
   // const doc = await get(`points`, {
   //   where: {
   //     user: {
@@ -81,7 +81,7 @@ export const Header = async () => {
                     )}
                   </li>
                 ))}
-              {user && (
+              {/* {user && (
                 <li>
                   <LinkPayload
                     href="/account"
@@ -93,7 +93,7 @@ export const Header = async () => {
                     Account
                   </LinkPayload>
                 </li>
-              )}
+              )} */}
             </ul>
             {/* <WalletButton user={user} myPoints={myPoints} /> */}
           </div>
