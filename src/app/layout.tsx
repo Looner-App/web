@@ -18,6 +18,7 @@ export const viewport: Viewport = {
 };
 
 export default function RootLayout({
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   children,
 }: {
   children: React.ReactNode;
@@ -29,7 +30,7 @@ export default function RootLayout({
           {/* <SlugLayout> */}
           <Header />
           <main className="w-full min-h-[calc(100vh-120px)] flex flex-col h-full mt-40 mb-52">
-            {children}
+            {/* {children} */}
           </main>
           <Footer />
           {/* </SlugLayout> */}

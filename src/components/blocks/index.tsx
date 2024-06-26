@@ -1,6 +1,6 @@
 import { Page } from '@/types/payload-types';
 
-import { IntroContentPayload } from './intro-content';
+// import { IntroContentPayload } from './intro-content';
 // import { MapItemsPayload } from './map-items';
 
 // import { CardsPayload } from './cards';
@@ -8,7 +8,7 @@ import { IntroContentPayload } from './intro-content';
 // import { LeaderboardPayload } from './leaderboard';
 
 const blockComponents = {
-  'intro-content': IntroContentPayload,
+  // 'intro-content': IntroContentPayload,
   // 'map-items': MapItemsPayload,
   // cards: CardsPayload,
   // roadmap: RoadmapPayload,

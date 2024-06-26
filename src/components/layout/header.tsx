@@ -1,5 +1,3 @@
-'use server';
-
 import { ImagePayload } from '@/components/image';
 import { LinkPayload } from '@/components/link';
 import { mergeStyle } from '@/libs/helper';
@@ -83,8 +81,7 @@ export const Header = async () => {
                     )}
                   </li>
                 ))}
-              {JSON.stringify(user)}
-              {/* {user && (
+              {user && (
                 <li>
                   <LinkPayload
                     href="/account"
@@ -96,7 +93,7 @@ export const Header = async () => {
                     Account
                   </LinkPayload>
                 </li>
-              )} */}
+              )}
               {/* <WalletButton user={user} myPoints={myPoints} /> */}
             </ul>
           </div>
