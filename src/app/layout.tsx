@@ -5,7 +5,7 @@ import { mergeStyle } from '@/libs/helper';
 import { fonts } from '@/fonts';
 import '@/styles/app.css';
 
-// import SlugLayout from '@/components/layout/slug';
+import SlugLayout from '@/components/layout/slug';
 
 export const metadata: Metadata = {
   title: process.env.NEXT_PUBLIC_SITE_NAME,
@@ -26,13 +26,13 @@ export default function RootLayout({
     <html lang="en">
       <body className={mergeStyle(`mt-[90px] lg:mt-[100px]`, fonts.variable)}>
         <MenuProvider>
-          {/* <SlugLayout> */}
-          <Header />
-          <main className="w-full min-h-[calc(100vh-120px)] flex flex-col h-full mt-40 mb-52">
-            {children}
-          </main>
-          <Footer />
-          {/* </SlugLayout> */}
+          <SlugLayout>
+            <Header />
+            <main className="w-full min-h-[calc(100vh-120px)] flex flex-col h-full mt-40 mb-52">
+              {children}
+            </main>
+            <Footer />
+          </SlugLayout>
         </MenuProvider>
       </body>
     </html>
