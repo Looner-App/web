@@ -3,7 +3,6 @@ import { getDoc, getDocs, getHomepageSlug } from '@/libs/api';
 import { Blocks } from '@/components/blocks';
 import { generateMetadataPayload } from '@/libs/helper';
 
-export const dynamic = `force-dynamic`;
 interface PageProps {
   params: { slug: string };
 }
