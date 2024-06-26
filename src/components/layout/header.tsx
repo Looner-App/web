@@ -7,7 +7,19 @@ import { ButtonMobileMenu } from './button-mobile-menu';
 import { BackdropMobileMenu } from './backdrop-mobile-menu';
 import { get, getGlobal, getUser } from '@/libs/api';
 import { Points } from '@/types/payload-types';
-import { WalletButton } from '../wallet/Button';
+
+import dynamic from 'next/dynamic';
+
+const WalletButton = dynamic(() => import(`../wallet/Button`), {
+  ssr: false,
+  loading: () => (
+    <tr>
+      <td colSpan={5} className="bg-zinc-900 p-3 text-center">
+        Loading ...
+      </td>
+    </tr>
+  ),
+});
 
 export const Header = async () => {
   const header = await getGlobal({ slug: `header` });

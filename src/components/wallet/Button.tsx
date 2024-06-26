@@ -37,3 +37,5 @@ export const WalletButton = ({ user, myPoints }: WalletButtonProps) => {
     </div>
   );
 };
+
+export default WalletButton;
