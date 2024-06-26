@@ -1,19 +1,19 @@
 import { Page } from '@/types/payload-types';
 
 import { IntroContentPayload } from './intro-content';
-import { MapItemsPayload } from './map-items';
+// import { MapItemsPayload } from './map-items';
 
-import { CardsPayload } from './cards';
-import { RoadmapPayload } from './roadmap';
-import { LeaderboardPayload } from './leaderboard';
+// import { CardsPayload } from './cards';
+// import { RoadmapPayload } from './roadmap';
+// import { LeaderboardPayload } from './leaderboard';
 
 const blockComponents = {
   'intro-content': IntroContentPayload,
-  'map-items': MapItemsPayload,
-  cards: CardsPayload,
-  roadmap: RoadmapPayload,
-  leaderboard: LeaderboardPayload,
-};
+  // 'map-items': MapItemsPayload,
+  // cards: CardsPayload,
+  // roadmap: RoadmapPayload,
+  // leaderboard: LeaderboardPayload,
+} as any;
 
 export const Blocks: React.FC<{
   blocks: Page['layout'];
@@ -32,7 +32,6 @@ export const Blocks: React.FC<{
             return (
               <Block
                 key={`block-${_i}`}
-                // @ts-expect-error: perbaiki aku
                 data={block}
                 id={sectionID || undefined}
               />
