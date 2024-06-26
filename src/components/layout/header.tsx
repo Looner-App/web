@@ -81,7 +81,8 @@ export const Header = async () => {
                     )}
                   </li>
                 ))}
-              {user && (
+              {JSON.stringify(user)}
+              {/* {user && (
                 <li>
                   <LinkPayload
                     href="/account"
@@ -93,9 +94,9 @@ export const Header = async () => {
                     Account
                   </LinkPayload>
                 </li>
-              )}
+              )} */}
+              {/* <WalletButton user={user} myPoints={myPoints} /> */}
             </ul>
-            {/* <WalletButton user={user} myPoints={myPoints} /> */}
           </div>
           <div className="flex items-center flex-shrink-0 lg:hidden lg:px-10">
             <ButtonMobileMenu />
