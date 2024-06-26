@@ -2,8 +2,10 @@ import { User } from '@/types/payload-types';
 
 export const getUser = async (): Promise<User | null> => {
   try {
-    const result = await fetch(`/users/me`);
-    const user = await result.json();
+    const result = await fetch(
+      `${process.env.NEXT_PUBLIC_SITE_URL}/api/users/me/`,
+    );
+    const { user } = await result.json();
 
     return user;
   } catch (e) {
