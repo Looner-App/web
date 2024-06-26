@@ -1,21 +1,11 @@
 import { User } from '@/types/payload-types';
-import { get } from './payload';
-import { cookies } from 'next/headers';
 
 export const getUser = async (): Promise<User | null> => {
   try {
-    const result = await get(
-      `/users/me`,
-      {},
-      {
-        headers: {
-          Cookie: cookies().toString(),
-        },
-        cache: `no-store`,
-      },
-    );
+    const result = await fetch(`/users/me`);
+    const user = await result.json();
 
-    return result?.user || null;
+    return user;
   } catch (e) {
     console.log(`Error getting user data.`, e);
     return null;
