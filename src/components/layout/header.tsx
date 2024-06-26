@@ -1,3 +1,5 @@
+'use server';
+
 import { ImagePayload } from '@/components/image';
 import { LinkPayload } from '@/components/link';
 import { mergeStyle } from '@/libs/helper';
