@@ -11,7 +11,7 @@ import { Points } from '@/types/payload-types';
 import dynamic from 'next/dynamic';
 
 const WalletButton = dynamic(() => import(`../wallet/Button`), {
-  ssr: true,
+  ssr: false,
   loading: () => (
     <tr>
       <td colSpan={5} className="bg-zinc-900 p-3 text-center">
