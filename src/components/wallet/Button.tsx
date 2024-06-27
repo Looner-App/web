@@ -17,7 +17,7 @@ export const WalletButton = ({ user, myPoints }: WalletButtonProps) => {
   const activeWallet = useActiveWallet();
 
   return (
-    <div className="flex gap-4 items-center justify-center">
+    <div className="flex max-lg:flex-col gap-4 items-center justify-center">
       {user && (
         <LinkPayload
           href="/account"
