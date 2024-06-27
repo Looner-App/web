@@ -154,6 +154,13 @@ export const Mapbox = ({ data, className, ...props }: IMapbox) => {
           _marker
             .getElementsByClassName(`point-marker`)[0]
             .classList.add(`bg-green-500`);
+        } else {
+          _marker
+            .getElementsByClassName(`pulse-marker`)[0]
+            .classList.remove(`bg-green-500`);
+          _marker
+            .getElementsByClassName(`point-marker`)[0]
+            .classList.remove(`bg-green-500`);
         }
       });
     });
