@@ -80,18 +80,9 @@ export const Header = async () => {
                     )}
                   </li>
                 ))}
-              {/* <li className={user ? `` : `hidden`}>
-                <LinkPayload
-                  href="/account"
-                  className={mergeStyle(
-                    `relative transition duration-300 before:bg-fade-white before:w-0 before:h-px before:absolute before:-bottom-1 before:left-1/2 before:-translate-x-1/2 before:transition-all before:duration-300`,
-                    `before:hocustive:w-full`,
-                  )}
-                >
-                  Account
-                </LinkPayload>
-              </li> */}
-              <WalletButton user={user} myPoints={myPoints} />
+              <li>
+                <WalletButton user={user} myPoints={myPoints} />
+              </li>
             </ul>
           </div>
           <div className="flex items-center flex-shrink-0 lg:hidden lg:px-10">
@@ -115,6 +106,9 @@ export const Header = async () => {
                       )}
                     </li>
                   ))}
+                <li>
+                  <WalletButton user={user} myPoints={myPoints} />
+                </li>
               </ul>
             </div>
           </div>
