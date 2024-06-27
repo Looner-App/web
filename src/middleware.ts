@@ -16,7 +16,7 @@ export async function middleware(request: NextRequest) {
     headers.set(`x-remove-min-h`, `1`);
   } else {
     headers.set(`x-is-claim`, `0`);
-    headers.set(`x-remove-min-h`, `o`);
+    headers.set(`x-remove-min-h`, `0`);
   }
   // Redirect if user access /account
   if (!user && pathname === `account`) {
@@ -41,7 +41,7 @@ export async function middleware(request: NextRequest) {
   // Redirect if user access /augmented
   if (!user && pathname === `augmented`) {
     const redirectTo = request.nextUrl.clone();
-    redirectTo.pathname = `/login`;
+    redirectTo.pathname = `/`;
     redirectTo.searchParams.set(
       `redirect`,
       `${process.env.NEXT_PUBLIC_SITE_URL}${request.nextUrl.pathname}`,
@@ -52,6 +52,7 @@ export async function middleware(request: NextRequest) {
 
   // Redirect if user already login
   const routeNotLogin = [
+    ///todo: remove old paths
     `login`,
     `register`,
     `forgot-password`,
