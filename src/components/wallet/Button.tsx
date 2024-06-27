@@ -30,7 +30,7 @@ export const WalletButton = ({ user, myPoints }: WalletButtonProps) => {
         </LinkPayload>
       )}
       {user && activeWallet?.getAccount()?.address ? (
-        <div className="flex space-x-2 items-center">
+        <div className="flex max-lg:flex-col gap-2 items-center">
           <div className="bg-zinc-700 px-2 py-1 rounded-md flex items-center space-x-2">
             <span className="p-px">
               <Image
