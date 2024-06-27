@@ -11,7 +11,7 @@ import { Points } from '@/types/payload-types';
 import dynamic from 'next/dynamic';
 
 const WalletButton = dynamic(() => import(`../wallet/Button`), {
-  ssr: true,
+  ssr: false,
   loading: () => (
     <div className="bg-azure-blue text-white transition hocustive:bg-white hocustive:text-black rounded-lg font-semibold md:py-3 py-2 md:px-6 px-4 disabled:opacity-50 text-sm md:text-lg flex w-fit items-center space-x-2">
       Loading ...
@@ -64,7 +64,7 @@ export const Header = async () => {
             </LinkPayload>
           </div>
           <div className="hidden lg:flex space-x-24 items-center">
-            <ul className="flex space-x-6 font-bold text-lg">
+            <ul className="flex space-x-6 font-bold text-lg items-center justify-end">
               {navMenus &&
                 navMenus?.length > 0 &&
                 navMenus.map((item, _i) => (
@@ -80,7 +80,7 @@ export const Header = async () => {
                     )}
                   </li>
                 ))}
-              <li className={user ? `` : `hidden`}>
+              {/* <li className={user ? `` : `hidden`}>
                 <LinkPayload
                   href="/account"
                   className={mergeStyle(
@@ -90,7 +90,7 @@ export const Header = async () => {
                 >
                   Account
                 </LinkPayload>
-              </li>
+              </li> */}
               <WalletButton user={user} myPoints={myPoints} />
             </ul>
           </div>
