@@ -1,7 +1,6 @@
 import { getUser } from '@/libs/api';
-import { cookies } from 'next/headers';
 
 export async function GET() {
-  const result = await getUser(cookies().toString());
+  const result = await getUser();
   return Response.json(result);
 }
