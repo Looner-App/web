@@ -1,15 +1,14 @@
 import { User } from '@/types/payload-types';
-import { cookies } from 'next/headers';
 import { get } from './payload';
 
-export const getUser = async (): Promise<User | null> => {
+export const getUser = async (cookies: string): Promise<User | null> => {
   if (typeof window === `undefined`) {
     const result = await get(
       `/users/me`,
       {},
       {
         headers: {
-          Cookie: cookies().toString(),
+          Cookie: cookies,
         },
         cache: `no-store`,
       },
