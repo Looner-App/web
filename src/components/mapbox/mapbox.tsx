@@ -2,9 +2,9 @@
 
 import { Switch } from '@headlessui/react';
 import { format } from 'date-fns';
-import { useRef, useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import mapboxgl, { MarkerOptions } from 'mapbox-gl';
-import { mergeStyle } from '@/libs/helper';
+import { harversine, mergeStyle } from '@/libs/helper';
 
 import 'mapbox-gl/dist/mapbox-gl.css';
 import './mapbox.css';
@@ -41,10 +41,26 @@ export const Mapbox = ({ data, className, ...props }: IMapbox) => {
   const [showMarkerLive, setMarkerLive] = useState(true);
   const [showMarkerLooted, setMarkerLooted] = useState(true);
 
+  // Check if location is near the user
+
+  const isNearUser = (
+    from: {
+      lat: number;
+      lng: number;
+    },
+    to: {
+      lat: number;
+      lng: number;
+    },
+    threshold = 30,
+  ) => {
+    const distance = harversine(from.lat, from.lng, to.lat, to.lng);
+    return distance <= threshold;
+  };
+
   // Initialize map when component mounts
   useEffect(() => {
     if (!mapContainerRef.current) return;
-
     const map = new mapboxgl.Map({
       container: mapContainerRef.current,
       style:
@@ -53,29 +69,32 @@ export const Mapbox = ({ data, className, ...props }: IMapbox) => {
       center: [initLng, initLat],
       zoom: initZoom,
     });
-
     // Add geolocate control to the map.
-    map.addControl(
-      new mapboxgl.GeolocateControl({
-        positionOptions: {
-          enableHighAccuracy: true,
-        },
-        // When active the map will receive updates to the device's location as it changes.
-        trackUserLocation: true,
-        // Draw an arrow next to the location dot to indicate which direction the device is heading.
-        showUserHeading: true,
-      }),
-    );
+    const geolocate = new mapboxgl.GeolocateControl({
+      positionOptions: {
+        enableHighAccuracy: true,
+      },
+      // When active the map will receive updates to the device's location as it changes.
+      trackUserLocation: true,
+      // Draw an arrow next to the location dot to indicate which direction the device is heading.
+      showUserLocation: false,
+    });
+    // Add to mapbox
+    map.addControl(geolocate);
 
     // Add navigation control (the +/- zoom buttons)
     map.addControl(new mapboxgl.NavigationControl(), `top-right`);
-
     // Create markers
     data.markers.forEach((item, _i) => {
       if (!mapMarkersRef.current[_i] || mapMarkersRef.current[_i] == null) {
         return;
       }
-
+      const extractUniqueLink = item.uniqueLink?.split(`/`);
+      const uniqueLink = extractUniqueLink?.[extractUniqueLink.length - 1];
+      const linkToAugmented = `/augmented/${uniqueLink}`;
+      //set data-link on mapMarkersRef.current[_i]
+      const mapMark: any = mapMarkersRef.current[_i];
+      mapMark?.setAttribute(`data-id`, uniqueLink);
       new mapboxgl.Marker(mapMarkersRef.current[_i])
         .setLngLat([item.lng, item.lat])
         .setPopup(
@@ -108,7 +127,7 @@ export const Mapbox = ({ data, className, ...props }: IMapbox) => {
                 }
                 ${
                   !item.claimedBy && item.publicUniqueLink
-                    ? `<div class='w-full'><a href="${item.uniqueLink}" class="mt-4 justify-center bg-azure-blue text-white transition hocustive:bg-azure-blue/20 hocustive:text-black rounded-lg font-semibold py-3 px-6  disabled:opacity-50 text-lg flex w-full items-center space-x-2">Claim</a></div>`
+                    ? `<div class='w-full' style="visibility: hidden" id="${uniqueLink}" ><a href="${linkToAugmented}" class="mt-4 justify-center bg-azure-blue text-white transition hocustive:bg-azure-blue/20 hocustive:text-black rounded-lg font-semibold py-3 px-6  disabled:opacity-50 text-lg flex w-full items-center space-x-2">Start AR</a></div>`
                     : ``
                 }
               </div>`,
@@ -116,7 +135,53 @@ export const Mapbox = ({ data, className, ...props }: IMapbox) => {
         )
         .addTo(map);
     });
-
+    // listen coords
+    geolocate.on(`geolocate`, (e: any) => {
+      const lat = e?.coords?.latitude;
+      const lng = e?.coords?.longitude;
+      // change html popup content
+      data.markers.forEach((item, _i) => {
+        if (!mapMarkersRef.current[_i] || mapMarkersRef.current[_i] == null) {
+          return;
+        }
+        if (!mapContainerRef.current) return;
+        const _marker = mapMarkersRef.current[_i] as HTMLDivElement;
+        const isNear = isNearUser(
+          { lat: lat, lng: lng },
+          { lat: item.lat, lng: item.lng },
+        );
+        //get document by id uniqueLink
+        //listne on click
+        _marker.addEventListener(`click`, (e: any) => {
+          const id = e?.target?.offsetParent?.dataset?.id ?? ``;
+          setTimeout(() => {
+            const getEl = document.getElementById(id);
+            if (getEl) {
+              if (!isNear) {
+                getEl.style.visibility = `hidden`;
+              } else {
+                getEl.style.visibility = `visible`;
+              }
+            }
+          }, 100);
+        });
+        if (isNear) {
+          _marker
+            .getElementsByClassName(`pulse-marker`)[0]
+            .classList.add(`bg-green-500`);
+          _marker
+            .getElementsByClassName(`point-marker`)[0]
+            .classList.add(`bg-green-500`);
+        } else {
+          _marker
+            .getElementsByClassName(`pulse-marker`)[0]
+            .classList.remove(`bg-green-500`);
+          _marker
+            .getElementsByClassName(`point-marker`)[0]
+            .classList.remove(`bg-green-500`);
+        }
+      });
+    });
     // Clean up on unmount
     return () => map.remove();
   }, []);
@@ -220,8 +285,8 @@ export const Mapbox = ({ data, className, ...props }: IMapbox) => {
               ref={(e) => e && (mapMarkersRef.current[_i] = e)}
               className={`mapbox__marker--live relative flex items-center justify-center h-[14px] w-[14px]`}
             >
-              <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-bright-blue opacity-50" />
-              <span className="relative inline-flex rounded-full h-2/3 w-2/3 bg-bright-blue" />
+              <span className="pulse-marker animate-ping absolute inline-flex h-full w-full rounded-full bg-bright-blue opacity-50" />
+              <span className="point-marker relative inline-flex rounded-full h-2/3 w-2/3 bg-bright-blue" />
             </div>
           ),
         )}
