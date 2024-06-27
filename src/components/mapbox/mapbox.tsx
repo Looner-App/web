@@ -84,13 +84,17 @@ export const Mapbox = ({ data, className, ...props }: IMapbox) => {
 
     // Add navigation control (the +/- zoom buttons)
     map.addControl(new mapboxgl.NavigationControl(), `top-right`);
-
     // Create markers
     data.markers.forEach((item, _i) => {
       if (!mapMarkersRef.current[_i] || mapMarkersRef.current[_i] == null) {
         return;
       }
-
+      const extractUniqueLink = item.uniqueLink?.split(`/`);
+      const uniqueLink = extractUniqueLink?.[extractUniqueLink.length - 1];
+      const linkToAugmented = `/augmented/${uniqueLink}`;
+      //set data-link on mapMarkersRef.current[_i]
+      const mapMark: any = mapMarkersRef.current[_i];
+      mapMark?.setAttribute(`data-id`, uniqueLink);
       new mapboxgl.Marker(mapMarkersRef.current[_i])
         .setLngLat([item.lng, item.lat])
         .setPopup(
@@ -123,7 +127,7 @@ export const Mapbox = ({ data, className, ...props }: IMapbox) => {
                 }
                 ${
                   !item.claimedBy && item.publicUniqueLink
-                    ? `<div class='w-full'><a href="${item.uniqueLink}" class="mt-4 justify-center bg-azure-blue text-white transition hocustive:bg-azure-blue/20 hocustive:text-black rounded-lg font-semibold py-3 px-6  disabled:opacity-50 text-lg flex w-full items-center space-x-2">Claim</a></div>`
+                    ? `<div class='w-full' style="visibility: hidden" id="${uniqueLink}" ><a href="${linkToAugmented}" class="mt-4 justify-center bg-azure-blue text-white transition hocustive:bg-azure-blue/20 hocustive:text-black rounded-lg font-semibold py-3 px-6  disabled:opacity-50 text-lg flex w-full items-center space-x-2">Start AR</a></div>`
                     : ``
                 }
               </div>`,
@@ -131,7 +135,6 @@ export const Mapbox = ({ data, className, ...props }: IMapbox) => {
         )
         .addTo(map);
     });
-
     // listen coords
     geolocate.on(`geolocate`, (e: any) => {
       const lat = e?.coords?.latitude;
@@ -147,6 +150,21 @@ export const Mapbox = ({ data, className, ...props }: IMapbox) => {
           { lat: lat, lng: lng },
           { lat: item.lat, lng: item.lng },
         );
+        //get document by id uniqueLink
+        //listne on click
+        _marker.addEventListener(`click`, (e: any) => {
+          const id = e?.target?.offsetParent?.dataset?.id ?? ``;
+          setTimeout(() => {
+            const getEl = document.getElementById(id);
+            if (getEl) {
+              if (!isNear) {
+                getEl.style.visibility = `hidden`;
+              } else {
+                getEl.style.visibility = `visible`;
+              }
+            }
+          }, 100);
+        });
         if (isNear) {
           _marker
             .getElementsByClassName(`pulse-marker`)[0]
