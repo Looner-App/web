@@ -1,5 +1,5 @@
 # BASE IMAGE
-FROM node:18.17-alpine AS base
+FROM node:18.18-alpine AS base
 WORKDIR /app
 
 

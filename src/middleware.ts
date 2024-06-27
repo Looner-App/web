@@ -21,7 +21,7 @@ export async function middleware(request: NextRequest) {
   // Redirect if user access /account
   if (!user && pathname === `account`) {
     const redirectTo = request.nextUrl.clone();
-    redirectTo.pathname = `/login`;
+    redirectTo.pathname = `/`;
 
     return NextResponse.redirect(redirectTo.toString());
   }
@@ -29,7 +29,7 @@ export async function middleware(request: NextRequest) {
   // Redirect if user access /claim
   if (!user && pathname === `claim`) {
     const redirectTo = request.nextUrl.clone();
-    redirectTo.pathname = `/login`;
+    redirectTo.pathname = `/`;
     redirectTo.searchParams.set(
       `redirect`,
       `${process.env.NEXT_PUBLIC_SITE_URL}${request.nextUrl.pathname}`,

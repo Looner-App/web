@@ -35,39 +35,44 @@ export const getDocs = async <T extends keyof PayloadCollections>({
   variables?: Record<string, unknown>;
   cache?: RequestCache;
 }) => {
-  const getAllDocs = !limit;
-  if (getAllDocs) {
-    limit = 10;
-  }
-  const options = cache ? { cache } : undefined;
-
-  const result: GetDocsType<PayloadCollections[T]> | null = await get(
-    `/${collection}`,
-    {
-      limit,
-      page,
-      locale,
-      ...variables,
-    },
-    options,
-  );
-
-  if (result && getAllDocs) {
-    for (let i = result.page + 1; i <= result.totalPages; i++) {
-      const nextResult: GetDocsType<PayloadCollections[T]> = await get(
-        `/${collection}`,
-        {
-          limit,
-          page: i,
-          locale,
-          ...variables,
-        },
-        options,
-      );
-
-      result.docs = [...result.docs, ...nextResult.docs];
+  try {
+    const getAllDocs = !limit;
+    if (getAllDocs) {
+      limit = 10;
     }
-  }
+    const options = cache ? { cache } : undefined;
 
-  return result;
+    const result: GetDocsType<PayloadCollections[T]> | null = await get(
+      `/${collection}`,
+      {
+        limit,
+        page,
+        locale,
+        ...variables,
+      },
+      options,
+    );
+
+    if (result && getAllDocs) {
+      for (let i = result.page + 1; i <= result.totalPages; i++) {
+        const nextResult: GetDocsType<PayloadCollections[T]> = await get(
+          `/${collection}`,
+          {
+            limit,
+            page: i,
+            locale,
+            ...variables,
+          },
+          options,
+        );
+
+        result.docs = [...result.docs, ...nextResult.docs];
+      }
+    }
+
+    return result;
+  } catch (error) {
+    console.log(`Error function getDocs() : ${collection}`);
+    console.log(error);
+  }
 };

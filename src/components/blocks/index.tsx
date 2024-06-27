@@ -13,7 +13,7 @@ const blockComponents = {
   cards: CardsPayload,
   roadmap: RoadmapPayload,
   leaderboard: LeaderboardPayload,
-};
+} as any;
 
 export const Blocks: React.FC<{
   blocks: Page['layout'];
@@ -32,7 +32,6 @@ export const Blocks: React.FC<{
             return (
               <Block
                 key={`block-${_i}`}
-                // @ts-expect-error: perbaiki aku
                 data={block}
                 id={sectionID || undefined}
               />

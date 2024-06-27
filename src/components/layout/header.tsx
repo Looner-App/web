@@ -6,9 +6,18 @@ import { HeaderWrapper } from './header-wrapper';
 import { ButtonMobileMenu } from './button-mobile-menu';
 import { BackdropMobileMenu } from './backdrop-mobile-menu';
 import { get, getGlobal, getUser } from '@/libs/api';
-import { AvatarThumbnail } from '../avatar/Thumbnail';
 import { Points } from '@/types/payload-types';
-import Image from 'next/image';
+
+import dynamic from 'next/dynamic';
+
+const WalletButton = dynamic(() => import(`../wallet/Button`), {
+  ssr: true,
+  loading: () => (
+    <div className="bg-azure-blue text-white transition hocustive:bg-white hocustive:text-black rounded-lg font-semibold md:py-3 py-2 md:px-6 px-4 disabled:opacity-50 text-sm md:text-lg flex w-fit items-center space-x-2">
+      Loading ...
+    </div>
+  ),
+});
 
 export const Header = async () => {
   const header = await getGlobal({ slug: `header` });
@@ -22,10 +31,9 @@ export const Header = async () => {
   });
 
   const points: Points[] = doc?.docs || [];
-  const myPoints = points.reduce(
-    (acc, curr) => acc + (curr.rewardsPointsEarned || 0),
-    0,
-  );
+  const myPoints = user?.id
+    ? points.reduce((acc, curr) => acc + (curr.rewardsPointsEarned || 0), 0)
+    : 0;
 
   const title = header?.logo.title;
   const logo = header?.logo.image;
@@ -56,7 +64,7 @@ export const Header = async () => {
             </LinkPayload>
           </div>
           <div className="hidden lg:flex space-x-24 items-center">
-            <ul className="flex space-x-6 font-bold text-lg">
+            <ul className="flex space-x-6 font-bold text-lg items-center justify-end">
               {navMenus &&
                 navMenus?.length > 0 &&
                 navMenus.map((item, _i) => (
@@ -72,37 +80,19 @@ export const Header = async () => {
                     )}
                   </li>
                 ))}
-            </ul>
-            <div>
-              {user ? (
-                <LinkPayload href={`/account`}>
-                  <div className="flex space-x-2 items-center">
-                    <div className="bg-zinc-700 px-2 py-1 rounded-md flex items-center space-x-2">
-                      <span className="p-px">
-                        <Image
-                          src="/point.svg"
-                          alt="point"
-                          width={28}
-                          height={28}
-                          className="border border-zinc-700 rounded-full"
-                        />
-                      </span>
-                      <span className="font-sans">{myPoints}</span>
-                    </div>
-                    <div className="bg-zinc-700 px-2 py-1 rounded-md">
-                      <AvatarThumbnail user={user} className="rounded-full" />
-                    </div>
-                  </div>
-                </LinkPayload>
-              ) : (
+              {/* <li className={user ? `` : `hidden`}>
                 <LinkPayload
-                  href={`/account`}
-                  className="bg-azure-blue text-white transition hocustive:bg-white hocustive:text-black rounded-lg font-semibold md:py-3 py-2 md:px-6 px-4 disabled:opacity-50 text-sm md:text-lg flex w-fit items-center space-x-2"
+                  href="/account"
+                  className={mergeStyle(
+                    `relative transition duration-300 before:bg-fade-white before:w-0 before:h-px before:absolute before:-bottom-1 before:left-1/2 before:-translate-x-1/2 before:transition-all before:duration-300`,
+                    `before:hocustive:w-full`,
+                  )}
                 >
-                  <span>Connect</span>
+                  Account
                 </LinkPayload>
-              )}
-            </div>
+              </li> */}
+              <WalletButton user={user} myPoints={myPoints} />
+            </ul>
           </div>
           <div className="flex items-center flex-shrink-0 lg:hidden lg:px-10">
             <ButtonMobileMenu />

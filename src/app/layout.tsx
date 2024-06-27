@@ -6,6 +6,8 @@ import { fonts } from '@/fonts';
 import '@/styles/app.css';
 import { headers } from 'next/headers';
 
+import SlugLayout from '@/components/layout/slug';
+
 export const metadata: Metadata = {
   title: process.env.NEXT_PUBLIC_SITE_NAME,
   icons: `${process.env.NEXT_PUBLIC_SITE_URL}/favicon.ico`,
@@ -34,13 +36,15 @@ export default function RootLayout({
         )}
       >
         <MenuProvider>
-          {menu && <Header />}
-          <main
-            className={`w-full ${!removeStyle && `min-h-[calc(100vh - 120px)] mt-40 mb-52`} ${isClaim && `justify-center items-center`} flex flex-col h-full`}
-          >
-            {children}
-          </main>
-          {!removeStyle && <Footer />}
+          <SlugLayout>
+            {menu && <Header />}
+            <main
+              className={`w-full ${!removeStyle && `min-h-[calc(100vh - 120px)] mt-40 mb-52`} ${isClaim && `justify-center items-center`} flex flex-col h-full`}
+            >
+              {children}
+            </main>
+            {!removeStyle && <Footer />}
+          </SlugLayout>
         </MenuProvider>
       </body>
     </html>

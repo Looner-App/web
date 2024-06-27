@@ -1,0 +1,6 @@
+.button-wallet button {
+  background-color: transparent !important;
+  padding: 8px 12px !important;
+  min-height: 40px;
+  color: inherit !important;
+}
