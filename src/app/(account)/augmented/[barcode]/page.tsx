@@ -14,8 +14,10 @@ export default async function Augmented({
   const result = null;
   console.log(result, barcode, searchParams);
   return (
-    <div className="container w-fit overflow-hidden">
-      <AframeDynamic />
-    </div>
+    <>
+      <div className="container w-fit overflow-hidden">
+        <AframeDynamic />
+      </div>
+    </>
   );
 }
