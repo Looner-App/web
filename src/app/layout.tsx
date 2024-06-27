@@ -23,8 +23,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   const headerList = headers();
-  const pathname = headerList.get(`x-current-path`);
-  console.log(pathname);
+  const menu = headerList.get(`x-use-menu`) === `1`;
   return (
     <html lang="en">
       <Script
@@ -45,7 +44,7 @@ export default function RootLayout({
       ></Script>
       <body className={mergeStyle(`mt-[90px] lg:mt-[100px]`, fonts.variable)}>
         <MenuProvider>
-          {pathname !== `/augmented` && <Header />}
+          {menu && <Header />}
 
           <main className="w-full min-h-[calc(100vh-120px)] flex flex-col h-full mt-40 mb-52">
             {children}
