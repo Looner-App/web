@@ -97,15 +97,17 @@ const madeEntityTarget = (assetUrl) => {
   );
   return el;
 };
-const targetComponent = {
-  async init() {
-    console.log(`initizlie`);
-    const target = madeEntityTarget(`/coin.glb`);
-    const el = this.el;
-    el.appendChild(target);
-    el.addEventListener(`click`, () => {
-      alert(`ok`);
-    });
-  },
+const targetComponent = ({ link }) => {
+  return {
+    async init() {
+      console.log(`initizlie`);
+      const target = madeEntityTarget(`/coin.glb`);
+      const el = this.el;
+      el.appendChild(target);
+      el.addEventListener(`click`, () => {
+        window.location.href = link;
+      });
+    },
+  };
 };
 export { AFrameScene, DISABLE_IMAGE_TARGETS, targetComponent };

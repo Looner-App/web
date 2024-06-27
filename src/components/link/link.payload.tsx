@@ -1,8 +1,8 @@
 import { Page } from '@/types/payload-types';
-import { Link, ILink } from './link';
+import { ILink, Link } from './link';
 
 interface PayloadLinkObject {
-  type?: 'reference' | 'archive' | 'custom' | null;
+  type?: 'reference' | 'archive' | 'custom' | 'link' | null;
   newTab?: boolean | null;
   reference?: {
     relationTo: 'pages';
@@ -10,7 +10,7 @@ interface PayloadLinkObject {
   } | null;
   archive?: string | null;
   url?: string | null;
-  label: string;
+  label?: string;
 }
 
 export interface ILinkPayload
@@ -48,7 +48,7 @@ export const LinkPayload = ({
         href = `/${data.archive}`;
 
         break;
-      case `custom`:
+      case `custom` || `link`:
         if (!data.url) break;
 
         href = data.url;
@@ -58,6 +58,14 @@ export const LinkPayload = ({
 
     if (!children) {
       children = data.label;
+    }
+
+    if (data.type === `link`) {
+      return (
+        <a href={String(data?.url ?? `/`)} target={target} {...props}>
+          {children}
+        </a>
+      );
     }
   }
 

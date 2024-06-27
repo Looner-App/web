@@ -1,7 +1,7 @@
 import { type NextRequest, NextResponse } from 'next/server';
 import { getUser } from './libs/api';
 
-const withoutMenus = [`augmented`];
+const withoutMenus = [`augmented`, `claim`];
 
 export async function middleware(request: NextRequest) {
   const user = await getUser();
@@ -11,6 +11,13 @@ export async function middleware(request: NextRequest) {
   const firstPath = pathSegments[1];
   const use_menu = String(!withoutMenus.includes(firstPath) ? 1 : 0);
   headers.set(`x-use-menu`, use_menu);
+  if (firstPath === `claim`) {
+    headers.set(`x-is-claim`, `1`);
+    headers.set(`x-remove-min-h`, `1`);
+  } else {
+    headers.set(`x-is-claim`, `0`);
+    headers.set(`x-remove-min-h`, `o`);
+  }
   // Redirect if user access /account
   if (!user && pathname === `account`) {
     const redirectTo = request.nextUrl.clone();

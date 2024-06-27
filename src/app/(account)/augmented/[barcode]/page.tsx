@@ -9,7 +9,6 @@ const AframeDynamic = dynamic(() => import(`@/components/aframe`), {
 });
 export default async function Augmented({
   params: { barcode },
-  searchParams,
 }: {
   params: { barcode: string };
   searchParams: { [key: string]: string | string[] | undefined };
@@ -25,11 +24,10 @@ export default async function Augmented({
     return notFound();
   }
   const json = await result.json();
-  console.log(json, barcode, searchParams);
   return (
     <>
       <div className="container w-fit overflow-hidden">
-        <AframeDynamic />
+        <AframeDynamic link={json?.data?.uniqueLink} />
       </div>
     </>
   );

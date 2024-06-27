@@ -23,16 +23,24 @@ export default function RootLayout({
 }) {
   const headerList = headers();
   const menu = headerList.get(`x-use-menu`) === `1`;
+  const removeStyle = headerList.get(`x-remove-min-h`) === `1`;
+  const isClaim = headerList.get(`x-is-claim`) === `1`;
   return (
     <html lang="en">
-      <body className={mergeStyle(`mt-[90px] lg:mt-[100px]`, fonts.variable)}>
+      <body
+        className={mergeStyle(
+          `${!isClaim ? `mt-[90px]` : `h-[100vh]`} lg:mt-[100px]`,
+          fonts.variable,
+        )}
+      >
         <MenuProvider>
           {menu && <Header />}
-
-          <main className="w-full min-h-[calc(100vh-120px)] flex flex-col h-full mt-40 mb-52">
+          <main
+            className={`w-full ${!removeStyle && `min-h-[calc(100vh - 120px)] mt-40 mb-52`} ${isClaim && `justify-center items-center`} flex flex-col h-full`}
+          >
             {children}
           </main>
-          <Footer />
+          {!removeStyle && <Footer />}
         </MenuProvider>
       </body>
     </html>

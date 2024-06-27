@@ -1,6 +1,5 @@
 // @ts-nocheck
 'use client';
-import { useEffect, useState } from 'react';
 import { AFrameScene, targetComponent } from '@/components/aframe/function';
 
 const html = `
@@ -20,24 +19,14 @@ gltf-model="draco-decoder-path: https://cdn.8thwall.com/web/aframe/draco-decoder
 </a-scene>
 
 `;
-const Aframe = () => {
-  const [allReady, setAllReady] = useState(false);
-
-  useEffect(() => {
-    if (window?.AFRAME) {
-      setAllReady(true);
-    }
-  }, [window?.AFRAME]);
-  if (!allReady) {
-    return null;
-  }
+const Aframe = ({ link }) => {
   return (
     <AFrameScene
       sceneHtml={html}
       components={[
         {
           name: `get-target`,
-          val: targetComponent,
+          val: targetComponent({ link }),
         },
       ]}
     />
