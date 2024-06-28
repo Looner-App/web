@@ -10,7 +10,7 @@ export async function POST() {
     },
   });
 
-  cookies().delete(`jwt`);
+  cookies().delete(`thirdweb_frontend`);
 
   return Response.json({ message: `Success` });
 }

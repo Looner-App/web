@@ -7,7 +7,7 @@ export async function GET() {
       isLoggedIn: false,
     };
 
-    const isJWTAvailable = cookies().get(`jwt`)?.value;
+    const isJWTAvailable = cookies().get(`thirdweb_frontend`)?.value;
 
     if (!isJWTAvailable) {
       return Response.json(

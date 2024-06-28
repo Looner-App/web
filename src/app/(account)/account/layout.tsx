@@ -6,6 +6,7 @@ import { Card } from '@/components/card';
 import { headers } from 'next/headers';
 import { ButtonReferral } from './button-referral';
 import { Points } from '@/types/payload-types';
+import { toEllipsis } from '@/libs/helper';
 
 export default async function Layout({
   children,
@@ -80,6 +81,13 @@ export default async function Layout({
                 <li>
                   <span className="font-black">{name}</span>
                 </li>
+                {user?.sub && (
+                  <li>
+                    <span className="text-xs">
+                      {toEllipsis(user.sub, 5, 5)}
+                    </span>
+                  </li>
+                )}
                 <li className="flex space-x-4 items-center">
                   <span>My points</span>
                   <span>

@@ -159,8 +159,7 @@ export interface Media {
 export interface User {
   id: string;
   name?: string | null;
-  instagram?: string | null;
-  country?: string | null;
+  sub?: string | null;
   roles?: ('admin' | 'user')[] | null;
   createdAt: string;
   updatedAt: string;
@@ -168,13 +167,8 @@ export interface User {
   referralCode?: string | null;
   invitationReferralCode?: string | null;
   email: string;
-  resetPasswordToken?: string | null;
-  resetPasswordExpiration?: string | null;
-  salt?: string | null;
-  hash?: string | null;
   loginAttempts?: number | null;
   lockUntil?: string | null;
-  password?: string | null;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
