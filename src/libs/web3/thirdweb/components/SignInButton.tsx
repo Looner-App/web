@@ -8,8 +8,6 @@ import { toEllipsis } from '@/libs/helper';
 import { thirdwebChains } from '../../chains/config';
 import './signin-button.css';
 
-/// todo: get it from global config or send with api calls
-
 export const SignInButton = () => {
   const router = useRouter();
   const activeWallet = useActiveWallet();
