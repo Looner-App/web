@@ -1,5 +1,5 @@
 .mapbox {
-  & __map {
+  &__map {
     position: absolute;
     inset: 0;
   }
