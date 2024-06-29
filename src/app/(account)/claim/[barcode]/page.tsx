@@ -38,7 +38,7 @@ export default async function Claim({
           <LinkPayload
             href={{
               type: `link`,
-              url: `/maps`,
+              url: `/map`,
             }}
             className="uppercase border inline-block
                   px-5 py-2 rounded-md transition duration-300 hocustive:bg-white hocustive:text-jet-black font-bold"
