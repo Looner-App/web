@@ -4,7 +4,7 @@ import Script from 'next/script';
 export const metadata: Metadata = {
   title: `Augmented - ${process.env.NEXT_PUBLIC_SITE_NAME}`,
 };
-
+const AR_TOKEN = process.env.AR_TOKEN;
 export default async function Layout({
   children,
 }: {
@@ -18,7 +18,7 @@ export default async function Layout({
       ></Script>
       <Script
         async
-        src="//apps.8thwall.com/xrweb?appKey=yehOggTyRUmmj9rKVqk6IMPGDgHTBczfoLgCsc2zOAkVj8b1MYGcBeQXYeyNbPEopym6sL"
+        src={`//apps.8thwall.com/xrweb?appKey=${AR_TOKEN}`}
       ></Script>
       <Script
         type="text/javascript"
