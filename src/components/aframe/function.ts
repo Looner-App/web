@@ -88,7 +88,7 @@ const madeEntityTarget = (assetUrl) => {
   const el = document.createElement(`a-entity`);
   el.setAttribute(`id`, `entity-target`);
   el.setAttribute(`position`, { x: 0, y: 1, z: -5 });
-  el.setAttribute(`scale`, `0.5 0.5 0.5`);
+  el.setAttribute(`scale`, `1.5 1.5 1.5`);
   el.setAttribute(`gltf-model`, `url(${assetUrl})`);
   el.setAttribute(`class`, `cantap`);
   el.setAttribute(
@@ -100,7 +100,6 @@ const madeEntityTarget = (assetUrl) => {
 const targetComponent = ({ link }) => {
   return {
     async init() {
-      console.log(`initizlie`);
       const target = madeEntityTarget(`/coin.glb`);
       const el = this.el;
       el.appendChild(target);
