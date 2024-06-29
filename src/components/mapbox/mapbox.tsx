@@ -150,6 +150,17 @@ export const Mapbox = ({ data, className, ...props }: IMapbox) => {
           { lat: lat, lng: lng },
           { lat: item.lat, lng: item.lng },
         );
+        if (!isNear) {
+          const pulse = _marker.getElementsByClassName(`pulse-marker`);
+          const point = _marker.getElementsByClassName(`point-marker`);
+          if (pulse.length > 0) {
+            pulse[0].classList.remove(`bg-green-500`);
+          }
+          if (point.length > 0) {
+            point[0].classList.remove(`bg-green-500`);
+          }
+          return;
+        }
         //get document by id uniqueLink
         //listne on click
         _marker.addEventListener(`click`, (e: any) => {
@@ -165,21 +176,12 @@ export const Mapbox = ({ data, className, ...props }: IMapbox) => {
             }
           }, 100);
         });
-        if (isNear) {
-          _marker
-            .getElementsByClassName(`pulse-marker`)[0]
-            .classList.add(`bg-green-500`);
-          _marker
-            .getElementsByClassName(`point-marker`)[0]
-            .classList.add(`bg-green-500`);
-        } else {
-          _marker
-            .getElementsByClassName(`pulse-marker`)[0]
-            .classList.remove(`bg-green-500`);
-          _marker
-            .getElementsByClassName(`point-marker`)[0]
-            .classList.remove(`bg-green-500`);
-        }
+        _marker
+          .getElementsByClassName(`pulse-marker`)[0]
+          .classList.add(`bg-green-500`);
+        _marker
+          .getElementsByClassName(`point-marker`)[0]
+          .classList.add(`bg-green-500`);
       });
     });
     // Clean up on unmount
