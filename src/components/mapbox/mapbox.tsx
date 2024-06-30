@@ -204,8 +204,8 @@ export const Mapbox = ({ data, className, ...props }: IMapbox) => {
               center: features[0].geometry.coordinates,
               zoom: zoom,
             });
+            hideMarkersInClusters();
           });
-        hideMarkersInClusters();
       });
       map.on(`mouseenter`, `clusters`, function () {
         map.getCanvas().style.cursor = `pointer`;
