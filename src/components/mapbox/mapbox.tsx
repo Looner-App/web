@@ -5,12 +5,11 @@ import { format } from 'date-fns';
 import { useEffect, useRef, useState } from 'react';
 import mapboxgl, { MarkerOptions } from 'mapbox-gl';
 import { harversine, mergeStyle } from '@/libs/helper';
-
 import 'mapbox-gl/dist/mapbox-gl.css';
 import './mapbox.css';
 
 mapboxgl.accessToken = String(process.env.NEXT_PUBLIC_MAPBOX_TOKEN);
-
+const customMarker = `/live_marker.svg`;
 export interface IMapbox extends React.HTMLAttributes<HTMLDivElement> {
   data: {
     markers: {
@@ -69,6 +68,161 @@ export const Mapbox = ({ data, className, ...props }: IMapbox) => {
       center: [initLng, initLat],
       zoom: initZoom,
     });
+    // Clsutering
+    map.on(`load`, () => {
+      // Add a new source from our GeoJSON data and set the
+      // 'cluster' option to true.
+      map.addSource(`markers`, {
+        type: `geojson`,
+        // Point to GeoJSON data. This example visualizes all M1.0+ earthquakes
+        // from 12/22/15 to 1/21/16 as logged by USGS' Earthquake hazards program.
+        data: {
+          type: `FeatureCollection`,
+          features: data.markers.map((marker) => ({
+            type: `Feature`,
+            properties: marker,
+            geometry: {
+              type: `Point`,
+              coordinates: [marker.lng, marker.lat],
+            },
+          })),
+        },
+        cluster: true,
+        clusterMaxZoom: 14, // Max zoom to cluster points on
+        clusterRadius: 50, // Radius of each cluster when clustering points (defaults to 50)
+      });
+
+      map.addLayer({
+        id: `clusters`,
+        type: `circle`,
+        source: `markers`,
+        filter: [`has`, `point_count`],
+        paint: {
+          // Use step expressions (https://docs.mapbox.com/mapbox-gl-js/style-spec/#expressions-step)
+          // with three steps to implement three types of circles:
+          //   * Blue, 20px circles when point count is less than 100
+          //   * Yellow, 30px circles when point count is between 100 and 750
+          //   * Pink, 40px circles when point count is greater than or equal to 750
+          'circle-color': [
+            `step`,
+            [`get`, `point_count`],
+            `#1B1B1B`, // color for clusters with count less than 100
+            100,
+            `#0D0D0D`, // color for clusters with count between 100 and 750
+            750,
+            `#000000`, // color for clusters with count greater than or equal to 750
+          ],
+          'circle-radius': [
+            `step`,
+            [`get`, `point_count`],
+            20,
+            100,
+            30,
+            750,
+            40,
+          ],
+          'circle-stroke-color': `#F9A32C`, // border color
+          'circle-stroke-width': 2, // border width
+        },
+      });
+
+      map.addLayer({
+        id: `cluster-count`,
+        type: `symbol`,
+        source: `markers`,
+        filter: [`has`, `point_count`],
+        layout: {
+          'text-field': `{point_count_abbreviated}`,
+          'text-font': [`DIN Offc Pro Medium`, `Arial Unicode MS Bold`],
+          'text-size': 12,
+        },
+        paint: {
+          'text-color': `#F9A32C`, // Set the text color to white
+        },
+      });
+
+      async function hideMarkersInClusters() {
+        // Show all markers
+        const markers = document.querySelectorAll(`[data-id]`);
+        let shouldBeHide: any = [];
+
+        // Get all clusters
+        const clusters = map
+          .querySourceFeatures(`markers`)
+          // @ts-ignore
+          .filter((feature) => feature.properties.cluster_id);
+
+        const bunchOfAsync = clusters.map((cluster) => {
+          return (
+            map
+              .getSource(`markers`)
+              // @ts-ignore
+              .getClusterLeaves(cluster.properties.cluster_id, Infinity, 0)
+          );
+        });
+        const _data = await Promise.all(bunchOfAsync);
+        _data.forEach((geoJson: any) => {
+          const geoData = geoJson._data;
+          shouldBeHide = geoData.features.map((feature: any) => {
+            const _prop = feature?.properties;
+            return String(_prop?.uniqueLink).split(`/`).pop();
+          });
+        });
+        // compare if the marker is in the cluster or not and hide it
+        markers &&
+          markers.forEach((marker: any) => {
+            const dataId = marker.getAttribute(`data-id`);
+            const markerElement = document.querySelector(
+              `[data-id="${dataId}"]`,
+            );
+            if (markerElement) {
+              if (shouldBeHide.includes(dataId)) {
+                // @ts-ignore
+                markerElement.style.visibility = `hidden`;
+              } else {
+                // @ts-ignore
+                markerElement.style.visibility = `visible`;
+              }
+            }
+          });
+      }
+      // inspect a cluster on click
+      map.on(`click`, `clusters`, function (e) {
+        const features = map.queryRenderedFeatures(e.point, {
+          layers: [`clusters`],
+        });
+        // @ts-ignore
+        const clusterId = features[0].properties.cluster_id;
+        map
+          .getSource(`markers`)
+          // @ts-ignore
+          .getClusterExpansionZoom(clusterId, function (err: any, zoom: any) {
+            if (err) return;
+
+            map.easeTo({
+              // @ts-ignore
+              center: features[0].geometry.coordinates,
+              zoom: zoom,
+            });
+            hideMarkersInClusters();
+          });
+      });
+      map.on(`mouseenter`, `clusters`, function () {
+        map.getCanvas().style.cursor = `pointer`;
+        hideMarkersInClusters();
+      });
+      map.on(`mouseleave`, `clusters`, function () {
+        map.getCanvas().style.cursor = ``;
+        hideMarkersInClusters();
+      });
+      map.on(`moveend`, hideMarkersInClusters);
+      map.on(`zoomend`, hideMarkersInClusters);
+      map.on(`move`, hideMarkersInClusters);
+      map.on(`zoom`, hideMarkersInClusters);
+      setTimeout(() => {
+        hideMarkersInClusters();
+      }, 1000);
+    });
     // Add geolocate control to the map.
     const geolocate = new mapboxgl.GeolocateControl({
       positionOptions: {
@@ -77,7 +231,7 @@ export const Mapbox = ({ data, className, ...props }: IMapbox) => {
       // When active the map will receive updates to the device's location as it changes.
       trackUserLocation: true,
       // Draw an arrow next to the location dot to indicate which direction the device is heading.
-      showUserLocation: true,
+      showUserLocation: false,
     });
     // Add to mapbox
     map.addControl(geolocate);
@@ -151,13 +305,13 @@ export const Mapbox = ({ data, className, ...props }: IMapbox) => {
           { lat: item.lat, lng: item.lng },
         );
         if (!isNear) {
-          const pulse = _marker.getElementsByClassName(`pulse-marker`);
-          const point = _marker.getElementsByClassName(`point-marker`);
-          if (pulse.length > 0) {
-            pulse[0].classList.remove(`bg-green-500`);
-          }
-          if (point.length > 0) {
-            point[0].classList.remove(`bg-green-500`);
+          const markerPoint =
+            _marker.getElementsByClassName(`point-marker-live`);
+          if (markerPoint.length > 0) {
+            //remove spinner
+            // @ts-ignore
+            _marker.getElementsByClassName(`point-marker`)[0].style.animation =
+              `none`;
           }
           return;
         }
@@ -176,12 +330,14 @@ export const Mapbox = ({ data, className, ...props }: IMapbox) => {
             }
           }, 100);
         });
-        _marker
-          .getElementsByClassName(`pulse-marker`)[0]
-          .classList.add(`bg-green-500`);
-        _marker
-          .getElementsByClassName(`point-marker`)[0]
-          .classList.add(`bg-green-500`);
+        // @ts-ignore
+        const liveMarker = _marker.getElementsByClassName(`point-marker-live`);
+        if (liveMarker.length > 0) {
+          //add spinner
+          // @ts-ignore
+          _marker.getElementsByClassName(`point-marker`)[0].style.animation =
+            `bounce 1s infinite`;
+        }
       });
     });
     // Clean up on unmount
@@ -279,16 +435,19 @@ export const Mapbox = ({ data, className, ...props }: IMapbox) => {
               ref={(e) => e && (mapMarkersRef.current[_i] = e)}
               className={`mapbox__marker--looted relative flex items-center justify-center h-[10px] w-[10px]`}
             >
-              <span className="relative inline-flex rounded-full h-2/3 w-2/3 bg-fade-red" />
+              <span className="relative inline-flex rounded-full h-2/3 w-2/3 bg-fade-red point-marker" />
             </div>
           ) : (
             <div
               key={_i}
               ref={(e) => e && (mapMarkersRef.current[_i] = e)}
-              className={`mapbox__marker--live relative flex items-center justify-center h-[14px] w-[14px]`}
+              className={`mapbox__marker--live relative flex items-center justify-center h-[64px] w-[64px]`}
             >
-              <span className="pulse-marker animate-ping absolute inline-flex h-full w-full rounded-full bg-bright-blue opacity-50" />
-              <span className="point-marker relative inline-flex rounded-full h-2/3 w-2/3 bg-bright-blue" />
+              <img
+                src={customMarker}
+                alt="marker"
+                className="absolute top-0 left-0 w-full h-full point-marker point-marker-live"
+              />
             </div>
           ),
         )}
