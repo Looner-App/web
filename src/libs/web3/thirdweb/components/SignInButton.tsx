@@ -8,15 +8,16 @@ import { toEllipsis } from '@/libs/helper';
 import { thirdwebChains } from '../../chains/config';
 import './signin-button.css';
 
+const clientInstance = client({
+  clientId: process.env.NEXT_PUBLIC_THIRDWEB_CLIENT_ID!,
+});
 export const SignInButton = () => {
   const router = useRouter();
   const activeWallet = useActiveWallet();
   return (
     <div className="bg-azure-blue text-white rounded-lg button-wallet">
       <ConnectButton
-        client={client({
-          clientId: process.env.NEXT_PUBLIC_THIRDWEB_CLIENT_ID!,
-        })}
+        client={clientInstance}
         wallets={wallets}
         theme={`dark`}
         chain={thirdwebChains[0]}
@@ -46,10 +47,13 @@ export const SignInButton = () => {
           showThirdwebBranding: false,
         }}
         auth={{
-          getLoginPayload: async ({ address }) => {
-            const { data } = await fetch(`/api/users/auth?address=${address}`, {
-              method: `GET`,
-            }).then((res) => res.json());
+          getLoginPayload: async ({ address, chainId }) => {
+            const { data } = await fetch(
+              `/api/users/auth?address=${address}&chainId=${chainId}`,
+              {
+                method: `GET`,
+              },
+            ).then((res) => res.json());
 
             return data;
           },

@@ -9,6 +9,7 @@ export async function GET(request: NextRequest) {
 
   const query = new URL(request.url).searchParams;
   const address = query.get(`address`);
+  const chainId = query.get(`chainId`);
 
   if (!address) {
     message = `Unauthorized access`;
@@ -22,7 +23,7 @@ export async function GET(request: NextRequest) {
   }
 
   const result = await fetchPayload(
-    `/users/auth?address=${query.get(`address`)}`,
+    `/users/auth?address=${address}&chainId=${chainId}`,
     `GET`,
   );
 
