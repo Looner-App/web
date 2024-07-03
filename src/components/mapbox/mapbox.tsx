@@ -1,12 +1,12 @@
 'use client';
 
 import { Switch } from '@headlessui/react';
-import { format } from 'date-fns';
 import { useEffect, useRef, useState } from 'react';
 import mapboxgl, { MarkerOptions } from 'mapbox-gl';
 import { harversine, mergeStyle } from '@/libs/helper';
 import 'mapbox-gl/dist/mapbox-gl.css';
 import './mapbox.css';
+import { format } from 'date-fns';
 
 mapboxgl.accessToken = String(process.env.NEXT_PUBLIC_MAPBOX_TOKEN);
 const customMarker = `/live_marker.svg`;
@@ -30,7 +30,7 @@ export interface IMapbox extends React.HTMLAttributes<HTMLDivElement> {
 }
 
 export const Mapbox = ({ data, className, ...props }: IMapbox) => {
-  const { markers, initZoom = 10 } = data;
+  const { markers, initZoom = 8 } = data;
   const initLat = markers.length > 0 ? markers[0].lat : 0;
   const initLng = markers.length > 0 ? markers[0].lng : 0;
 
@@ -88,8 +88,8 @@ export const Mapbox = ({ data, className, ...props }: IMapbox) => {
           })),
         },
         cluster: true,
-        clusterMaxZoom: 14, // Max zoom to cluster points on
-        clusterRadius: 50, // Radius of each cluster when clustering points (defaults to 50)
+        clusterMaxZoom: 10, // Max zoom to cluster points on
+        clusterRadius: 40, // Radius of each cluster when clustering points (defaults to 50)
       });
 
       map.addLayer({
@@ -425,32 +425,31 @@ export const Mapbox = ({ data, className, ...props }: IMapbox) => {
             </label>
           </li>
         </ul>
-      </div>
-
-      <div className="hidden">
-        {markers.map((item, _i) =>
-          item.status === `looted` ? (
-            <div
-              key={_i}
-              ref={(e) => e && (mapMarkersRef.current[_i] = e)}
-              className={`mapbox__marker--looted relative flex items-center justify-center h-[10px] w-[10px]`}
-            >
-              <span className="relative inline-flex rounded-full h-2/3 w-2/3 bg-fade-red point-marker" />
-            </div>
-          ) : (
-            <div
-              key={_i}
-              ref={(e) => e && (mapMarkersRef.current[_i] = e)}
-              className={`mapbox__marker--live relative flex items-center justify-center h-[64px] w-[64px]`}
-            >
-              <img
-                src={customMarker}
-                alt="marker"
-                className="absolute top-0 left-0 w-full h-full point-marker point-marker-live"
-              />
-            </div>
-          ),
-        )}
+        <div className="hidden">
+          {markers.map((item, _i) =>
+            item.status === `looted` ? (
+              <div
+                key={_i}
+                ref={(e) => e && (mapMarkersRef.current[_i] = e)}
+                className={`mapbox__marker--looted relative flex items-center justify-center h-[10px] w-[10px]`}
+              >
+                <span className="relative inline-flex rounded-full h-2/3 w-2/3 bg-fade-red point-marker" />
+              </div>
+            ) : (
+              <div
+                key={_i}
+                ref={(e) => e && (mapMarkersRef.current[_i] = e)}
+                className={`mapbox__marker--live relative flex items-center justify-center h-[64px] w-[64px]`}
+              >
+                <img
+                  src={customMarker}
+                  alt="marker"
+                  className="absolute top-0 left-0 w-full h-full point-marker point-marker-live"
+                />
+              </div>
+            ),
+          )}
+        </div>
       </div>
     </div>
   );
