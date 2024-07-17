@@ -9,6 +9,17 @@ export async function middleware(request: NextRequest) {
   const headers = new Headers(request.headers);
   const pathSegments = request.nextUrl.pathname.split(`/`);
   const firstPath = pathSegments[1];
+
+  /// === referral headers ====
+  /**
+   * eg: localhost:3000/?referral=a1d07a48uenl4ddll95u8-lo.9ee5nd7
+   */
+
+  const searchParams = new URLSearchParams(request.nextUrl.search);
+  const referral = searchParams.get(`referral`);
+  headers.set(`x-referral`, referral || ``);
+
+  /// ==== augmented headers ====
   const use_menu = String(!withoutMenus.includes(firstPath) ? 1 : 0);
   headers.set(`x-use-menu`, use_menu);
   if (firstPath === `claim`) {
@@ -18,6 +29,7 @@ export async function middleware(request: NextRequest) {
     headers.set(`x-is-claim`, `0`);
     headers.set(`x-remove-min-h`, `0`);
   }
+
   // Redirect if user access /account
   if (!user && pathname === `account`) {
     const redirectTo = request.nextUrl.clone();
