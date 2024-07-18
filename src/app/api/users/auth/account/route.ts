@@ -21,7 +21,6 @@ export async function GET() {
 
     const result = await fetchPayload(`/users/auth/account`, `GET`, {
       headers: {
-        'Content-Type': `application/json`,
         Cookie: cookies().toString(),
       },
     });

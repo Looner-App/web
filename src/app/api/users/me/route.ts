@@ -1,6 +1,19 @@
-import { getUser } from '@/libs/api';
+import { get } from '@/libs/api';
+import { cookies } from 'next/headers';
 
 export async function GET() {
-  const result = await getUser();
-  return Response.json(result);
+  const cookie = cookies();
+
+  const result = await get(
+    `/users/me`,
+    {},
+    {
+      headers: {
+        Cookie: cookie.toString(),
+      },
+      cache: `no-store`,
+    },
+  );
+
+  return Response.json(result?.user);
 }
