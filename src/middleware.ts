@@ -16,9 +16,6 @@ export async function middleware(request: NextRequest) {
    */
 
   const referral = request.nextUrl.searchParams.get(`referral`);
-
-  /// todo: double chec if necessary getting this way
-  headers.set(`referral`, referral || ``);
   request.cookies.set(`referral`, String(referral || ``));
   headers.set(`Set-Cookie`, request.cookies.toString());
 
