@@ -15,9 +15,12 @@ export async function middleware(request: NextRequest) {
    * eg: localhost:3000/?referral=a1d07a48uenl4ddll95u8-lo.9ee5nd7
    */
 
-  const searchParams = new URLSearchParams(request.nextUrl.search);
-  const referral = searchParams.get(`referral`);
-  headers.set(`x-referral`, referral || ``);
+  const referral = request.nextUrl.searchParams.get(`referral`);
+
+  /// todo: double chec if necessary getting this way
+  headers.set(`referral`, referral || ``);
+  request.cookies.set(`referral`, String(referral || ``));
+  headers.set(`Set-Cookie`, request.cookies.toString());
 
   /// ==== augmented headers ====
   const use_menu = String(!withoutMenus.includes(firstPath) ? 1 : 0);

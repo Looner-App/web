@@ -4,10 +4,22 @@ import { NextRequest } from 'next/server';
 
 export async function GET(request: NextRequest) {
   const cookie = cookies();
-  const referral =
-    request.nextUrl.searchParams.get(`referral`) || headers().get(`x-referral`);
 
-  cookie.set(`x-referral`, referral || ``);
+  /// todo: double chec if necessary getting this way
+  const referral =
+    cookie.get(`referral`)?.value ||
+    headers().get(`referral`) ||
+    request.nextUrl.searchParams.get(`referral`);
+
+  if (referral) {
+    cookie.set({
+      name: `referral`,
+      value: String(referral),
+      httpOnly: false,
+      expires: new Date(Date.now() + 1000 * 60 * 60 * 24 * 365),
+      path: `/`,
+    });
+  }
 
   const result = await get(
     `/users/me`,
@@ -19,12 +31,6 @@ export async function GET(request: NextRequest) {
       cache: `no-store`,
     },
   );
-
-  console.log({
-    headers: {
-      Cookie: cookie.toString(),
-    },
-  });
 
   return Response.json(result?.user);
 }

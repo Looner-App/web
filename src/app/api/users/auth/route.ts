@@ -68,9 +68,10 @@ export async function POST(request: NextRequest) {
       message = `Login success`;
 
       // Save cookie login token
-      cookies().set(`thirdweb_frontend`, data.token, {
-        httpOnly: true,
-        expires: data.exp * 1000,
+      cookies().set({
+        name: `thirdweb_frontend`,
+        value: String(data.token),
+        expires: new Date(Date.now() + 1000 * 60 * 60 * 24 * 365),
         path: `/`,
       });
     } else {
