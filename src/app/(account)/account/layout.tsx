@@ -5,7 +5,7 @@ import { AvatarThumbnail } from '@/components/avatar/Thumbnail';
 import { Card } from '@/components/card';
 import { headers } from 'next/headers';
 import { ButtonReferral } from './button-referral';
-import { Points } from '@/types/payload-types';
+import { Points, Referral } from '@/types/payload-types';
 import { toEllipsis } from '@/libs/helper';
 
 export default async function Layout({
@@ -15,7 +15,7 @@ export default async function Layout({
 }) {
   const user = await getUser();
 
-  const doc = await get(`points`, {
+  const docPoints = await get(`points`, {
     where: {
       user: {
         equals: user?.id,
@@ -23,7 +23,17 @@ export default async function Layout({
     },
   });
 
-  const points: Points[] = doc?.docs || [];
+  const docReferral = await get(`referral`, {
+    where: {
+      user: {
+        equals: user?.id,
+      },
+    },
+  });
+
+  const referral: Referral[] = docReferral?.docs || [];
+
+  const points: Points[] = docPoints?.docs || [];
 
   const myPoints = points.reduce(
     (acc, curr) => acc + (curr.rewardsPointsEarned || 0),
@@ -116,7 +126,7 @@ export default async function Layout({
             </div>
             <div className="col-span-12">
               <div>
-                <ButtonReferral baseURL={`${host}`} user={user} />
+                <ButtonReferral baseURL={`${host}`} referral={referral[0]} />
               </div>
             </div>
           </div>
