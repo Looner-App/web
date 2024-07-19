@@ -25,7 +25,9 @@ export const ClaimedItems = ({ data }: IClaimedItems) => {
   const findClaimedItemPoint = (id: string) => {
     if (!claims) return;
 
-    const claimed = claims.find((claim) => claim?.claimable?.id === id);
+    const claimed = claims.find(
+      (claim) => (claim?.claimable as any)?.id === id,
+    );
     return claimed?.rewardsPointsEarned || 0;
   };
 
