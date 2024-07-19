@@ -3,8 +3,8 @@ import { Image } from '@/components/image';
 import { MenuItem } from './menu-item';
 import { AvatarThumbnail } from '@/components/avatar/Thumbnail';
 import { Card } from '@/components/card';
-import { headers } from 'next/headers';
-import { ButtonReferral } from './button-referral';
+// import { headers } from 'next/headers';
+// import { ButtonReferral } from './button-referral';
 import { Points } from '@/types/payload-types';
 import { toEllipsis } from '@/libs/helper';
 
@@ -53,7 +53,7 @@ export default async function Layout({
   const name = String(user?.name);
 
   /// get the url from
-  const host = headers().get(`host`);
+  // const host = headers().get(`host`);
 
   const menuItems = [
     {
@@ -114,11 +114,11 @@ export default async function Layout({
                 </li>
               </ul>
             </div>
-            <div className="col-span-12">
+            {/* <div className="col-span-12">
               <div>
                 <ButtonReferral baseURL={`${host}`} user={user} />
               </div>
-            </div>
+            </div> */}
           </div>
         </Card>
       </div>
