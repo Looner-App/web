@@ -2,20 +2,20 @@
 
 import { BsCopy } from 'react-icons/bs';
 import classNames from 'classnames';
-import { User } from '@/types/payload-types';
+import { Referral } from '@/types/payload-types';
 import { useState } from 'react';
 
 export type ButtonReferralProps = {
-  user?: User | null;
+  referral?: Referral | null;
   baseURL: string;
 };
 
-export const ButtonReferral = ({ user, baseURL }: ButtonReferralProps) => {
+export const ButtonReferral = ({ referral, baseURL }: ButtonReferralProps) => {
   const [copied, setCopied] = useState(false);
   const onCopy = () => {
     /// copy the url to the clipboard
     navigator.clipboard
-      .writeText(`${baseURL}/?referral=${user?.referralCode}`)
+      .writeText(`${baseURL}/?referral=${referral?.referralCode}`)
       .then(() => {
         setCopied(true);
         setTimeout(() => {
@@ -28,6 +28,7 @@ export const ButtonReferral = ({ user, baseURL }: ButtonReferralProps) => {
     <div className="flex gap-2 items-center">
       <div>
         <button
+          disabled={!referral?.referralCode}
           type="button"
           className={classNames([
             `text-black bg-white rounded-lg flex space-x-2 items-center py-2 px-4`,

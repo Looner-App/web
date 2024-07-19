@@ -10,5 +10,7 @@ export const LeaderboardPayload = async ({
   data,
   id,
 }: LeaderboardPayloadProps) => {
-  return <Leaderboard data={data} cardVariant={data.cardVariant} id={id} />;
+  return (
+    <Leaderboard data={data as any} cardVariant={data.cardVariant} id={id} />
+  );
 };

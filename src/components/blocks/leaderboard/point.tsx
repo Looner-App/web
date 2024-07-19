@@ -1,4 +1,4 @@
-import { Points } from '@/types/payload-types';
+import { Points, User } from '@/types/payload-types';
 import { useMemo } from 'react';
 import Image from 'next/image';
 import { AvatarThumbnail } from '@/components/avatar/Thumbnail';
@@ -34,9 +34,9 @@ export const LeaderboardPoint = async ({
       </th>
       <td className="p-3 flex space-x-2 items-center">
         <span>
-          <AvatarThumbnail user={point?.user} />
+          <AvatarThumbnail user={point?.user as User} />
         </span>
-        <span>{point.user?.name}</span>
+        <span>{(point.user as User)?.name}</span>
       </td>
       <td className="p-3">{challengePoints}</td>
       <td className="p-3">{referralPoints}</td>
