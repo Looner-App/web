@@ -16,8 +16,10 @@ export async function middleware(request: NextRequest) {
    */
 
   const referral = request.nextUrl.searchParams.get(`referral`);
-  request.cookies.set(`referral`, String(referral || ``));
-  headers.set(`Set-Cookie`, request.cookies.toString());
+  if (referral && referral?.length > 0) {
+    request.cookies.set(`referral`, String(referral || ``));
+    headers.set(`Set-Cookie`, request.cookies.toString());
+  }
 
   /// ==== augmented headers ====
   const use_menu = String(!withoutMenus.includes(firstPath) ? 1 : 0);

@@ -3,10 +3,15 @@ import { cookies, headers } from 'next/headers';
 
 export const getUser = async (): Promise<User | null> => {
   try {
-    const searchParams = new URLSearchParams();
-    searchParams.set(`referral`, headers().get(`referral`) || ``);
+    let path = `/api/users/me`;
+    const referral = headers().get(`referral`);
 
-    const path = `/api/users/me?${searchParams.toString()}`;
+    if (referral) {
+      const searchParams = new URLSearchParams();
+      searchParams.set(`referral`, referral);
+      path += `?${searchParams.toString()}`;
+    }
+
     const result = await fetch(process.env.NEXT_PUBLIC_SITE_URL + `${path}`, {
       headers: {
         Cookie: cookies().toString(),
