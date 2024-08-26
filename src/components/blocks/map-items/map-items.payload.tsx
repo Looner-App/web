@@ -47,7 +47,9 @@ export const MapItemsPayload = async ({ data, id }: IBlockPayload) => {
                   item?.publicUniqueLink && item?.uniqueLink
                     ? item.uniqueLink
                     : undefined,
-                marker_3d: item?.marker_3d || ``,
+                marker_3d: {
+                  url: item?.marker_3d?.url ?? null,
+                },
               };
             })
           : [],

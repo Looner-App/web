@@ -40,7 +40,9 @@ export interface Item {
   category: string | Category;
   barcode?: string | null;
   uniqueLink?: string | null;
-  marker_3d?: string | null;
+  marker_3d?: {
+    url?: string | null;
+  } | null;
   publicUniqueLink?: boolean | null;
   batchCreation?: boolean | null;
   batchCreationCount?: number | null;

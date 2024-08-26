@@ -40,6 +40,7 @@
     "react-youtube": "10.1.0",
     "sharp": "0.33.3",
     "thirdweb": "5.33.0",
+    "three": "0.167.1",
     "video.js": "8.10.0",
     "viem": "2.13.8",
     "wagmi": "2.10.0"
@@ -55,6 +56,7 @@
     "@types/react": "18.2.65",
     "@types/react-dom": "18.2.22",
     "@types/react-google-recaptcha": "2.1.9",
+    "@types/three": "0.167.2",
     "@typescript-eslint/eslint-plugin": "7.2.0",
     "@typescript-eslint/parser": "7.2.0",
     "autoprefixer": "10.4.18",
