@@ -10,6 +10,7 @@ import { format } from 'date-fns';
 
 mapboxgl.accessToken = String(process.env.NEXT_PUBLIC_MAPBOX_TOKEN);
 const customMarker = `/live_marker.svg`;
+
 export interface IMapbox extends React.HTMLAttributes<HTMLDivElement> {
   data: {
     markers: {
@@ -24,6 +25,7 @@ export interface IMapbox extends React.HTMLAttributes<HTMLDivElement> {
       claimedDuration?: string;
       publicUniqueLink?: boolean;
       uniqueLink?: string;
+      marker_3d?: string;
     }[];
     initZoom?: number;
   };
@@ -186,6 +188,7 @@ export const Mapbox = ({ data, className, ...props }: IMapbox) => {
             }
           });
       }
+
       // inspect a cluster on click
       map.on(`click`, `clusters`, function (e) {
         const features = map.queryRenderedFeatures(e.point, {
@@ -239,21 +242,23 @@ export const Mapbox = ({ data, className, ...props }: IMapbox) => {
     // Add navigation control (the +/- zoom buttons)
     map.addControl(new mapboxgl.NavigationControl(), `top-right`);
     // Create markers
-    data.markers.forEach((item, _i) => {
-      if (!mapMarkersRef.current[_i] || mapMarkersRef.current[_i] == null) {
-        return;
-      }
-      const extractUniqueLink = item.uniqueLink?.split(`/`);
-      const uniqueLink = extractUniqueLink?.[extractUniqueLink.length - 1];
-      const linkToAugmented = `/augmented/${uniqueLink}`;
-      //set data-link on mapMarkersRef.current[_i]
-      const mapMark: any = mapMarkersRef.current[_i];
-      mapMark?.setAttribute(`data-id`, uniqueLink);
-      new mapboxgl.Marker(mapMarkersRef.current[_i])
-        .setLngLat([item.lng, item.lat])
-        .setPopup(
-          new mapboxgl.Popup().setHTML(
-            `<div class="text-jet-black">
+    data.markers
+      .filter((e) => e.marker_3d === ``)
+      .forEach((item, _i) => {
+        if (!mapMarkersRef.current[_i] || mapMarkersRef.current[_i] == null) {
+          return;
+        }
+        const extractUniqueLink = item.uniqueLink?.split(`/`);
+        const uniqueLink = extractUniqueLink?.[extractUniqueLink.length - 1];
+        const linkToAugmented = `/augmented/${uniqueLink}`;
+        //set data-link on mapMarkersRef.current[_i]
+        const mapMark: any = mapMarkersRef.current[_i];
+        mapMark?.setAttribute(`data-id`, uniqueLink);
+        new mapboxgl.Marker(mapMarkersRef.current[_i])
+          .setLngLat([item.lng, item.lat])
+          .setPopup(
+            new mapboxgl.Popup().setHTML(
+              `<div class="text-jet-black">
                 <div class="text-lg font-bold">${item.title}</div>
                 <hr class="my-3" />
                 ${item.image ? `<img src="${item.image}" alt="${item.title}" class="mb-3 w-full" />` : ``}
@@ -285,10 +290,10 @@ export const Mapbox = ({ data, className, ...props }: IMapbox) => {
                     : ``
                 }
               </div>`,
-          ),
-        )
-        .addTo(map);
-    });
+            ),
+          )
+          .addTo(map);
+      });
     // listen coords
     geolocate.on(`geolocate`, (e: any) => {
       const lat = e?.coords?.latitude;
@@ -426,29 +431,31 @@ export const Mapbox = ({ data, className, ...props }: IMapbox) => {
           </li>
         </ul>
         <div className="hidden">
-          {markers.map((item, _i) =>
-            item.status === `looted` ? (
-              <div
-                key={_i}
-                ref={(e) => e && (mapMarkersRef.current[_i] = e)}
-                className={`mapbox__marker--looted relative flex items-center justify-center h-[10px] w-[10px]`}
-              >
-                <span className="relative inline-flex rounded-full h-2/3 w-2/3 bg-fade-red point-marker" />
-              </div>
-            ) : (
-              <div
-                key={_i}
-                ref={(e) => e && (mapMarkersRef.current[_i] = e)}
-                className={`mapbox__marker--live relative flex items-center justify-center h-[64px] w-[64px]`}
-              >
-                <img
-                  src={customMarker}
-                  alt="marker"
-                  className="absolute top-0 left-0 w-full h-full point-marker point-marker-live"
-                />
-              </div>
-            ),
-          )}
+          {markers
+            .filter((item) => item.marker_3d === ``)
+            .map((item, _i) =>
+              item.status === `looted` ? (
+                <div
+                  key={_i}
+                  ref={(e) => e && (mapMarkersRef.current[_i] = e)}
+                  className={`mapbox__marker--looted relative flex items-center justify-center h-[10px] w-[10px]`}
+                >
+                  <span className="relative inline-flex rounded-full h-2/3 w-2/3 bg-fade-red point-marker" />
+                </div>
+              ) : (
+                <div
+                  key={_i}
+                  ref={(e) => e && (mapMarkersRef.current[_i] = e)}
+                  className={`mapbox__marker--live relative flex items-center justify-center h-[64px] w-[64px]`}
+                >
+                  <img
+                    src={customMarker}
+                    alt="marker"
+                    className="absolute top-0 left-0 w-full h-full point-marker point-marker-live"
+                  />
+                </div>
+              ),
+            )}
         </div>
       </div>
     </div>

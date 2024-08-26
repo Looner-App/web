@@ -2,8 +2,8 @@ import { formatDistance } from 'date-fns';
 import { Page } from '@/types/payload-types';
 import { getDocs } from '@/libs/api';
 import {
-  MapItems as BlockComponent,
   IMapItems as IBlockComponent,
+  MapItems as BlockComponent,
 } from './map-items';
 
 interface IBlockPayload {
@@ -47,6 +47,7 @@ export const MapItemsPayload = async ({ data, id }: IBlockPayload) => {
                   item?.publicUniqueLink && item?.uniqueLink
                     ? item.uniqueLink
                     : undefined,
+                marker_3d: item?.marker_3d || ``,
               };
             })
           : [],

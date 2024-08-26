@@ -1,4 +1,4 @@
-import { Mapbox, IMapbox } from '@/components/mapbox';
+import { IMapbox, Mapbox } from '@/components/mapbox';
 
 export interface IMapItems extends React.HTMLAttributes<HTMLElement> {
   data: {
