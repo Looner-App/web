@@ -2,14 +2,20 @@
 
 import { Switch } from '@headlessui/react';
 import { useEffect, useRef, useState } from 'react';
-import mapboxgl, { MarkerOptions } from 'mapbox-gl';
-import { harversine, mergeStyle } from '@/libs/helper';
+import mapboxgl from 'mapbox-gl';
+import * as THREE from 'three';
+// @ts-ignore
+import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader';
+import { mergeStyle } from '@/libs/helper';
 import 'mapbox-gl/dist/mapbox-gl.css';
 import './mapbox.css';
 import { format } from 'date-fns';
 
 mapboxgl.accessToken = String(process.env.NEXT_PUBLIC_MAPBOX_TOKEN);
 const customMarker = `/live_marker.svg`;
+
+// const coinModelPath = `/coin.glb`;
+
 export interface IMapbox extends React.HTMLAttributes<HTMLDivElement> {
   data: {
     markers: {
@@ -24,6 +30,9 @@ export interface IMapbox extends React.HTMLAttributes<HTMLDivElement> {
       claimedDuration?: string;
       publicUniqueLink?: boolean;
       uniqueLink?: string;
+      marker_3d?: {
+        url?: string | null;
+      };
     }[];
     initZoom?: number;
   };
@@ -35,29 +44,157 @@ export const Mapbox = ({ data, className, ...props }: IMapbox) => {
   const initLng = markers.length > 0 ? markers[0].lng : 0;
 
   const mapContainerRef = useRef<HTMLDivElement | null>(null);
-  const mapMarkersRef = useRef<MarkerOptions[]>([]);
+  const mapMarkersRef = useRef<mapboxgl.Marker[]>([]);
 
   const [showMarkerLive, setMarkerLive] = useState(true);
   const [showMarkerLooted, setMarkerLooted] = useState(true);
 
-  // Check if location is near the user
-
-  const isNearUser = (
-    from: {
-      lat: number;
-      lng: number;
-    },
-    to: {
-      lat: number;
-      lng: number;
-    },
-    threshold = 30,
+  // const isNearUser = (
+  //   from: {
+  //     lat: number;
+  //     lng: number;
+  //   },
+  //   to: {
+  //     lat: number;
+  //     lng: number;
+  //   },
+  //   threshold = 30,
+  // ) => {
+  //   const distance = harversine(from.lat, from.lng, to.lat, to.lng);
+  //   return distance <= threshold;
+  // };
+  const mixers: THREE.AnimationMixer[] = [];
+  const load3DModel = (
+    map: mapboxgl.Map,
+    coordinates: [number, number],
+    modelUrl: string,
+    id: string | null = null,
+    clip: string | null = null,
+    rotation = [Math.PI / 2, 0, 0],
+    scale = 1,
   ) => {
-    const distance = harversine(from.lat, from.lng, to.lat, to.lng);
-    return distance <= threshold;
+    const modelOrigin = coordinates;
+    const modelAltitude = 0;
+
+    const modelAsMercatorCoordinate = mapboxgl.MercatorCoordinate.fromLngLat(
+      modelOrigin,
+      modelAltitude,
+    );
+
+    const modelTransform = {
+      translateX: modelAsMercatorCoordinate.x,
+      translateY: modelAsMercatorCoordinate.y,
+      translateZ: modelAsMercatorCoordinate.z,
+      rotateX: rotation[0],
+      rotateY: rotation[1],
+      rotateZ: rotation[2],
+      scale: modelAsMercatorCoordinate.meterInMercatorCoordinateUnits() * scale,
+    };
+
+    const customLayer = {
+      id: id ?? `3d-model-${coordinates[0]}-${coordinates[1]}`,
+      type: `custom`,
+      renderingMode: `3d`,
+      onAdd: function (map: mapboxgl.Map, gl: WebGLRenderingContext) {
+        // @ts-ignore
+        this.camera = new THREE.Camera();
+        // @ts-ignore
+        this.scene = new THREE.Scene();
+
+        const directionalLight = new THREE.DirectionalLight(0xffffff);
+        directionalLight.position.set(0, -70, 100).normalize();
+        // @ts-ignore
+        this.scene.add(directionalLight);
+
+        const directionalLight2 = new THREE.DirectionalLight(0xffffff);
+        directionalLight2.position.set(0, 70, 100).normalize();
+        // @ts-ignore
+        this.scene.add(directionalLight2);
+
+        const loader = new GLTFLoader();
+        loader.load(modelUrl, (gltf: any) => {
+          const model = gltf.scene;
+          // @ts-ignore
+          this.scene.add(model);
+
+          const mixer = new THREE.AnimationMixer(model);
+          if (clip) {
+            const pickClip = gltf.animations.find(
+              (_clip: any) => _clip.name === clip,
+            );
+            if (pickClip) {
+              mixer.clipAction(pickClip).play();
+              mixers.push(mixer);
+            }
+          }
+        });
+
+        // @ts-ignore
+        this.map = map;
+        // @ts-ignore
+        this.renderer = new THREE.WebGLRenderer({
+          canvas: map.getCanvas(),
+          context: gl,
+          antialias: true,
+        });
+
+        // @ts-ignore
+        this.renderer.autoClear = false;
+      },
+      render: function (gl: WebGLRenderingContext, matrix: number[]) {
+        const rotationX = new THREE.Matrix4().makeRotationAxis(
+          new THREE.Vector3(1, 0, 0),
+          modelTransform.rotateX,
+        );
+        const rotationY = new THREE.Matrix4().makeRotationAxis(
+          new THREE.Vector3(0, 1, 0),
+          modelTransform.rotateY,
+        );
+        const rotationZ = new THREE.Matrix4().makeRotationAxis(
+          new THREE.Vector3(0, 0, 1),
+          modelTransform.rotateZ,
+        );
+
+        const m = new THREE.Matrix4().fromArray(matrix);
+        const l = new THREE.Matrix4()
+          .makeTranslation(
+            modelTransform.translateX,
+            modelTransform.translateY,
+            // @ts-ignore
+            modelTransform.translateZ,
+          )
+          .scale(
+            new THREE.Vector3(
+              modelTransform.scale,
+              -modelTransform.scale,
+              modelTransform.scale,
+            ),
+          )
+          .multiply(rotationX)
+          .multiply(rotationY)
+          .multiply(rotationZ);
+
+        // @ts-ignore
+        this.camera.projectionMatrix = m.multiply(l);
+
+        // @ts-ignore
+        const delta = this.map.frameRate || 1 / 60; // assume 60fps if not available
+        mixers.forEach((mixer) => mixer.update(delta));
+
+        // @ts-ignore
+        this.renderer.resetState();
+        // @ts-ignore
+        this.renderer.render(this.scene, this.camera);
+        // @ts-ignore
+        this.map.triggerRepaint();
+      },
+    };
+
+    // Add the custom layer to the map
+    // @ts-ignore
+    map.addLayer(customLayer);
   };
 
-  // Initialize map when component mounts
   useEffect(() => {
     if (!mapContainerRef.current) return;
     const map = new mapboxgl.Map({
@@ -67,20 +204,65 @@ export const Mapbox = ({ data, className, ...props }: IMapbox) => {
         `mapbox://styles/mapbox/dark-v11`,
       center: [initLng, initLat],
       zoom: initZoom,
+      pitch: 60,
+      bearing: -60,
+      antialias: true,
     });
-    // Clsutering
+
+    map.on(`style.load`, () => {
+      const layers = map.getStyle().layers;
+
+      const labelLayerId =
+        layers.find(
+          (layer: any) => layer.type === `symbol` && layer.layout[`text-field`],
+        )?.id ?? ``;
+      map.addLayer(
+        {
+          id: `add-3d-buildings`,
+          source: `composite`,
+          'source-layer': `building`,
+          filter: [`==`, `extrude`, `true`],
+          type: `fill-extrusion`,
+          minzoom: 15,
+          paint: {
+            'fill-extrusion-color': `#aaa`,
+            'fill-extrusion-height': [
+              `interpolate`,
+              [`linear`],
+              [`zoom`],
+              15,
+              0,
+              15.05,
+              [`get`, `height`],
+            ],
+            'fill-extrusion-base': [
+              `interpolate`,
+              [`linear`],
+              [`zoom`],
+              15,
+              0,
+              15.05,
+              [`get`, `min_height`],
+            ],
+            'fill-extrusion-opacity': 0.6,
+          },
+        },
+        labelLayerId,
+      );
+    });
+
+    // Clustering and Marker Setup
     map.on(`load`, () => {
-      // Add a new source from our GeoJSON data and set the
-      // 'cluster' option to true.
       map.addSource(`markers`, {
         type: `geojson`,
-        // Point to GeoJSON data. This example visualizes all M1.0+ earthquakes
-        // from 12/22/15 to 1/21/16 as logged by USGS' Earthquake hazards program.
         data: {
           type: `FeatureCollection`,
           features: data.markers.map((marker) => ({
             type: `Feature`,
-            properties: marker,
+            properties: {
+              ...marker,
+              cluster: false,
+            },
             geometry: {
               type: `Point`,
               coordinates: [marker.lng, marker.lat],
@@ -88,8 +270,8 @@ export const Mapbox = ({ data, className, ...props }: IMapbox) => {
           })),
         },
         cluster: true,
-        clusterMaxZoom: 10, // Max zoom to cluster points on
-        clusterRadius: 40, // Radius of each cluster when clustering points (defaults to 50)
+        clusterMaxZoom: 14, // Max zoom to cluster points on
+        clusterRadius: 50, // Radius of each cluster when clustering points (defaults to 50)
       });
 
       map.addLayer({
@@ -98,19 +280,14 @@ export const Mapbox = ({ data, className, ...props }: IMapbox) => {
         source: `markers`,
         filter: [`has`, `point_count`],
         paint: {
-          // Use step expressions (https://docs.mapbox.com/mapbox-gl-js/style-spec/#expressions-step)
-          // with three steps to implement three types of circles:
-          //   * Blue, 20px circles when point count is less than 100
-          //   * Yellow, 30px circles when point count is between 100 and 750
-          //   * Pink, 40px circles when point count is greater than or equal to 750
           'circle-color': [
             `step`,
             [`get`, `point_count`],
-            `#1B1B1B`, // color for clusters with count less than 100
+            `#1B1B1B`,
             100,
-            `#0D0D0D`, // color for clusters with count between 100 and 750
+            `#0D0D0D`,
             750,
-            `#000000`, // color for clusters with count greater than or equal to 750
+            `#000000`,
           ],
           'circle-radius': [
             `step`,
@@ -121,8 +298,8 @@ export const Mapbox = ({ data, className, ...props }: IMapbox) => {
             750,
             40,
           ],
-          'circle-stroke-color': `#F9A32C`, // border color
-          'circle-stroke-width': 2, // border width
+          'circle-stroke-color': `#F9A32C`,
+          'circle-stroke-width': 2,
         },
       });
 
@@ -137,56 +314,46 @@ export const Mapbox = ({ data, className, ...props }: IMapbox) => {
           'text-size': 12,
         },
         paint: {
-          'text-color': `#F9A32C`, // Set the text color to white
+          'text-color': `#F9A32C`,
         },
       });
 
-      async function hideMarkersInClusters() {
-        // Show all markers
+      map.addLayer({
+        id: `unclustered-point`,
+        type: `symbol`,
+        source: `markers`,
+        filter: [`!has`, `point_count`],
+        layout: {
+          'icon-image': [`get`, `icon`],
+          'icon-size': 1.5,
+        },
+      });
+
+      // Hide markers when they are part of a cluster
+      const hideMarkersInClusters = () => {
         const markers = document.querySelectorAll(`[data-id]`);
-        let shouldBeHide: any = [];
+        markers.forEach((marker: any) => {
+          marker.style.display = `none`;
+        });
 
-        // Get all clusters
-        const clusters = map
-          .querySourceFeatures(`markers`)
+        const features = map.querySourceFeatures(`markers`, {
+          filter: [`!has`, `point_count`],
+        });
+
+        features.forEach((feature) => {
           // @ts-ignore
-          .filter((feature) => feature.properties.cluster_id);
-
-        const bunchOfAsync = clusters.map((cluster) => {
-          return (
-            map
-              .getSource(`markers`)
-              // @ts-ignore
-              .getClusterLeaves(cluster.properties.cluster_id, Infinity, 0)
+          const uniqueLink = feature.properties.uniqueLink;
+          const markerElement = document.querySelector(
+            `[data-id="${uniqueLink}"]`,
           );
+          if (markerElement) {
+            // @ts-ignore
+            markerElement.style.display = `block`;
+          }
         });
-        const _data = await Promise.all(bunchOfAsync);
-        _data.forEach((geoJson: any) => {
-          const geoData = geoJson._data;
-          shouldBeHide = geoData.features.map((feature: any) => {
-            const _prop = feature?.properties;
-            return String(_prop?.uniqueLink).split(`/`).pop();
-          });
-        });
-        // compare if the marker is in the cluster or not and hide it
-        markers &&
-          markers.forEach((marker: any) => {
-            const dataId = marker.getAttribute(`data-id`);
-            const markerElement = document.querySelector(
-              `[data-id="${dataId}"]`,
-            );
-            if (markerElement) {
-              if (shouldBeHide.includes(dataId)) {
-                // @ts-ignore
-                markerElement.style.visibility = `hidden`;
-              } else {
-                // @ts-ignore
-                markerElement.style.visibility = `visible`;
-              }
-            }
-          });
-      }
-      // inspect a cluster on click
+      };
+
+      // Inspect a cluster on click
       map.on(`click`, `clusters`, function (e) {
         const features = map.queryRenderedFeatures(e.point, {
           layers: [`clusters`],
@@ -196,7 +363,7 @@ export const Mapbox = ({ data, className, ...props }: IMapbox) => {
         map
           .getSource(`markers`)
           // @ts-ignore
-          .getClusterExpansionZoom(clusterId, function (err: any, zoom: any) {
+          .getClusterExpansionZoom(clusterId, function (err, zoom) {
             if (err) return;
 
             map.easeTo({
@@ -204,177 +371,126 @@ export const Mapbox = ({ data, className, ...props }: IMapbox) => {
               center: features[0].geometry.coordinates,
               zoom: zoom,
             });
-            hideMarkersInClusters();
           });
       });
-      map.on(`mouseenter`, `clusters`, function () {
-        map.getCanvas().style.cursor = `pointer`;
-        hideMarkersInClusters();
-      });
-      map.on(`mouseleave`, `clusters`, function () {
-        map.getCanvas().style.cursor = ``;
-        hideMarkersInClusters();
-      });
-      map.on(`moveend`, hideMarkersInClusters);
+
       map.on(`zoomend`, hideMarkersInClusters);
-      map.on(`move`, hideMarkersInClusters);
-      map.on(`zoom`, hideMarkersInClusters);
-      setTimeout(() => {
-        hideMarkersInClusters();
-      }, 1000);
-    });
-    // Add geolocate control to the map.
-    const geolocate = new mapboxgl.GeolocateControl({
-      positionOptions: {
-        enableHighAccuracy: true,
-      },
-      // When active the map will receive updates to the device's location as it changes.
-      trackUserLocation: true,
-      // Draw an arrow next to the location dot to indicate which direction the device is heading.
-      showUserLocation: false,
-    });
-    // Add to mapbox
-    map.addControl(geolocate);
+      map.on(`moveend`, hideMarkersInClusters);
+      map.on(`click`, `clusters`, hideMarkersInClusters);
 
-    // Add navigation control (the +/- zoom buttons)
-    map.addControl(new mapboxgl.NavigationControl(), `top-right`);
-    // Create markers
-    data.markers.forEach((item, _i) => {
-      if (!mapMarkersRef.current[_i] || mapMarkersRef.current[_i] == null) {
-        return;
-      }
-      const extractUniqueLink = item.uniqueLink?.split(`/`);
-      const uniqueLink = extractUniqueLink?.[extractUniqueLink.length - 1];
-      const linkToAugmented = `/augmented/${uniqueLink}`;
-      //set data-link on mapMarkersRef.current[_i]
-      const mapMark: any = mapMarkersRef.current[_i];
-      mapMark?.setAttribute(`data-id`, uniqueLink);
-      new mapboxgl.Marker(mapMarkersRef.current[_i])
-        .setLngLat([item.lng, item.lat])
-        .setPopup(
-          new mapboxgl.Popup().setHTML(
-            `<div class="text-jet-black">
-                <div class="text-lg font-bold">${item.title}</div>
-                <hr class="my-3" />
-                ${item.image ? `<img src="${item.image}" alt="${item.title}" class="mb-3 w-full" />` : ``}
-                ${
-                  item.desc
-                    ? `<div class="mb-2">${item.desc}</div>
-                      <hr class="my-3" />`
-                    : ``
-                }
-                <div>
-                  <span class="flex-shrink-0">Current status</span>: <b class="capitalize flex-shrink-0">${item.status}</b>
-                </div>
-                <div>
-                  <span class="flex-shrink-0">Dropped date</span>: <b class="capitalize flex-shrink-0">${format(item.createdAt, `MMM dd, yyyy, KK:mmaaa`)}</b>
-                </div>
-                ${
-                  item.claimedBy
-                    ? `<div><span class="flex-shrink-0">Claimed by</span>: <b class="capitalize flex-shrink-0">${item.claimedBy}</b></div>`
-                    : ``
-                }
-                ${
-                  item.claimedDuration
-                    ? `<div><span class="flex-shrink-0">Claimed in</span>: <b class="capitalize flex-shrink-0">${item.claimedDuration}</b></div>`
-                    : ``
-                }
-                ${
-                  !item.claimedBy && item.publicUniqueLink
-                    ? `<div class='w-full' style="visibility: hidden" id="${uniqueLink}" ><a href="${linkToAugmented}" class="mt-4 justify-center bg-azure-blue text-white transition hocustive:bg-azure-blue/20 hocustive:text-black rounded-lg font-semibold py-3 px-6  disabled:opacity-50 text-lg flex w-full items-center space-x-2">Start AR</a></div>`
-                    : ``
-                }
-              </div>`,
-          ),
-        )
-        .addTo(map);
-    });
-    // listen coords
-    geolocate.on(`geolocate`, (e: any) => {
-      const lat = e?.coords?.latitude;
-      const lng = e?.coords?.longitude;
-      // change html popup content
+      // Add markers to map
       data.markers.forEach((item, _i) => {
-        if (!mapMarkersRef.current[_i] || mapMarkersRef.current[_i] == null) {
-          return;
+        if (item.marker_3d?.url) {
+          console.log(`3D Model URL:`, item.marker_3d.url);
+          // Uncomment to enable 3D model loading
+          load3DModel(
+            map,
+            [item.lng, item.lat],
+            `/coin.glb`,
+            null,
+            null,
+            undefined,
+            0.1,
+          );
         }
-        if (!mapContainerRef.current) return;
-        const _marker = mapMarkersRef.current[_i] as HTMLDivElement;
-        const isNear = isNearUser(
-          { lat: lat, lng: lng },
-          { lat: item.lat, lng: item.lng },
+        const markerElement = document.createElement(`div`);
+        markerElement.setAttribute(
+          `class`,
+          item.status === `looted`
+            ? `mapbox__marker--looted`
+            : `mapbox__marker--live`,
         );
-        if (!isNear) {
-          const markerPoint =
-            _marker.getElementsByClassName(`point-marker-live`);
-          if (markerPoint.length > 0) {
-            //remove spinner
-            // @ts-ignore
-            _marker.getElementsByClassName(`point-marker`)[0].style.animation =
-              `none`;
-          }
-          return;
+        markerElement.setAttribute(`data-id`, item.uniqueLink || ``);
+        markerElement.style.width = item.status === `looted` ? `10px` : `64px`;
+        markerElement.style.height = item.status === `looted` ? `10px` : `64px`;
+
+        if (item.status === `looted`) {
+          markerElement.innerHTML = `<span class="relative inline-flex rounded-full h-2/3 w-2/3 bg-fade-red point-marker" />`;
+        } else {
+          markerElement.innerHTML = `<img
+              src="${customMarker}"
+              alt="marker"
+              class="absolute top-0 left-0 w-full h-full point-marker point-marker-live"
+              key="${_i}-keyless"
+            />`;
         }
-        //get document by id uniqueLink
-        //listne on click
-        _marker.addEventListener(`click`, (e: any) => {
-          const id = e?.target?.offsetParent?.dataset?.id ?? ``;
-          setTimeout(() => {
-            const getEl = document.getElementById(id);
-            if (getEl) {
-              if (!isNear) {
-                getEl.style.visibility = `hidden`;
-              } else {
-                getEl.style.visibility = `visible`;
-              }
-            }
-          }, 100);
-        });
-        // @ts-ignore
-        const liveMarker = _marker.getElementsByClassName(`point-marker-live`);
-        if (liveMarker.length > 0) {
-          //add spinner
-          // @ts-ignore
-          _marker.getElementsByClassName(`point-marker`)[0].style.animation =
-            `bounce 1s infinite`;
-        }
+
+        const mapMarker = new mapboxgl.Marker(markerElement)
+          .setLngLat([item.lng, item.lat])
+          .setPopup(
+            new mapboxgl.Popup().setHTML(
+              `<div class="text-jet-black">
+                  <div class="text-lg font-bold">${item.title}</div>
+                  <hr class="my-3" />
+                  ${
+                    item.image
+                      ? `<img src="${item.image}" alt="${item.title}" class="mb-3 w-full" />`
+                      : ``
+                  }
+                  ${
+                    item.desc
+                      ? `<div class="mb-2">${item.desc}</div><hr class="my-3" />`
+                      : ``
+                  }
+                  <div>
+                    <span class="flex-shrink-0">Current status</span>: <b class="capitalize flex-shrink-0">${item.status}</b>
+                  </div>
+                  <div>
+                    <span class="flex-shrink-0">Dropped date</span>: <b class="capitalize flex-shrink-0">${format(item.createdAt, `MMM dd, yyyy, KK:mmaaa`)}</b>
+                  </div>
+                  ${
+                    item.claimedBy
+                      ? `<div><span class="flex-shrink-0">Claimed by</span>: <b class="capitalize flex-shrink-0">${item.claimedBy}</b></div>`
+                      : ``
+                  }
+                  ${
+                    item.claimedDuration
+                      ? `<div><span class="flex-shrink-0">Claimed in</span>: <b class="capitalize flex-shrink-0">${item.claimedDuration}</b></div>`
+                      : ``
+                  }
+                  ${
+                    !item.claimedBy && item.publicUniqueLink
+                      ? `<div class='w-full' style="visibility: hidden" id="${item.uniqueLink}" ><a href="/augmented/${item.uniqueLink}" class="mt-4 justify-center bg-azure-blue text-white transition hocustive:bg-azure-blue/20 hocustive:text-black rounded-lg font-semibold py-3 px-6  disabled:opacity-50 text-lg flex w-full items-center space-x-2">Start AR</a></div>`
+                      : ``
+                  }
+                </div>`,
+            ),
+          )
+          .addTo(map);
+
+        mapMarkersRef.current.push(mapMarker);
       });
+
+      // Initially hide all markers part of a cluster
+      hideMarkersInClusters();
+
+      // Implement hide/show functionality for markers based on status
+      const updateMarkerVisibility = () => {
+        mapMarkersRef.current.forEach((mapMarker, index) => {
+          const marker = markers[index];
+          const markerElement = mapMarker.getElement();
+          if (
+            (marker.status === `live` && !showMarkerLive) ||
+            (marker.status === `looted` && !showMarkerLooted)
+          ) {
+            markerElement.style.display = `none`;
+          } else {
+            markerElement.style.display = `block`;
+          }
+        });
+        hideMarkersInClusters(); // Also hide markers that are part of clusters
+      };
+
+      updateMarkerVisibility();
+      map.on(`moveend`, updateMarkerVisibility);
+      map.on(`zoomend`, updateMarkerVisibility);
     });
-    // Clean up on unmount
-    return () => map.remove();
-  }, []);
 
-  useEffect(() => {
-    if (!mapContainerRef.current) return;
-
-    const markers = mapContainerRef.current.querySelectorAll(
-      `.mapbox__marker--live`,
-    ) as unknown as HTMLDivElement[];
-
-    markers.forEach((marker) => {
-      if (showMarkerLive) {
-        marker.style.visibility = `visible`;
-      } else {
-        marker.style.visibility = `hidden`;
-      }
-    });
-  }, [showMarkerLive]);
-
-  useEffect(() => {
-    if (!mapContainerRef.current) return;
-
-    const markers = mapContainerRef.current.querySelectorAll(
-      `.mapbox__marker--looted`,
-    ) as unknown as HTMLDivElement[];
-
-    markers.forEach((marker) => {
-      if (showMarkerLooted) {
-        marker.style.visibility = `visible`;
-      } else {
-        marker.style.visibility = `hidden`;
-      }
-    });
-  }, [showMarkerLooted]);
+    return () => {
+      map.remove();
+      mapMarkersRef.current = [];
+    };
+  }, [data.markers, showMarkerLive, showMarkerLooted]);
 
   return (
     <div className={mergeStyle(`mapbox`, className)} {...props}>
@@ -425,31 +541,6 @@ export const Mapbox = ({ data, className, ...props }: IMapbox) => {
             </label>
           </li>
         </ul>
-        <div className="hidden">
-          {markers.map((item, _i) =>
-            item.status === `looted` ? (
-              <div
-                key={_i}
-                ref={(e) => e && (mapMarkersRef.current[_i] = e)}
-                className={`mapbox__marker--looted relative flex items-center justify-center h-[10px] w-[10px]`}
-              >
-                <span className="relative inline-flex rounded-full h-2/3 w-2/3 bg-fade-red point-marker" />
-              </div>
-            ) : (
-              <div
-                key={_i}
-                ref={(e) => e && (mapMarkersRef.current[_i] = e)}
-                className={`mapbox__marker--live relative flex items-center justify-center h-[64px] w-[64px]`}
-              >
-                <img
-                  src={customMarker}
-                  alt="marker"
-                  className="absolute top-0 left-0 w-full h-full point-marker point-marker-live"
-                />
-              </div>
-            ),
-          )}
-        </div>
       </div>
     </div>
   );
