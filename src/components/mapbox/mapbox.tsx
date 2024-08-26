@@ -454,7 +454,7 @@ export const Mapbox = ({ data, className, ...props }: IMapbox) => {
 
     // Create standard markers
     data.markers
-      .filter((e) => !e.marker_3d)
+      .filter((e) => !e.marker_3d?.url)
       .forEach((item, _i) => {
         if (!mapMarkersRef.current[_i] || mapMarkersRef.current[_i] == null) {
           return;
