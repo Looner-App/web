@@ -24,8 +24,13 @@ export async function middleware(request: NextRequest) {
   /// ==== augmented headers ====
   const use_menu = String(!withoutMenus.includes(firstPath) ? 1 : 0);
   headers.set(`x-use-menu`, use_menu);
-  headers.set(`x-is-claim`, use_menu);
-  headers.set(`x-remove-min-h`, use_menu);
+  if ([`claim`, `explore`].includes(firstPath)) {
+    headers.set(`x-is-claim`, `1`);
+    headers.set(`x-remove-min-h`, `1`);
+  } else {
+    headers.set(`x-is-claim`, `0`);
+    headers.set(`x-remove-min-h`, `0`);
+  }
 
   // Redirect if user access /account
   if (!user && pathname === `account`) {
