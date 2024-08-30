@@ -1,0 +1,44 @@
+#gradient {
+  z-index: 99;
+  /* add another 100% for each new color,
+  always repeat the first two colors in the array*/
+  background-size: 400% 400%;
+  background-image: linear-gradient(140deg, #7611B6, #563BA4, #3A4AAA, #7611B6, #563BA4);
+}
+
+
+spinner {
+  width: 4rem;
+  height: 4rem;
+  border-top: 3px solid rgba(255, 255, 255, 0.5);
+  border-right: 3px solid transparent;
+  border-radius: 50%;
+  animation: rotation 0.8s linear infinite;
+  position: relative; /* Add this to position the logo inside */
+}
+
+.spinner-wrapper {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+.spinner-logo {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 2rem; /* Adjust the size as needed */
+  height: 2rem; /* Adjust the size as needed */
+  z-index: 99;
+}
+
+@keyframes rotation {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}

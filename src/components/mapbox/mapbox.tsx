@@ -64,6 +64,7 @@ export const Mapbox = ({ data, className, ...props }: IMapbox) => {
   //   return distance <= threshold;
   // };
   const mixers: THREE.AnimationMixer[] = [];
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const load3DModel = (
     map: mapboxgl.Map,
     coordinates: [number, number],
@@ -383,15 +384,15 @@ export const Mapbox = ({ data, className, ...props }: IMapbox) => {
         if (item.marker_3d?.url) {
           console.log(`3D Model URL:`, item.marker_3d.url);
           // Uncomment to enable 3D model loading
-          load3DModel(
-            map,
-            [item.lng, item.lat],
-            `/coin.glb`,
-            null,
-            null,
-            undefined,
-            0.1,
-          );
+          // load3DModel(
+          //   map,
+          //   [item.lng, item.lat],
+          //   `/coin.glb`,
+          //   null,
+          //   null,
+          //   undefined,
+          //   0.1,
+          // );
         }
         const markerElement = document.createElement(`div`);
         markerElement.setAttribute(

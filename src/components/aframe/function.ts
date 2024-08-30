@@ -97,7 +97,7 @@ const madeEntityTarget = (assetUrl) => {
   );
   return el;
 };
-const targetComponent = ({ link }) => {
+const targetComponent = ({ link = `` }) => {
   return {
     async init() {
       const target = madeEntityTarget(`/coin.glb`);
@@ -109,4 +109,92 @@ const targetComponent = ({ link }) => {
     },
   };
 };
-export { AFrameScene, DISABLE_IMAGE_TARGETS, targetComponent };
+const madeMarker = (data) => {
+  const item = document.createElement(`lightship-map-point`);
+  item.setAttribute(`id`, data.id);
+  item.setAttribute(`lat-lng`, `${data.lat} ${data.lng}`);
+  item.setAttribute(`position`, { x: 0, y: 25, z: 0 });
+  item.setAttribute(`scale`, `2 2 2`);
+  item.setAttribute(`gltf-model`, `url(${data.marker_3d})`);
+  item.setAttribute(`class`, `cantap`);
+  item.setAttribute(
+    `animation`,
+    `property: rotation; to: 0 360 0; loop: true; dur: 5000; easing: linear;`,
+  );
+
+  return item;
+};
+const getData = (data = []) => {
+  return {
+    async init() {
+      console.log(`data`, data);
+      this.lightshipMap = document.querySelector(`lightship-map`);
+      const fragment = document.createDocumentFragment();
+      this.requestInProgress = false;
+      const len = data.length;
+      let i = 0;
+      const addMarker = () => {
+        if (i < len) {
+          const sw = data[i];
+          const target = madeMarker(sw);
+          fragment.appendChild(target);
+          i++;
+          requestAnimationFrame(addMarker);
+        } else {
+          this.lightshipMap.appendChild(fragment);
+        }
+      };
+      requestAnimationFrame(addMarker);
+    },
+  };
+};
+const mapLoading = () => {
+  return {
+    async init() {
+      const scene = this.el.sceneEl;
+      const gradient = document.getElementById(`gradient`);
+      const dismissLoadScreen = () => {
+        setTimeout(() => {
+          gradient.classList.add(`fade-out`);
+        }, 1500);
+
+        setTimeout(() => {
+          gradient.style.display = `none`;
+        }, 2000);
+      };
+
+      const handleGeolocationError = (err) => {
+        console.log(err.message);
+      };
+      const getPosition = function (options) {
+        return new Promise((resolve, reject) => {
+          if (!navigator.geolocation) {
+            reject(new Error(`Geolocation is not supported by your browser`));
+          } else {
+            navigator.geolocation.getCurrentPosition(resolve, reject, options);
+          }
+        });
+      };
+      getPosition()
+        .then(() => {
+          if (scene.hasLoaded) {
+            dismissLoadScreen();
+          } else {
+            scene.addEventListener(`loaded`, dismissLoadScreen);
+          }
+        })
+        .catch((err) => {
+          console.error(err.message);
+          // Handle the error when geolocation is disabled or any other error
+          handleGeolocationError(err);
+        });
+    },
+  };
+};
+export {
+  AFrameScene,
+  DISABLE_IMAGE_TARGETS,
+  targetComponent,
+  mapLoading,
+  getData,
+};
