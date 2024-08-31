@@ -42,15 +42,20 @@ const usePermission = () => {
       requestPermission();
     } else {
       // @ts-ignore
-      DeviceMotionEvent.requestPermission()
-        .then((response: any) => {
-          if (response == `granted`) {
-            requestPermission();
-          }
-        })
-        .catch(() => {
-          onDenied();
-        });
+      if (typeof DeviceMotionEvent === `undefined`) {
+        // @ts-ignore
+        DeviceMotionEvent.requestPermission()
+          .then((response: any) => {
+            if (response == `granted`) {
+              requestPermission();
+            }
+          })
+          .catch(() => {
+            onDenied();
+          });
+      } else {
+        requestPermission();
+      }
     }
   };
 
