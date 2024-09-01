@@ -1,5 +1,6 @@
 import './niantic.css';
 import dynamic from 'next/dynamic';
+import { proxyUrl } from '@/libs/helper';
 
 export interface IMapbox extends React.HTMLAttributes<HTMLDivElement> {
   data: {
@@ -33,6 +34,12 @@ const Index = ({ data, ...props }: IMapbox) => {
       const getLastUniqueLink = (uniqueLink: string) => {
         return uniqueLink.split(`/`).pop();
       };
+      // get last path marker.marker_3d?.url
+      const lastPath = marker.marker_3d?.url?.split(`/`).pop();
+      let path = ``;
+      if (lastPath) {
+        path = proxyUrl(lastPath);
+      }
       return {
         lat: marker.lat,
         lng: marker.lng,
@@ -40,7 +47,7 @@ const Index = ({ data, ...props }: IMapbox) => {
         id: marker?.uniqueLink
           ? getLastUniqueLink(marker?.uniqueLink)
           : Math.random().toString(36).substring(7),
-        marker_3d: marker.marker_3d?.url,
+        marker_3d: path,
       };
     })
     .filter((marker) => marker.marker_3d);
