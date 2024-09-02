@@ -114,7 +114,7 @@ const madeMarker = (data) => {
   item.setAttribute(`id`, data.id);
   item.setAttribute(`lat-lng`, `${data.lat} ${data.lng}`);
   item.setAttribute(`position`, { x: 0, y: 25, z: 0 });
-  item.setAttribute(`scale`, `2 2 2`);
+  item.setAttribute(`scale`, `0.6 0.6 0.6`);
   item.setAttribute(`gltf-model`, `url(${data.marker_3d})`);
   item.setAttribute(`class`, `cantap`);
   item.setAttribute(
@@ -127,7 +127,6 @@ const madeMarker = (data) => {
 const getData = (data = []) => {
   return {
     async init() {
-      console.log(`data`, data);
       this.lightshipMap = document.querySelector(`lightship-map`);
       const fragment = document.createDocumentFragment();
       this.requestInProgress = false;
@@ -137,6 +136,9 @@ const getData = (data = []) => {
         if (i < len) {
           const sw = data[i];
           const target = madeMarker(sw);
+          target.addEventListener(`click`, () => {
+            target.setAttribute(`visible`, false);
+          });
           fragment.appendChild(target);
           i++;
           requestAnimationFrame(addMarker);
