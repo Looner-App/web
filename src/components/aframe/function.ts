@@ -136,8 +136,36 @@ const getData = (data = []) => {
         if (i < len) {
           const sw = data[i];
           const target = madeMarker(sw);
-          target.addEventListener(`click`, () => {
-            target.setAttribute(`visible`, false);
+          target.addEventListener(`click`, async () => {
+            //make spin faster
+            target.setAttribute(
+              `animation__bounce`,
+              `property: position; to: 0 0.2 0; dir: alternate; dur: 300; loop: true; easing: easeInOutQuad;`,
+            );
+            const id = sw?.id;
+
+            // Send PATCH request to the API endpoint
+            try {
+              const response = await fetch(`/api/users/claim`, {
+                method: `PATCH`,
+                headers: {
+                  'Content-Type': `application/json`,
+                },
+                body: JSON.stringify({ id }), // Pass the id in the request body
+              });
+
+              if (!response.ok) {
+                // Show alert and redirect to the login page if the request fails
+                alert(`Failed to claim user. Please log in to continue.`);
+                window.location.href = `/login`; // Redirect to the login page
+              } else {
+                target.setAttribute(`visible`, false);
+              }
+            } catch (error) {
+              console.error(`Error during the fetch request:`, error);
+              alert(`Failed to claim user. Please log in to continue.`);
+              window.location.href = `/login`; // Redirect to the login page
+            }
           });
           fragment.appendChild(target);
           i++;
