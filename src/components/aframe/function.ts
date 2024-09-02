@@ -157,14 +157,14 @@ const getData = (data = []) => {
               if (!response.ok) {
                 // Show alert and redirect to the login page if the request fails
                 alert(`Failed to claim user. Please log in to continue.`);
-                window.location.href = `/login`; // Redirect to the login page
+                window.location.href = `/`; // Redirect to the login page
               } else {
                 target.setAttribute(`visible`, false);
               }
             } catch (error) {
               console.error(`Error during the fetch request:`, error);
               alert(`Failed to claim user. Please log in to continue.`);
-              window.location.href = `/login`; // Redirect to the login page
+              window.location.href = `/`; // Redirect to the login page
             }
           });
           fragment.appendChild(target);
