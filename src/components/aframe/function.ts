@@ -143,9 +143,14 @@ const getData = (data = []) => {
               `property: position; to: 0 0.2 0; dir: alternate; dur: 300; loop: true; easing: easeInOutQuad;`,
             );
             const id = sw?.id;
+            const isTargetAR = sw?.isTargetAR;
 
             // Send PATCH request to the API endpoint
             try {
+              if (isTargetAR) {
+                window.location.href = `/augmented/${id}`;
+                return;
+              }
               const response = await fetch(`/api/users/claim`, {
                 method: `PATCH`,
                 headers: {

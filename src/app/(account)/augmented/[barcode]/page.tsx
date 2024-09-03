@@ -3,7 +3,7 @@ import { fetchPayload } from '@/libs/api';
 import { cookies } from 'next/headers';
 import { notFound } from 'next/navigation';
 
-const AframeDynamic = dynamic(() => import(`@/components/aframe`), {
+const AframeDynamic = dynamic(() => import(`@/components/aframeTarget`), {
   ssr: false,
   loading: () => <p>Loading...</p>,
 });
@@ -27,7 +27,10 @@ export default async function Augmented({
   return (
     <>
       <div className="container w-fit overflow-hidden">
-        <AframeDynamic link={json?.data?.uniqueLink} />
+        <AframeDynamic
+          link={json?.data?.uniqueLink}
+          asset3d={json?.data?.marker3d?.url ?? null}
+        />
       </div>
     </>
   );

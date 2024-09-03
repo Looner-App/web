@@ -30,6 +30,7 @@ export interface IMapbox extends React.HTMLAttributes<HTMLDivElement> {
       claimedDuration?: string;
       publicUniqueLink?: boolean;
       uniqueLink?: string;
+      isTargetAR?: boolean | null;
       marker_3d?: {
         url?: string | null;
       };

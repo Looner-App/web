@@ -3,7 +3,7 @@ import Script from 'next/script';
 import { Meta } from 'next/dist/lib/metadata/generate/meta';
 
 export const metadata: Metadata = {
-  title: `Augmented - ${process.env.NEXT_PUBLIC_SITE_NAME}`,
+  title: `Explore - ${process.env.NEXT_PUBLIC_SITE_NAME}`,
 };
 const AR_TOKEN = process.env.AR_TOKEN;
 export default async function Layout({
