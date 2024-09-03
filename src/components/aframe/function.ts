@@ -114,7 +114,7 @@ const madeMarker = (data) => {
   item.setAttribute(`id`, data.id);
   item.setAttribute(`lat-lng`, `${data.lat} ${data.lng}`);
   item.setAttribute(`position`, { x: 0, y: 25, z: 0 });
-  item.setAttribute(`scale`, `2 2 2`);
+  item.setAttribute(`scale`, `0.6 0.6 0.6`);
   item.setAttribute(`gltf-model`, `url(${data.marker_3d})`);
   item.setAttribute(`class`, `cantap`);
   item.setAttribute(
@@ -127,7 +127,6 @@ const madeMarker = (data) => {
 const getData = (data = []) => {
   return {
     async init() {
-      console.log(`data`, data);
       this.lightshipMap = document.querySelector(`lightship-map`);
       const fragment = document.createDocumentFragment();
       this.requestInProgress = false;
@@ -137,6 +136,37 @@ const getData = (data = []) => {
         if (i < len) {
           const sw = data[i];
           const target = madeMarker(sw);
+          target.addEventListener(`click`, async () => {
+            //make spin faster
+            target.setAttribute(
+              `animation__bounce`,
+              `property: position; to: 0 0.2 0; dir: alternate; dur: 300; loop: true; easing: easeInOutQuad;`,
+            );
+            const id = sw?.id;
+
+            // Send PATCH request to the API endpoint
+            try {
+              const response = await fetch(`/api/users/claim`, {
+                method: `PATCH`,
+                headers: {
+                  'Content-Type': `application/json`,
+                },
+                body: JSON.stringify({ id }), // Pass the id in the request body
+              });
+
+              if (!response.ok) {
+                // Show alert and redirect to the login page if the request fails
+                alert(`Failed to claim user. Please log in to continue.`);
+                window.location.href = `/`; // Redirect to the login page
+              } else {
+                target.setAttribute(`visible`, false);
+              }
+            } catch (error) {
+              console.error(`Error during the fetch request:`, error);
+              alert(`Failed to claim user. Please log in to continue.`);
+              window.location.href = `/`; // Redirect to the login page
+            }
+          });
           fragment.appendChild(target);
           i++;
           requestAnimationFrame(addMarker);
