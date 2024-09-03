@@ -19,6 +19,7 @@ export interface IMapbox extends React.HTMLAttributes<HTMLDivElement> {
       marker_3d?: {
         url?: string | null;
       };
+      isTargetAR?: boolean | null;
     }[];
     initZoom?: number;
   };
@@ -48,6 +49,7 @@ const Index = ({ data, ...props }: IMapbox) => {
           ? getLastUniqueLink(marker?.uniqueLink)
           : Math.random().toString(36).substring(7),
         marker_3d: path,
+        isTargetAR: marker?.isTargetAR,
       };
     })
     .filter((marker) => marker.marker_3d);

@@ -15,12 +15,12 @@ export default async function Page() {
   });
   const dataPayload: IBlockComponent['data'] = {
     mapbox: {
-      // initZoom: 10,
       markers:
         items && items.docs.length
           ? items.docs
               .filter((e) => e.publicUniqueLink)
               .map((item) => {
+                console.log(item);
                 return {
                   lng: item.location[0],
                   lat: item.location[1],
@@ -47,6 +47,7 @@ export default async function Page() {
                   marker_3d: {
                     url: item?.marker_3d?.url ?? null,
                   },
+                  isTargetAR: item?.isTargetAR,
                 };
               })
           : [],

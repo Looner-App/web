@@ -40,6 +40,7 @@ export interface Item {
   category: string | Category;
   barcode?: string | null;
   uniqueLink?: string | null;
+  isTargetAR?: boolean | null;
   marker_3d?: {
     url?: string | null;
   } | null;
