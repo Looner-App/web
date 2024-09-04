@@ -100,7 +100,7 @@ const madeEntityTarget = (assetUrl) => {
 const targetComponent = ({ link, asset3d = null }) => {
   return {
     async init() {
-      const target = madeEntityTarget(asset3d ?? `/coin.glb`);
+      const target = madeEntityTarget(asset3d ?? `/lootbox.glb`);
       const el = this.el;
       el.appendChild(target);
       el.addEventListener(`click`, () => {

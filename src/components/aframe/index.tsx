@@ -11,7 +11,7 @@ const html = `<a-scene map-loading-screen renderer="color-management:true; antia
     <h1 class="powered">Powered By Looner</h1>
   </div>
   <a-assets>
-    <a-asset-item id="doty" src="//static.8thwall.app/assets/model-xmcmxic3oj.glb" />
+    <a-asset-item id="doty" src="/avatar.glb" />
   </a-assets>
   <a-entity light="type: directional;
            intensity: 0.3;
@@ -32,7 +32,7 @@ const html = `<a-scene map-loading-screen renderer="color-management:true; antia
       exponent: 0.65"></a-sky>
   <a-plane scale="100 100 1" rotation="-90 0 0" position="0 0.01 0" material="shader: shadow" shadow="cast: false; receive: true;"></a-plane>
   <lightship-map get-data scale="100 100 100" responsive-map-theme="mode: time" lightship-map-add-wayspots="primitive: custom-wayspot; meters: 25; min: 0.05;">
-    <a-entity id="character" gltf-model="#doty" rotation="0 180 0" scale="0.08 0.08 0.08" lightship-map-motion-direction lightship-map-walk-animation="idle: idle; walk: walk; run: walk;" shadow></a-entity>
+    <a-entity id="character" gltf-model="#doty" rotation="0 180 0" scale="0.008 0.008 0.008" lightship-map-motion-direction lightship-map-walk-animation="idle: Action; walk: walking; run: walking;" shadow></a-entity>
   </lightship-map>
 </a-scene>
 `;
