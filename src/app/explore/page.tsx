@@ -20,7 +20,6 @@ export default async function Page() {
           ? items.docs
               .filter((e) => e.publicUniqueLink)
               .map((item) => {
-                console.log(item);
                 return {
                   lng: item.location[0],
                   lat: item.location[1],
