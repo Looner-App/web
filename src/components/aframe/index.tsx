@@ -14,7 +14,7 @@ const html = `<a-scene map-loading-screen renderer="color-management:true; antia
     <a-asset-item id="doty" src="/avatar.glb" />
     <img id="clouds" src="/clouds.jpg">
   </a-assets>
-    <a-entity id="land-mat" material="color: #6a816a"></a-entity>
+  <a-entity id="land-mat" material="color: #6a816a"></a-entity>
   <a-entity id="building-mat" material="color: #c2c2c2"></a-entity>
   <a-entity id="park-mat" material="color: #116e28"></a-entity>
   <a-entity id="parking-mat" material="color: #707070"></a-entity>
@@ -50,7 +50,13 @@ const html = `<a-scene map-loading-screen renderer="color-management:true; antia
       repeat: 4 4;
       opacity: 0.35;"
   ></a-sky>
-  <a-plane scale="100 100 1" rotation="-90 0 0" position="0 0.01 0" material="shader: shadow" shadow="cast: false; receive: true;"></a-plane>
+    <a-plane
+    scale="100 100 1"
+    rotation="-90 0 0"
+    position="0 0.01 0"
+    material="shader: shadow"
+    shadow="cast: false; receive: true;"
+  ></a-plane>
   <lightship-map get-data scale="100 100 100" responsive-map-theme="mode: time" lightship-map-add-wayspots="primitive: custom-wayspot; meters: 25; min: 0.05;">
     <a-entity id="character" gltf-model="#doty" rotation="0 180 0" scale="0.008 0.008 0.008" lightship-map-motion-direction lightship-map-walk-animation="idle: Action; walk: walking; run: walking;" shadow></a-entity>
   </lightship-map>
