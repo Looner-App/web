@@ -3,7 +3,7 @@
 import { AFrameScene, getData, mapLoading } from '@/components/aframe/function';
 import usePermission from '@/components/aframe/permission';
 
-const html = `<a-scene map-loading-screen renderer="color-management:true; antialias: true;" fog="color: white; type: exponential; density: 0.060;" gltf-model="draco-decoder-path: https://cdn.8thwall.com/web/aframe/draco-decoder/" inspector="url: https://cdn.jsdelivr.net/gh/aframevr/aframe-inspector@master/dist/aframe-inspector.min.js">
+const html = `<a-scene map-loading-screen renderer="color-management:true; antialias: true;" fog="color: #e9cfb9; type: exponential; density: 0.010;" gltf-model="draco-decoder-path: https://cdn.8thwall.com/web/aframe/draco-decoder/" inspector="url: https://cdn.jsdelivr.net/gh/aframevr/aframe-inspector@master/dist/aframe-inspector.min.js">
   <div id="gradient" class="gradient-move absolute-fill">
     <div class="spinner-wrapper">
       <div class="spinner"></div>
@@ -12,7 +12,16 @@ const html = `<a-scene map-loading-screen renderer="color-management:true; antia
   </div>
   <a-assets>
     <a-asset-item id="doty" src="/avatar.glb" />
+    <img id="clouds" src="/clouds.jpg">
   </a-assets>
+    <a-entity id="land-mat" material="color: #6a816a"></a-entity>
+  <a-entity id="building-mat" material="color: #c2c2c2"></a-entity>
+  <a-entity id="park-mat" material="color: #116e28"></a-entity>
+  <a-entity id="parking-mat" material="color: #707070"></a-entity>
+  <a-entity id="road-mat" material="color: #343232"></a-entity>
+  <a-entity id="transit-mat" material="color: #000000"></a-entity>
+  <a-entity id="sand-mat" material="color: #d3c592"></a-entity>
+  <a-entity id="water-mat" material="color: #5d81a2"></a-entity>
   <a-entity light="type: directional;
            intensity: 0.3;
            cast-shadow: true;
@@ -28,8 +37,19 @@ const html = `<a-scene map-loading-screen renderer="color-management:true; antia
   <a-camera near="1" far="200" raycaster="objects: .cantap" cursor="fuse: false; rayOrigin: mouse;" wasd-controls="enabled: false" lightship-map-controls="target: 0 4 0; min-distance: 5.5; max-distance: 25;"></a-camera>
   <a-sky id="outer-sky" radius="100" material="
       shader: lightship-map-sky-gradient;
-      topColor: #73E8F9;
+      topColor: #6b8cb8;
       exponent: 0.65"></a-sky>
+   <a-sky
+    id="inner-sky"
+    radius="90"
+    xrextras-spin="speed: 500000"
+    material="
+      shader: standard;
+      src: #clouds;
+      transparent: true;
+      repeat: 4 4;
+      opacity: 0.35;"
+  ></a-sky>
   <a-plane scale="100 100 1" rotation="-90 0 0" position="0 0.01 0" material="shader: shadow" shadow="cast: false; receive: true;"></a-plane>
   <lightship-map get-data scale="100 100 100" responsive-map-theme="mode: time" lightship-map-add-wayspots="primitive: custom-wayspot; meters: 25; min: 0.05;">
     <a-entity id="character" gltf-model="#doty" rotation="0 180 0" scale="0.008 0.008 0.008" lightship-map-motion-direction lightship-map-walk-animation="idle: Action; walk: walking; run: walking;" shadow></a-entity>
