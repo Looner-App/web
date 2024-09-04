@@ -58,7 +58,7 @@ const html = `<a-scene map-loading-screen renderer="color-management:true; antia
     shadow="cast: false; receive: true;"
   ></a-plane>
   <lightship-map get-data scale="100 100 100" responsive-map-theme="mode: time" lightship-map-add-wayspots="primitive: custom-wayspot; meters: 25; min: 0.05;">
-    <a-entity id="character" gltf-model="#doty" rotation="0 180 0" scale="0.008 0.008 0.008" lightship-map-motion-direction lightship-map-walk-animation="idle: Action; walk: walking; run: walking;" shadow></a-entity>
+    <a-entity id="character" gltf-model="#doty" rotation="0 180 0" scale="0.08 0.08 0.08" lightship-map-motion-direction lightship-map-walk-animation="idle: Action; walk: walking; run: walking;" shadow></a-entity>
   </lightship-map>
 </a-scene>
 `;
