@@ -1,14 +1,23 @@
 // @ts-nocheck
 'use client';
-import { AFrameScene, getData, mapLoading } from '@/components/aframe/function';
-import usePermission from '@/components/aframe/permission';
+import {
+  AFrameScene,
+  getData,
+  mapLoadingScreenComponent,
+} from '@/components/aframe/function';
 
-const html = `<a-scene map-loading-screen renderer="color-management:true; antialias: true;" fog="color: #e9cfb9; type: exponential; density: 0.010;" gltf-model="draco-decoder-path: https://cdn.8thwall.com/web/aframe/draco-decoder/" inspector="url: https://cdn.jsdelivr.net/gh/aframevr/aframe-inspector@master/dist/aframe-inspector.min.js">
+const html = `<a-scene
+map-loading-screen renderer="color-management:true; antialias: true;"
+ fog="color: #e9cfb9; type: exponential; density: 0.010;"
+  gltf-model="draco-decoder-path: https://cdn.8thwall.com/web/aframe/draco-decoder/"
+  xr-web="allowedDevices: any"
+   inspector="url: https://cdn.jsdelivr.net/gh/aframevr/aframe-inspector@master/dist/aframe-inspector.min.js"
+   >
   <div id="gradient" class="gradient-move absolute-fill">
     <div class="spinner-wrapper">
       <div class="spinner"></div>
     </div>
-    <h1 class="powered">Powered By Looner</h1>
+    <h1 class="poweredby">Powered By Looner</h1>
   </div>
   <a-assets>
     <a-asset-item id="doty" src="/avatar.glb" />
@@ -63,32 +72,13 @@ const html = `<a-scene map-loading-screen renderer="color-management:true; antia
 </a-scene>
 `;
 const Aframe = ({ data = [] }: any) => {
-  console.log(`data`, data);
-  const permit = usePermission();
-  if (!permit.permission.camera) {
-    // notify user to allow camera access with tailwind
-    return (
-      <div className="flex items-center justify-center h-screen">
-        <div className="text-center">
-          <h1 className="text-2xl font-bold">Please allow camera access</h1>
-          <button
-            onClick={permit.motionSensor}
-            className="uppercase border inline-block
-                  px-5 py-2 rounded-md transition duration-300 hocustive:bg-white hocustive:text-jet-black font-bold"
-          >
-            Allow Camera & Motion Sensor
-          </button>
-        </div>
-      </div>
-    );
-  }
   return (
     <AFrameScene
       sceneHtml={html}
       components={[
         {
           name: `map-loading-screen`,
-          val: mapLoading,
+          val: mapLoadingScreenComponent,
         },
         {
           name: `get-data`,

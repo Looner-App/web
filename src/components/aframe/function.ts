@@ -109,6 +109,42 @@ const targetComponent = ({ link = `` }) => {
     },
   };
 };
+
+const mapLoadingScreenComponent = {
+  init() {
+    const scene = this.el.sceneEl;
+    const gradient = document.getElementById(`gradient`);
+    const poweredby = document.getElementById(`poweredby`);
+
+    const dismissLoadScreen = () => {
+      setTimeout(() => {
+        poweredby.classList.add(`fade-out`);
+        gradient.classList.add(`fade-out`);
+      }, 1500);
+
+      setTimeout(() => {
+        poweredby.style.display = `none`;
+        gradient.style.display = `none`;
+      }, 2000);
+    };
+
+    const getPosition = function (options) {
+      return new Promise((resolve, reject) => {
+        navigator.geolocation.getCurrentPosition(resolve, reject, options);
+      });
+    };
+
+    getPosition()
+      .then(() => {
+        scene.hasLoaded
+          ? dismissLoadScreen()
+          : scene.addEventListener(`loaded`, dismissLoadScreen);
+      })
+      .catch((err) => {
+        console.error(err.message);
+      });
+  },
+};
 const madeMarker = (data) => {
   const item = document.createElement(`lightship-map-point`);
   item.setAttribute(`id`, data.id);
@@ -183,53 +219,10 @@ const getData = (data = []) => {
     },
   };
 };
-const mapLoading = () => {
-  return {
-    async init() {
-      const scene = this.el.sceneEl;
-      const gradient = document.getElementById(`gradient`);
-      const dismissLoadScreen = () => {
-        setTimeout(() => {
-          gradient.classList.add(`fade-out`);
-        }, 1500);
-
-        setTimeout(() => {
-          gradient.style.display = `none`;
-        }, 2000);
-      };
-
-      const handleGeolocationError = (err) => {
-        console.log(err.message);
-      };
-      const getPosition = function (options) {
-        return new Promise((resolve, reject) => {
-          if (!navigator.geolocation) {
-            reject(new Error(`Geolocation is not supported by your browser`));
-          } else {
-            navigator.geolocation.getCurrentPosition(resolve, reject, options);
-          }
-        });
-      };
-      getPosition()
-        .then(() => {
-          if (scene.hasLoaded) {
-            dismissLoadScreen();
-          } else {
-            scene.addEventListener(`loaded`, dismissLoadScreen);
-          }
-        })
-        .catch((err) => {
-          console.error(err.message);
-          // Handle the error when geolocation is disabled or any other error
-          handleGeolocationError(err);
-        });
-    },
-  };
-};
 export {
   AFrameScene,
   DISABLE_IMAGE_TARGETS,
   targetComponent,
-  mapLoading,
+  mapLoadingScreenComponent,
   getData,
 };
