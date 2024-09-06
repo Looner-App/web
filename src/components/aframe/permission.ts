@@ -1,7 +1,12 @@
 'use client';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 
 const usePermission = () => {
+  const [geoPermission, setGeoPermission] = useState<{
+    geo: boolean;
+  }>({
+    geo: false,
+  });
   const [permission, setPermission] = useState<{
     camera: boolean;
   }>({
@@ -39,7 +44,7 @@ const usePermission = () => {
   };
   const motionSensor = () => {
     if (navigator.userAgent.toLowerCase().includes(`android`)) {
-      requestPermission();
+      console.log(`android`);
     } else {
       // @ts-ignore
       if (typeof DeviceMotionEvent === `undefined`) {
@@ -47,7 +52,7 @@ const usePermission = () => {
         DeviceMotionEvent.requestPermission()
           .then((response: any) => {
             if (response == `granted`) {
-              requestPermission();
+              console.log(`granted`);
             }
           })
           .catch(() => {
@@ -59,7 +64,26 @@ const usePermission = () => {
     }
   };
 
-  return { permission, motionSensor };
+  const getGeoPermission = () => {
+    if (navigator.geolocation) {
+      setTimeout(() => {
+        navigator.geolocation.getCurrentPosition(
+          () => {
+            setGeoPermission({ geo: true });
+            motionSensor();
+          },
+          () => {
+            setGeoPermission({ geo: false });
+          },
+        );
+      }, 5000);
+    }
+  };
+
+  useEffect(() => {
+    getGeoPermission();
+  }, []);
+  return { permission, motionSensor, geoPermission };
 };
 
 export default usePermission;
