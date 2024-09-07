@@ -5,10 +5,11 @@ import {
   getData,
   mapLoadingScreenComponent,
 } from '@/components/aframe/function';
+import usePermission from '@/components/aframe/permission';
 
 const html = `<a-scene
 map-loading-screen renderer="color-management:true; antialias: true;"
- fog="color: #e9cfb9; type: exponential; density: 0.010;"
+ fog="color: #e9cfb9; type: exponential; density: -0.016;"
   gltf-model="draco-decoder-path: https://cdn.8thwall.com/web/aframe/draco-decoder/"
   xr-web="allowedDevices: any"
    inspector="url: https://cdn.jsdelivr.net/gh/aframevr/aframe-inspector@master/dist/aframe-inspector.min.js"
@@ -67,11 +68,26 @@ map-loading-screen renderer="color-management:true; antialias: true;"
     shadow="cast: false; receive: true;"
   ></a-plane>
   <lightship-map get-data scale="100 100 100" responsive-map-theme="mode: time" lightship-map-add-wayspots="primitive: custom-wayspot; meters: 25; min: 0.05;">
-    <a-entity id="character" gltf-model="#doty" rotation="0 180 0" scale="0.08 0.08 0.08" lightship-map-motion-direction lightship-map-walk-animation="idle: Action; walk: walking; run: walking;" shadow></a-entity>
+    <a-entity id="character" gltf-model="#doty" rotation="0 180 0" scale="0.01 0.01 0.01" lightship-map-motion-direction lightship-map-walk-animation="idle: Action; walk: walking; run: walking;" shadow></a-entity>
   </lightship-map>
 </a-scene>
 `;
+
+const Loader = () => {
+  return (
+    <div className="flex flex-col items-center justify-center min-h-screen">
+      <div className="spinner animate-spin rounded-full h-12 w-12 border-t-4 border-b-4 border-white mb-4"></div>
+      <p className="text-white text-lg font-semibold">Loading...</p>
+    </div>
+  );
+};
 const Aframe = ({ data = [] }: any) => {
+  const permissions = usePermission();
+
+  if (!permissions.geoPermission.geo) {
+    return <Loader />;
+  }
+
   return (
     <AFrameScene
       sceneHtml={html}

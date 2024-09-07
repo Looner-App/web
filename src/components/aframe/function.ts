@@ -84,48 +84,12 @@ function AFrameScene({
 }
 
 const DISABLE_IMAGE_TARGETS = [];
-const madeEntityTarget = (assetUrl) => {
-  const el = document.createElement(`a-entity`);
-  el.setAttribute(`id`, `entity-target`);
-  el.setAttribute(`position`, { x: 0, y: 1, z: -5 });
-  el.setAttribute(`scale`, `1.5 1.5 1.5`);
-  el.setAttribute(`gltf-model`, `url(${assetUrl})`);
-  el.setAttribute(`class`, `cantap`);
-  el.setAttribute(
-    `animation`,
-    `property: rotation; to: 0 360 0; loop: true; dur: 5000; easing: linear;`,
-  );
-  return el;
-};
-const targetComponent = ({ link = `` }) => {
-  return {
-    async init() {
-      const target = madeEntityTarget(`/coin.glb`);
-      const el = this.el;
-      el.appendChild(target);
-      el.addEventListener(`click`, () => {
-        window.location.href = link;
-      });
-    },
-  };
-};
 
 const mapLoadingScreenComponent = {
   init() {
     const scene = this.el.sceneEl;
-    const gradient = document.getElementById(`gradient`);
-    const poweredby = document.getElementById(`poweredby`);
-
     const dismissLoadScreen = () => {
-      setTimeout(() => {
-        poweredby.classList.add(`fade-out`);
-        gradient.classList.add(`fade-out`);
-      }, 1500);
-
-      setTimeout(() => {
-        poweredby.style.display = `none`;
-        gradient.style.display = `none`;
-      }, 2000);
+      console.log(`ready`);
     };
 
     const getPosition = function (options) {
@@ -153,10 +117,7 @@ const madeMarker = (data) => {
   item.setAttribute(`scale`, `0.6 0.6 0.6`);
   item.setAttribute(`gltf-model`, `url(${data.marker_3d})`);
   item.setAttribute(`class`, `cantap`);
-  item.setAttribute(
-    `animation`,
-    `property: rotation; to: 0 360 0; loop: true; dur: 5000; easing: linear;`,
-  );
+  item.setAttribute(`animation-mixer`, `clip:idle floating`);
 
   return item;
 };
@@ -173,14 +134,13 @@ const getData = (data = []) => {
           const sw = data[i];
           const target = madeMarker(sw);
           target.addEventListener(`click`, async () => {
-            //make spin faster
-            target.setAttribute(
-              `animation__bounce`,
-              `property: position; to: 0 0.2 0; dir: alternate; dur: 300; loop: true; easing: easeInOutQuad;`,
-            );
+            target.setAttribute(`animation-mixer`, `clip:tap coin`);
+            setTimeout(() => {
+              target.setAttribute(`visible`, false);
+            }, 1000);
+            return;
             const id = sw?.id;
             const isTargetAR = sw?.isTargetAR;
-
             // Send PATCH request to the API endpoint
             try {
               if (isTargetAR) {
@@ -222,7 +182,6 @@ const getData = (data = []) => {
 export {
   AFrameScene,
   DISABLE_IMAGE_TARGETS,
-  targetComponent,
   mapLoadingScreenComponent,
   getData,
 };
