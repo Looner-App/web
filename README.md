@@ -1,5 +1,4 @@
-# Looner Web (vercel)
-
+# Looner Web 
 Looner offers a unique social experience that bridges the physical and digital realms, similar to a Pokémon Go experience but for brand collaborations. Users can participate in real-world scavenger hunts and digital interactions within metaverses. The app rewards engagement with both physical and digital items, such as concert tickets, branded products, and NFTs.
 
 ## Quick start
