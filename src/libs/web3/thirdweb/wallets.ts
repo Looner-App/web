@@ -18,7 +18,7 @@ export const wallets = [
   }),
   inAppWallet({
     auth: {
-      options: [`email`, `google`],
+      options: [`email`, `google`, `telegram`],
     },
   }),
   walletConnect(),
