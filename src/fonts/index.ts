@@ -3,7 +3,7 @@
 import localFont from 'next/font/local';
 
 export const cyberbang = localFont({
-  variable: '--font-cyberbang',
+  variable: '--font-geom',
   display: 'swap',
   src: [
     {
@@ -46,6 +46,44 @@ export const neometric = localFont({
     },
     {
       path: './neometric/Fontspring-DEMO-neometric-heavy.otf',
+      weight: '900',
+    },
+  ],
+});
+export const geom = localFont({
+  variable: '--font-geom',
+  display: 'swap',
+  src: [
+    {
+      path: './geom/geom-bold.ttf',
+      weight: '100',
+    },
+    {
+      path: './geom/geom-bold.ttf',
+      weight: '200',
+    },
+    {
+      path: './geom/geom-bold.ttf',
+      weight: '300',
+    },
+    {
+      path: './geom/geom-bold.ttf',
+      weight: '400',
+    },
+    {
+      path: './geom/geom-bold.ttf',
+      weight: '500',
+    },
+    {
+      path: './geom/geom-bold.ttf',
+      weight: '700',
+    },
+    {
+      path: './geom/geom-bold.ttf',
+      weight: '800',
+    },
+    {
+      path: './geom/geom-bold.ttf',
       weight: '900',
     },
   ],
@@ -177,6 +215,6 @@ export const montserratAlt = localFont({
 });
 
 export const fonts = {
-  className: `${neometric.className} ${neometricAlt.className} ${montserrat.className} ${montserratAlt.className} ${cyberbang.className}`,
-  variable: `${neometric.variable} ${neometricAlt.variable} ${montserrat.variable} ${montserratAlt.variable} ${cyberbang.variable}`,
+  className: `${neometric.className} ${neometricAlt.className} ${montserrat.className} ${montserratAlt.className} ${cyberbang.className} ${geom.className}`,
+  variable: `${neometric.variable} ${neometricAlt.variable} ${montserrat.variable} ${montserratAlt.variable} ${cyberbang.variable} ${geom.variable}`,
 };

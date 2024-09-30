@@ -15,7 +15,7 @@ export const SignInButton = () => {
   const router = useRouter();
   const activeWallet = useActiveWallet();
   return (
-    <div className="bg-azure-blue text-white rounded-lg button-wallet">
+    <div className="bg-glow-green text-black rounded-lg button-wallet">
       <ConnectButton
         client={clientInstance}
         wallets={wallets}

@@ -13,7 +13,7 @@ export const MapItems = ({ data, ...props }: IMapItems) => {
       <div className="container my-4 lg:my-10 text-white flex flex-col gap-12">
         {data.title && (
           <div
-            className="font-cyberbang text-xl lg:text-3xl leading-normal text-center"
+            className="font-geom text-xl lg:text-3xl leading-normal text-center"
             dangerouslySetInnerHTML={{ __html: data.title }}
           />
         )}

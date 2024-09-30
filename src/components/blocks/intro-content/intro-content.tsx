@@ -1,6 +1,6 @@
 import * as reactIcons from 'react-icons/bs';
-import { ImagePayload, IImagePayload } from '@/components/image';
-import { LinkPayload, ILinkPayload } from '@/components/link';
+import { IImagePayload, ImagePayload } from '@/components/image';
+import { ILinkPayload, LinkPayload } from '@/components/link';
 import classNames from 'classnames';
 import { SocialLinks } from '@/components/SocialLinks';
 
@@ -49,7 +49,7 @@ export const IntroContent = async ({ data, ...props }: IIntroContent) => {
           >
             {data.title && (
               <div
-                className="font-cyberbang text-5xl lg:text-7xl lg:leading-[1.375] max-lg:text-center lg:text-left"
+                className="font-geom text-5xl lg:text-7xl lg:leading-[1.375] max-lg:text-center lg:text-left"
                 // dangerouslySetInnerHTML={{ __html: data.title }}
               >
                 <Stronger message={data.title} />
@@ -73,7 +73,7 @@ export const IntroContent = async ({ data, ...props }: IIntroContent) => {
               <div className="flex space-x-1 max-lg:items-center max-lg:justify-center">
                 <LinkPayload
                   href={data.link}
-                  className="bg-azure-blue text-white transition hocustive:bg-white hocustive:text-black rounded-lg font-semibold py-3 px-6  disabled:opacity-50 text-lg flex w-fit items-center space-x-2"
+                  className="bg-glow-green text-black transition hocustive:bg-white hocustive:text-black rounded-lg font-semibold py-3 px-6  disabled:opacity-50 text-lg flex w-fit items-center space-x-2"
                 >
                   {data.displayIcon && Icon && (
                     <Icon

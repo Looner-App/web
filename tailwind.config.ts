@@ -33,6 +33,7 @@ const config: Config = {
         'fade-red': `#FF5252`,
         'fade-white': `#B2B2B2`,
         'jet-black': `#141415`,
+        'glow-green': `#C6FF00`,
       },
       container: {
         center: true,
@@ -46,7 +47,8 @@ const config: Config = {
         'neometric-alt': [`var(--font-neometric-alt)`],
         montserrat: [`var(--font-montserrat)`],
         'montserrat-alt': [`var(--font-montserrat-alt)`],
-        cyberbang: [`var(--font-cyberbang)`],
+        cyberbang: [`var(--font-geom)`],
+        geom: [`var(--font-geom)`],
       },
     },
   },

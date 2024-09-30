@@ -24,7 +24,7 @@ export const Card = ({
       {...props}
       className={classNames([className, `flex flex-col text-center`])}
     >
-      <h2 className="font-cyberbang text-3xl leading-normal">{title}</h2>
+      <h2 className="font-geom text-3xl leading-normal">{title}</h2>
       <p className="text-center p-4 text-lg">{description}</p>
     </CardComponent>
   );
