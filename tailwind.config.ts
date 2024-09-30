@@ -33,6 +33,7 @@ const config: Config = {
         'fade-red': `#FF5252`,
         'fade-white': `#B2B2B2`,
         'jet-black': `#141415`,
+        'glow-green': `#C6FF00`,
       },
       container: {
         center: true,

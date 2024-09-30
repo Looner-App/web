@@ -452,7 +452,7 @@ export const Mapbox = ({ data, className, ...props }: IMapbox) => {
                   }
                   ${
                     !item.claimedBy && item.publicUniqueLink
-                      ? `<div class='w-full' style="visibility: hidden" id="${item.uniqueLink}" ><a href="/augmented/${item.uniqueLink}" class="mt-4 justify-center bg-azure-blue text-white transition hocustive:bg-azure-blue/20 hocustive:text-black rounded-lg font-semibold py-3 px-6  disabled:opacity-50 text-lg flex w-full items-center space-x-2">Start AR</a></div>`
+                      ? `<div class='w-full' style="visibility: hidden" id="${item.uniqueLink}" ><a href="/augmented/${item.uniqueLink}" class="mt-4 justify-center bg-glow-green text-black transition hocustive:bg-glow-green/20 hocustive:text-black rounded-lg font-semibold py-3 px-6  disabled:opacity-50 text-lg flex w-full items-center space-x-2">Start AR</a></div>`
                       : ``
                   }
                 </div>`,
