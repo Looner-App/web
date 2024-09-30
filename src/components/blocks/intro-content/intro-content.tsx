@@ -49,7 +49,7 @@ export const IntroContent = async ({ data, ...props }: IIntroContent) => {
           >
             {data.title && (
               <div
-                className="font-cyberbang text-5xl lg:text-7xl lg:leading-[1.375] max-lg:text-center lg:text-left"
+                className="font-geom text-5xl lg:text-7xl lg:leading-[1.375] max-lg:text-center lg:text-left"
                 // dangerouslySetInnerHTML={{ __html: data.title }}
               >
                 <Stronger message={data.title} />
