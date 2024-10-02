@@ -1,6 +1,6 @@
 'use client';
 
-import { IImagePayload, ImagePayload } from '@/components/image';
+import { ImagePayload, IImagePayload } from '@/components/image';
 import { Points } from '@/types/payload-types';
 import { format } from 'date-fns';
 import Image from 'next/image';
@@ -34,7 +34,7 @@ export const ClaimedItems = ({ data }: IClaimedItems) => {
   return (
     <div className="flex flex-col space-y-4">
       <div className="flex space-x-4 items-center">
-        <span className="font-bold uppercase font-geom text-lg">
+        <span className="font-bold uppercase font-cyberbang text-lg">
           Drop. Find. Loot
         </span>
         <span className="font-medium text-sm flex-shrink-0">

@@ -28,7 +28,7 @@ export const Roadmap = ({ className, data, ...props }: RoadmapProps) => {
     >
       <div className="flex flex-col justify-center items-center gap-12">
         {title && (
-          <div className="font-geom text-5xl lg:text-7xl leading-normal max-lg:text-center">
+          <div className="font-cyberbang text-5xl lg:text-7xl leading-normal max-lg:text-center">
             <Stronger message={title} />
           </div>
         )}
