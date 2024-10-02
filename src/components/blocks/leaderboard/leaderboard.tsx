@@ -40,7 +40,7 @@ export const Leaderboard = async ({
       )}
       {...props}
     >
-      <h1 className="font-geom text-xl lg:text-3xl leading-normal text-center">
+      <h1 className="font-cyberbang text-xl lg:text-3xl leading-normal text-center">
         Leaderboard
       </h1>
       <ScrollBar className="w-full overflow-x-auto">

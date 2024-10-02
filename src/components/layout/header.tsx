@@ -13,7 +13,7 @@ import dynamic from 'next/dynamic';
 const WalletButton = dynamic(() => import(`../wallet/Button`), {
   ssr: true,
   loading: () => (
-    <div className="bg-glow-green text-black transition hocustive:bg-white hocustive:text-black rounded-lg font-semibold md:py-3 py-2 md:px-6 px-4 disabled:opacity-50 text-sm md:text-lg flex w-fit items-center space-x-2">
+    <div className="bg-azure-blue text-white transition hocustive:bg-white hocustive:text-black rounded-lg font-semibold md:py-3 py-2 md:px-6 px-4 disabled:opacity-50 text-sm md:text-lg flex w-fit items-center space-x-2">
       Loading ...
     </div>
   ),
