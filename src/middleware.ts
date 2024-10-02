@@ -51,6 +51,16 @@ export async function middleware(request: NextRequest) {
 
     return NextResponse.redirect(redirectTo);
   }
+  if (!user && pathname === `map`) {
+    const redirectTo = request.nextUrl.clone();
+    redirectTo.pathname = `/`;
+    redirectTo.searchParams.set(
+      `redirect`,
+      `${process.env.NEXT_PUBLIC_SITE_URL}${request.nextUrl.pathname}`,
+    );
+
+    return NextResponse.redirect(redirectTo);
+  }
 
   // Redirect if user access /augmented
   if (!user && pathname === `augmented`) {
