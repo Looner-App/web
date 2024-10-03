@@ -67,19 +67,26 @@ export const Header = async () => {
             <ul className="flex space-x-6 font-bold text-lg items-center justify-end">
               {navMenus &&
                 navMenus?.length > 0 &&
-                navMenus.map((item, _i) => (
-                  <li key={_i}>
-                    {item.link && (
-                      <LinkPayload
-                        href={item.link}
-                        className={mergeStyle(
-                          `relative transition duration-300 before:bg-fade-white before:w-0 before:h-px before:absolute before:-bottom-1 before:left-1/2 before:-translate-x-1/2 before:transition-all before:duration-300`,
-                          `before:hocustive:w-full`,
-                        )}
-                      />
-                    )}
-                  </li>
-                ))}
+                navMenus
+                  .filter((e) => {
+                    if (!user) {
+                      return !String(e.link.url).toLowerCase().includes(`map`);
+                    }
+                    return true;
+                  })
+                  .map((item, _i) => (
+                    <li key={_i}>
+                      {item.link && (
+                        <LinkPayload
+                          href={item.link}
+                          className={mergeStyle(
+                            `relative transition duration-300 before:bg-fade-white before:w-0 before:h-px before:absolute before:-bottom-1 before:left-1/2 before:-translate-x-1/2 before:transition-all before:duration-300`,
+                            `before:hocustive:w-full`,
+                          )}
+                        />
+                      )}
+                    </li>
+                  ))}
               <li>
                 <WalletButton user={user} myPoints={myPoints} />
               </li>
@@ -93,19 +100,28 @@ export const Header = async () => {
               <ul className="flex flex-col items-center space-y-3 uppercase font-medium text-lg text-fade-white">
                 {navMenus &&
                   navMenus.length > 0 &&
-                  navMenus.map((item, _i) => (
-                    <li key={_i}>
-                      {item.link && (
-                        <LinkPayload
-                          href={item.link}
-                          className={mergeStyle(
-                            `relative transition duration-300 before:bg-fade-white before:w-0 before:h-px before:absolute before:-bottom-1 before:left-1/2 before:-translate-x-1/2 before:transition-all before:duration-300`,
-                            `before:hocustive:w-full`,
-                          )}
-                        />
-                      )}
-                    </li>
-                  ))}
+                  navMenus
+                    .filter((e) => {
+                      if (!user) {
+                        return !String(e.link.url)
+                          .toLowerCase()
+                          .includes(`map`);
+                      }
+                      return true;
+                    })
+                    .map((item, _i) => (
+                      <li key={_i}>
+                        {item.link && (
+                          <LinkPayload
+                            href={item.link}
+                            className={mergeStyle(
+                              `relative transition duration-300 before:bg-fade-white before:w-0 before:h-px before:absolute before:-bottom-1 before:left-1/2 before:-translate-x-1/2 before:transition-all before:duration-300`,
+                              `before:hocustive:w-full`,
+                            )}
+                          />
+                        )}
+                      </li>
+                    ))}
                 <li>
                   <WalletButton user={user} myPoints={myPoints} />
                 </li>
