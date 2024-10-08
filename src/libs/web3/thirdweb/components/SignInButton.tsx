@@ -7,7 +7,11 @@ import { useRouter } from 'next/navigation';
 import { toEllipsis } from '@/libs/helper';
 import { thirdwebChains } from '../../chains/config';
 import './signin-button.css';
+import dynamic from 'next/dynamic';
 
+const Button = dynamic(() => import(`@/components/button`), {
+  ssr: false,
+});
 const clientInstance = client({
   clientId: process.env.NEXT_PUBLIC_THIRDWEB_CLIENT_ID!,
 });
@@ -15,7 +19,7 @@ export const SignInButton = () => {
   const router = useRouter();
   const activeWallet = useActiveWallet();
   return (
-    <div className="bg-azure-blue text-white rounded-lg button-wallet">
+    <Button type="default" className="button-wallet">
       <ConnectButton
         client={clientInstance}
         wallets={wallets}
@@ -95,7 +99,7 @@ export const SignInButton = () => {
           },
         }}
       />
-    </div>
+    </Button>
   );
 };
 
