@@ -19,10 +19,19 @@ export default async function Page() {
         items && items.docs.length
           ? items.docs
               .filter((e) => e.publicUniqueLink)
+              .filter((e) => {
+                if (typeof e.category === `string`) {
+                  return e.category !== `Coins`;
+                } else if (typeof e.category === `object`) {
+                  return e.category.title !== `Coins`;
+                }
+                return true;
+              })
               .map((item) => {
                 return {
                   lng: item.location[0],
                   lat: item.location[1],
+                  category: item.category,
                   status: item.claimedBy && item.claimedAt ? `looted` : `live`,
                   title: item.title,
                   desc: item.desc?.html || undefined,

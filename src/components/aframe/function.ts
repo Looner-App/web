@@ -135,10 +135,6 @@ const getData = (data = []) => {
           const target = madeMarker(sw);
           target.addEventListener(`click`, async () => {
             target.setAttribute(`animation-mixer`, `clip:tap coin`);
-            setTimeout(() => {
-              target.setAttribute(`visible`, false);
-            }, 1000);
-            return;
             const id = sw?.id;
             const isTargetAR = sw?.isTargetAR;
             // Send PATCH request to the API endpoint

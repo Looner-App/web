@@ -10,6 +10,7 @@ import { mergeStyle } from '@/libs/helper';
 import 'mapbox-gl/dist/mapbox-gl.css';
 import './mapbox.css';
 import { format } from 'date-fns';
+import { Category } from '@/types/payload-types';
 
 mapboxgl.accessToken = String(process.env.NEXT_PUBLIC_MAPBOX_TOKEN);
 const customMarker = `/live_marker.svg`;
@@ -21,6 +22,7 @@ export interface IMapbox extends React.HTMLAttributes<HTMLDivElement> {
     markers: {
       lat: number;
       lng: number;
+      category: string | Category;
       status: `live` | `looted`;
       title: string;
       desc?: string;
