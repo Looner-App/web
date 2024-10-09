@@ -14,8 +14,9 @@ export const ButtonReferral = ({ referral, baseURL }: ButtonReferralProps) => {
   const [copied, setCopied] = useState(false);
   const onCopy = () => {
     /// copy the url to the clipboard
+    const shortTo4Digits = referral?.referralCode?.substring(0, 4);
     navigator.clipboard
-      .writeText(`${baseURL}/?referral=${referral?.referralCode}`)
+      .writeText(`${baseURL}/?referral=${shortTo4Digits}`)
       .then(() => {
         setCopied(true);
         setTimeout(() => {
