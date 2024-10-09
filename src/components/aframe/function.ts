@@ -175,9 +175,23 @@ const getData = (data = []) => {
     },
   };
 };
+const changeTerrain = {
+  async init() {
+    const el = this.el;
+    el.setAttribute(`land-material`, `#land-mat`);
+    el.setAttribute(`building-material`, `#building-mat`);
+    el.setAttribute(`park-material`, `#park-mat`);
+    el.setAttribute(`parking-material`, `#parking-mat`);
+    el.setAttribute(`road-material`, `#road-mat`);
+    el.setAttribute(`transit-material`, `#transit-mat`);
+    el.setAttribute(`sand-material`, `#sand-mat`);
+    el.setAttribute(`water-material`, `#water-mat`);
+  },
+};
 export {
   AFrameScene,
   DISABLE_IMAGE_TARGETS,
   mapLoadingScreenComponent,
   getData,
+  changeTerrain,
 };
