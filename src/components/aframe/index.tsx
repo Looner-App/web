@@ -86,6 +86,7 @@ const Loader = () => {
   );
 };
 const Aframe = ({ data = [] }: any) => {
+  console.log(`data`, data);
   const permissions = usePermission();
 
   if (!permissions.geoPermission.geo) {

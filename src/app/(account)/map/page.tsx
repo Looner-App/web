@@ -19,14 +19,14 @@ export default async function Page() {
         items && items.docs.length
           ? items.docs
               .filter((e) => e.publicUniqueLink)
-              .filter((e) => {
-                if (typeof e.category === `string`) {
-                  return e.category.toLowerCase() !== `coins`;
-                } else if (typeof e.category === `object`) {
-                  return e.category.title.toLowerCase() !== `coins`;
-                }
-                return true;
-              })
+              // .filter((e) => {
+              //   if (typeof e.category === `string`) {
+              //     return e.category.toLowerCase() !== `coins`;
+              //   } else if (typeof e.category === `object`) {
+              //     return e.category.title.toLowerCase() !== `coins`;
+              //   }
+              //   return true;
+              // })
               .map((item) => {
                 return {
                   lng: item.location[0],
