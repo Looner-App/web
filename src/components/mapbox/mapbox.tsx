@@ -22,7 +22,7 @@ export interface IMapbox extends React.HTMLAttributes<HTMLDivElement> {
     markers: {
       lat: number;
       lng: number;
-      category: string | Category;
+      category?: string | Category;
       status: `live` | `looted`;
       title: string;
       desc?: string;
