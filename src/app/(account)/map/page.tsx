@@ -21,9 +21,9 @@ export default async function Page() {
               .filter((e) => e.publicUniqueLink)
               .filter((e) => {
                 if (typeof e.category === `string`) {
-                  return e.category !== `Coins`;
+                  return e.category.toLowerCase() !== `coins`;
                 } else if (typeof e.category === `object`) {
-                  return e.category.title !== `Coins`;
+                  return e.category.title.toLowerCase() !== `coins`;
                 }
                 return true;
               })
