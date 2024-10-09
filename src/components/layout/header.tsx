@@ -71,7 +71,7 @@ export const Header = async () => {
                   .filter((e) => {
                     if (!user) {
                       return ![`map`, `leaderboard`].includes(
-                        String(e.link.url).toLowerCase(),
+                        String(e.link.label).toLowerCase(),
                       );
                     }
                     return true;
@@ -106,7 +106,7 @@ export const Header = async () => {
                     .filter((e) => {
                       if (!user) {
                         return ![`map`, `leaderboard`].includes(
-                          String(e.link.url).toLowerCase(),
+                          String(e.link.label).toLowerCase(),
                         );
                       }
                       return true;
