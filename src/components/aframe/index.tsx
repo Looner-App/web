@@ -2,12 +2,14 @@
 'use client';
 import {
   AFrameScene,
+  changeTerrain,
   getData,
   mapLoadingScreenComponent,
 } from '@/components/aframe/function';
 import usePermission from '@/components/aframe/permission';
 
 const html = `<a-scene
+change-terrain
 map-loading-screen renderer="color-management:true; antialias: true;"
  fog="color: #e9cfb9; type: exponential; density: -0.016;"
   gltf-model="draco-decoder-path: https://cdn.8thwall.com/web/aframe/draco-decoder/"
@@ -24,14 +26,16 @@ map-loading-screen renderer="color-management:true; antialias: true;"
     <a-asset-item id="doty" src="/avatar.glb" />
     <img id="clouds" src="/clouds.jpg">
   </a-assets>
-  <a-entity id="land-mat" material="color: #6a816a"></a-entity>
-  <a-entity id="building-mat" material="color: #c2c2c2"></a-entity>
-  <a-entity id="park-mat" material="color: #116e28"></a-entity>
+    <a-entity id="land-mat" material="color: #8AD1A2;"></a-entity>
+  <a-entity id="building-mat" material="color: #628776; opacity: 0.2;"></a-entity>
+  <a-entity id="park-mat" material="color: #628776"></a-entity>
   <a-entity id="parking-mat" material="color: #707070"></a-entity>
-  <a-entity id="road-mat" material="color: #343232"></a-entity>
-  <a-entity id="transit-mat" material="color: #000000"></a-entity>
-  <a-entity id="sand-mat" material="color: #d3c592"></a-entity>
-  <a-entity id="water-mat" material="color: #5d81a2"></a-entity>
+  <a-entity id="road-mat" material="color: #575757"></a-entity>
+  <a-entity id="transit-mat" material="color: #3B3B3B"></a-entity>
+  <a-entity id="sand-mat" material="color: #E2D8A6"></a-entity>
+  <a-entity id="water-mat" material="color:#6090AF"></a-entity>
+ <a-entity id="sky-mat" material="color: #00FFD5”; opacity: 0.25;"></a-entity>
+ <a-entity id="fog-mat" material="color: #776EBF”; opacity: 0.2;"></a-entity>
   <a-entity light="type: directional;
            intensity: 0.3;
            cast-shadow: true;
@@ -99,6 +103,10 @@ const Aframe = ({ data = [] }: any) => {
         {
           name: `get-data`,
           val: getData(data),
+        },
+        {
+          name: `change-terrain`,
+          val: changeTerrain,
         },
       ]}
     />
