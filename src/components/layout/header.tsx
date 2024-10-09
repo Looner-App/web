@@ -70,7 +70,9 @@ export const Header = async () => {
                 navMenus
                   .filter((e) => {
                     if (!user) {
-                      return !String(e.link.url).toLowerCase().includes(`map`);
+                      return ![`map`, `leaderboard`].includes(
+                        String(e.link.url).toLowerCase(),
+                      );
                     }
                     return true;
                   })
@@ -103,9 +105,9 @@ export const Header = async () => {
                   navMenus
                     .filter((e) => {
                       if (!user) {
-                        return !String(e.link.url)
-                          .toLowerCase()
-                          .includes(`map`);
+                        return ![`map`, `leaderboard`].includes(
+                          String(e.link.url).toLowerCase(),
+                        );
                       }
                       return true;
                     })
