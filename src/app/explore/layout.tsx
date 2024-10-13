@@ -17,7 +17,7 @@ export default async function Layout({
       <Meta name="8thwall:package" content="@8thwall.xrextras" />
       <Meta
         name="8thwall:dependencies"
-        content="eyJhcHBLZXkiOiI1ZGE3WHZjOXIzWmRtbU9rSUpDQjJWMVhWdTFzWllGM0xKMUVEbjJqMG40QVpkT1RtOGV5SjV2dWNBSXZxclFmNnAweG05IiwiZGVwZW5kZW5jaWVzIjpbeyJtb2R1bGVJZCI6ImFhZjk2ZDI5LTA0YTYtNDlhYy1iMTliLTQ4OGM1YTk0Nzg1MSIsImFsaWFzIjoibGlnaHRzaGlwLW1hcHMiLCJjb25maWciOnt9fV19"
+        content="eyJhcHBLZXkiOiJ5ZWhPZ2dUeVJVbW1qOXJLVnFrNklNUEdEZ0hUQmN6Zm9MZ0NzYzJ6T0FrVmo4YjFNWUdjQmVRWFlleU5iUEVvcHltNnNMIiwiZGVwZW5kZW5jaWVzIjpbeyJtb2R1bGVJZCI6ImFhZjk2ZDI5LTA0YTYtNDlhYy1iMTliLTQ4OGM1YTk0Nzg1MSIsImFsaWFzIjoibGlnaHRzaGlwLW1hcHMiLCJjb25maWciOnt9fV19"
       />
       <Script
         type="text/javascript"
