@@ -5,16 +5,17 @@ import {
   changeTerrain,
   getData,
   mapLoadingScreenComponent,
+  lighstipModules,
 } from '@/components/aframe/function';
 import usePermission from '@/components/aframe/permission';
 
 const html = `<a-scene
-change-terrain
-map-loading-screen renderer="color-management:true; antialias: true;"
- fog="color: #e9cfb9; type: exponential; density: -0.016;"
+modules-lighship
+map-loading-screen 
+renderer="color-management:true; antialias: true;"
+ fog="color: #776EBF; type: exponential; density: 0.018;"
   gltf-model="draco-decoder-path: https://cdn.8thwall.com/web/aframe/draco-decoder/"
   xr-web="allowedDevices: any"
-   inspector="url: https://cdn.jsdelivr.net/gh/aframevr/aframe-inspector@master/dist/aframe-inspector.min.js"
    >
   <div id="gradient" class="gradient-move absolute-fill">
     <div class="spinner-wrapper">
@@ -34,8 +35,9 @@ map-loading-screen renderer="color-management:true; antialias: true;"
   <a-entity id="transit-mat" material="color: #3B3B3B"></a-entity>
   <a-entity id="sand-mat" material="color: #E2D8A6"></a-entity>
   <a-entity id="water-mat" material="color:#6090AF"></a-entity>
- <a-entity id="sky-mat" material="color: #00FFD5”; opacity: 0.25;"></a-entity>
- <a-entity id="fog-mat" material="color: #776EBF”; opacity: 0.2;"></a-entity>
+<a-entity id=“sky-mat" material="color: #00FFD5”; opacity: 0.25;”></a-entity>
+<a-entity id=“fog-mat" material="color: #776EBF”; opacity: 0.2;”></a-entity>
+
   <a-entity light="type: directional;
            intensity: 0.3;
            cast-shadow: true;
@@ -52,7 +54,7 @@ map-loading-screen renderer="color-management:true; antialias: true;"
   <a-sky id="outer-sky" radius="100" material="
       shader: lightship-map-sky-gradient;
       topColor: #6b8cb8;
-      exponent: 0.65"></a-sky>
+      exponent: 0.25"></a-sky>
    <a-sky
     id="inner-sky"
     radius="90"
@@ -71,8 +73,19 @@ map-loading-screen renderer="color-management:true; antialias: true;"
     material="shader: shadow"
     shadow="cast: false; receive: true;"
   ></a-plane>
-  <lightship-map get-data scale="100 100 100" responsive-map-theme="mode: time" lightship-map-add-wayspots="primitive: custom-wayspot; meters: 25; min: 0.05;">
-    <a-entity id="character" gltf-model="#doty" rotation="0 180 0" scale="0.01 0.01 0.01" lightship-map-motion-direction lightship-map-walk-animation="idle: Action; walk: walking; run: walking;" shadow></a-entity>
+
+  <lightship-map 
+  themeBuilderComponent
+    land-material="#land-mat"
+    building-material="#building-mat"
+    park-material="#park-mat"
+    parking-material="#parking-mat"
+    road-material="#road-mat"
+    transit-material="#transit-mat"
+    sand-material="#sand-mat"
+    water-material="#water-mat"
+   get-data scale="100 100 100" responsive-map-theme="mode: time" lightship-map-add-wayspots="primitive: custom-wayspot; meters: 25; min: 0.05;">
+    <a-entity id="character" gltf-model="#doty" rotation="0 180 0" scale="0.02 0.02 0.02" lightship-map-motion-direction lightship-map-walk-animation="idle: Action; walk: walking; run: walking;" shadow></a-entity>
   </lightship-map>
 </a-scene>
 `;
@@ -108,6 +121,10 @@ const Aframe = ({ data = [] }: any) => {
         {
           name: `change-terrain`,
           val: changeTerrain,
+        },
+        {
+          name: `modules-lighship`,
+          val: lighstipModules,
         },
       ]}
     />

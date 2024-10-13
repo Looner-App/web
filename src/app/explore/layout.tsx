@@ -13,15 +13,15 @@ export default async function Layout({
 }) {
   return (
     <>
-      <Meta name="8thwall:renderer" content="aframe:1.4.1" />
+      <Meta name="8thwall:renderer" content="aframe:1.3.0" />
       <Meta name="8thwall:package" content="@8thwall.xrextras" />
       <Meta
         name="8thwall:dependencies"
-        content="eyJhcHBLZXkiOiJ5ZWhPZ2dUeVJVbW1qOXJLVnFrNklNUEdEZ0hUQmN6Zm9MZ0NzYzJ6T0FrVmo4YjFNWUdjQmVRWFlleU5iUEVvcHltNnNMIiwiZGVwZW5kZW5jaWVzIjpbeyJtb2R1bGVJZCI6ImFhZjk2ZDI5LTA0YTYtNDlhYy1iMTliLTQ4OGM1YTk0Nzg1MSIsImFsaWFzIjoibGlnaHRzaGlwLW1hcHMiLCJjb25maWciOnt9fV19"
+        content="eyJhcHBLZXkiOiI1ZGE3WHZjOXIzWmRtbU9rSUpDQjJWMVhWdTFzWllGM0xKMUVEbjJqMG40QVpkT1RtOGV5SjV2dWNBSXZxclFmNnAweG05IiwiZGVwZW5kZW5jaWVzIjpbeyJtb2R1bGVJZCI6ImFhZjk2ZDI5LTA0YTYtNDlhYy1iMTliLTQ4OGM1YTk0Nzg1MSIsImFsaWFzIjoibGlnaHRzaGlwLW1hcHMiLCJjb25maWciOnt9fV19"
       />
       <Script
         type="text/javascript"
-        src="//cdn.8thwall.com/web/aframe/8frame-1.4.1.min.js"
+        src="//cdn.8thwall.com/web/aframe/8frame-1.3.0.min.js"
       ></Script>
       <Script
         async
@@ -43,6 +43,7 @@ export default async function Layout({
         crossOrigin="anonymous"
         src="https://static.8thwall.app/modules/v1/aaf96d29-04a6-49ac-b19b-488c5a947851/version/major/1/module.js?s=3bd9d7cd-bed8-4db3-8e58-ac4ee5c75bad"
       ></Script>
+
       {children}
     </>
   );
