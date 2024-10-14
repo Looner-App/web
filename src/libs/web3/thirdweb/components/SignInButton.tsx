@@ -1,27 +1,26 @@
 'use client';
 
-import { ConnectButton, useActiveWallet } from 'thirdweb/react';
-import { client } from '@/libs/web3/thirdweb/client';
+import { ConnectButton } from 'thirdweb/react';
 import { wallets } from '@/libs/web3/thirdweb/wallets';
 import { useRouter } from 'next/navigation';
-import { toEllipsis } from '@/libs/helper';
 import { thirdwebChains } from '../../chains/config';
 import './signin-button.css';
 import dynamic from 'next/dynamic';
+import { useWalletName } from '@/libs/web3/thirdweb/hooks/useWalletName';
 
 const Button = dynamic(() => import(`@/components/button`), {
   ssr: false,
 });
-const clientInstance = client({
-  clientId: process.env.NEXT_PUBLIC_THIRDWEB_CLIENT_ID!,
-});
+
 export const SignInButton = () => {
   const router = useRouter();
-  const activeWallet = useActiveWallet();
+
+  const { data: walletName, client } = useWalletName();
+
   return (
     <Button type="default" className="button-wallet">
       <ConnectButton
-        client={clientInstance}
+        client={client}
         wallets={wallets}
         theme={`dark`}
         chain={thirdwebChains[0]}
@@ -34,15 +33,24 @@ export const SignInButton = () => {
         }}
         detailsButton={{
           style: {
-            background: `transparent !important`,
+            padding: `0px !important`,
+            margin: `0px !important`,
           },
-          render: () => (
-            <button type="button">
-              {toEllipsis(activeWallet?.getAccount()?.address, 6, 6) ||
-                `Connect Wallet`}
-            </button>
-          ),
+          render() {
+            return <>{walletName}</>;
+          },
         }}
+        // detailsButton={{
+        //   style: {
+        //     background: `transparent !important`,
+        //   },
+        //   render: () => (
+        //     <button type="button">
+        //       {toEllipsis(activeWallet?.getAccount()?.address, 6, 6) ||
+        //         `Connect Wallet`}
+        //     </button>
+        //   ),
+        // }}
         signInButton={{
           label: `Sign In`,
         }}
