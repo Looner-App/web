@@ -31,6 +31,7 @@ const AframeDynamic = dynamic(() => import(`@/components/aframe`), {
 });
 const Index = ({ data, ...props }: IMapbox) => {
   const markers = data.markers
+    .filter((marker) => marker.status === `live`)
     .map((marker) => {
       const getLastUniqueLink = (uniqueLink: string) => {
         return uniqueLink.split(`/`).pop();

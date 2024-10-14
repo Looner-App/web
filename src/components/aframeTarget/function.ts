@@ -91,16 +91,13 @@ const madeEntityTarget = (assetUrl) => {
   el.setAttribute(`scale`, `1.5 1.5 1.5`);
   el.setAttribute(`gltf-model`, `url(${assetUrl})`);
   el.setAttribute(`class`, `cantap`);
-  el.setAttribute(
-    `animation`,
-    `property: rotation; to: 0 360 0; loop: true; dur: 5000; easing: linear;`,
-  );
+  el.setAttribute(`animation-mixer`, `clip:idle floating`);
   return el;
 };
 const targetComponent = ({ link, asset3d = null }) => {
   return {
     async init() {
-      const target = madeEntityTarget(asset3d ?? `/lootbox.glb`);
+      const target = madeEntityTarget(asset3d ?? `/coin-target.glb`);
       const el = this.el;
       el.appendChild(target);
       el.addEventListener(`click`, () => {

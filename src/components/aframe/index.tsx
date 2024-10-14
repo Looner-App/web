@@ -4,14 +4,14 @@ import {
   AFrameScene,
   changeTerrain,
   getData,
-  mapLoadingScreenComponent,
   lighstipModules,
+  mapLoadingScreenComponent,
 } from '@/components/aframe/function';
 import usePermission from '@/components/aframe/permission';
 
 const html = `<a-scene
 modules-lighship
-map-loading-screen 
+map-loading-screen
 renderer="color-management:true; antialias: true;"
  fog="color: #776EBF; type: exponential; density: 0.018;"
   gltf-model="draco-decoder-path: https://cdn.8thwall.com/web/aframe/draco-decoder/"
@@ -74,7 +74,7 @@ renderer="color-management:true; antialias: true;"
     shadow="cast: false; receive: true;"
   ></a-plane>
 
-  <lightship-map 
+  <lightship-map
   themeBuilderComponent
     land-material="#land-mat"
     building-material="#building-mat"
@@ -99,7 +99,6 @@ const Loader = () => {
   );
 };
 const Aframe = ({ data = [] }: any) => {
-  console.log(`data`, data);
   const permissions = usePermission();
 
   if (!permissions.geoPermission.geo) {
