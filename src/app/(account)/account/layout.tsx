@@ -7,6 +7,7 @@ import { headers } from 'next/headers';
 import { ButtonReferral } from './button-referral';
 import { Points, Referral } from '@/types/payload-types';
 import { toEllipsis } from '@/libs/helper';
+import { Account } from '@/app/(account)/account/account';
 
 export default async function Layout({
   children,
@@ -89,7 +90,9 @@ export default async function Layout({
             <div className="col-span-6 lg:col-span-7">
               <ul className="flex flex-col space-y-4">
                 <li>
-                  <span className="font-black">{name}</span>
+                  <span className="font-black">
+                    <Account fallback={name} />
+                  </span>
                 </li>
                 {user?.sub && (
                   <li>
