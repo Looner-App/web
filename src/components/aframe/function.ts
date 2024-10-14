@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 // @ts-nocheck
 // A React component for 8th Wall AFrame scenes. The scene HTML can be supplied, along with
 // any components or primitives that should be registered, and any image targets that should be
@@ -177,21 +178,53 @@ const getData = (data = []) => {
 };
 const changeTerrain = {
   async init() {
-    const el = this.el;
-    el.setAttribute(`land-material`, `#land-mat`);
-    el.setAttribute(`building-material`, `#building-mat`);
-    el.setAttribute(`park-material`, `#park-mat`);
-    el.setAttribute(`parking-material`, `#parking-mat`);
-    el.setAttribute(`road-material`, `#road-mat`);
-    el.setAttribute(`transit-material`, `#transit-mat`);
-    el.setAttribute(`sand-material`, `#sand-mat`);
-    el.setAttribute(`water-material`, `#water-mat`);
+    const landMat = document.getElementById(`land-mat`);
+    const buildingMat = document.getElementById(`building-mat`);
+    const parkMat = document.getElementById(`park-mat`);
+    const parkingMat = document.getElementById(`parking-mat`);
+    const roadMat = document.getElementById(`road-mat`);
+    const transitMat = document.getElementById(`transit-mat`);
+    const sandMat = document.getElementById(`sand-mat`);
+    const waterMat = document.getElementById(`water-mat`);
+    landMat.setAttribute(`land-material`, `#land-mat`);
+    buildingMat.setAttribute(`building-material`, `#building-mat`);
+    parkMat.setAttribute(`park-material`, `#park-mat`);
+    parkingMat.setAttribute(`parking-material`, `#parking-mat`);
+    roadMat.setAttribute(`road-material`, `#road-mat`);
+    transitMat.setAttribute(`transit-material`, `#transit-mat`);
+    sandMat.setAttribute(`sand-material`, `#sand-mat`);
+    waterMat.setAttribute(`water-material`, `#water-mat`);
+    landMat.setAttribute(`material`, `color: #8AD1A2`);
+  },
+};
+
+const lighstipModules = {
+  init() {
+    const lightshipMaps = window.Modules8.getModule({
+      moduleId: `aaf96d29-04a6-49ac-b19b-488c5a947851`,
+    });
+  },
+};
+
+const themeBuilderComponent = {
+  init() {
+    // custom theme materials
+    const landMat = document.getElementById(`land-mat`);
+    const buildingMat = document.getElementById(`building-mat`);
+    const parkMat = document.getElementById(`park-mat`);
+    const parkingMat = document.getElementById(`parking-mat`);
+    const roadMat = document.getElementById(`road-mat`);
+    const transitMat = document.getElementById(`transit-mat`);
+    const sandMat = document.getElementById(`sand-mat`);
+    const waterMat = document.getElementById(`water-mat`);
   },
 };
 export {
+  themeBuilderComponent,
   AFrameScene,
   DISABLE_IMAGE_TARGETS,
   mapLoadingScreenComponent,
   getData,
   changeTerrain,
+  lighstipModules,
 };
