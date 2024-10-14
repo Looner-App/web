@@ -84,23 +84,20 @@ function AFrameScene({
 }
 
 const DISABLE_IMAGE_TARGETS = [];
-const madeEntityTarget = (data) => {
+const madeEntityTarget = (assetUrl) => {
   const el = document.createElement(`a-entity`);
   el.setAttribute(`id`, `entity-target`);
   el.setAttribute(`position`, { x: 0, y: 1, z: -5 });
   el.setAttribute(`scale`, `1.5 1.5 1.5`);
-  el.setAttribute(`gltf-model`, `url(${data.marker_3d})`);
+  el.setAttribute(`gltf-model`, `url(${assetUrl})`);
   el.setAttribute(`class`, `cantap`);
-  el.setAttribute(
-    `animation`,
-    `property: rotation; to: 0 360 0; loop: true; dur: 5000; easing: linear;`,
-  );
+  el.setAttribute(`animation-mixer`, `clip:idle floating`);
   return el;
 };
-const targetComponent = ({ link, data = null }) => {
+const targetComponent = ({ link, asset3d = null }) => {
   return {
     async init() {
-      const target = madeEntityTarget(data ?? `${data.marker_3d}`);
+      const target = madeEntityTarget(asset3d ?? `/coin-target.glb`);
       const el = this.el;
       el.appendChild(target);
       el.addEventListener(`click`, () => {
