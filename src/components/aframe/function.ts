@@ -115,7 +115,7 @@ const madeMarker = (data) => {
   item.setAttribute(`id`, data.id);
   item.setAttribute(`lat-lng`, `${data.lat} ${data.lng}`);
   item.setAttribute(`position`, { x: 0, y: 25, z: 0 });
-  item.setAttribute(`scale`, `0.6 0.6 0.6`);
+  item.setAttribute(`scale`, `0.75 0.75 0.75`);
   item.setAttribute(`gltf-model`, `url(${data.marker_3d})`);
   item.setAttribute(`class`, `cantap`);
   item.setAttribute(`animation-mixer`, `clip:idle floating`);

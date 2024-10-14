@@ -84,12 +84,12 @@ function AFrameScene({
 }
 
 const DISABLE_IMAGE_TARGETS = [];
-const madeEntityTarget = (assetUrl) => {
+const madeEntityTarget = (data) => {
   const el = document.createElement(`a-entity`);
   el.setAttribute(`id`, `entity-target`);
   el.setAttribute(`position`, { x: 0, y: 1, z: -5 });
   el.setAttribute(`scale`, `1.5 1.5 1.5`);
-  el.setAttribute(`gltf-model`, `url(${assetUrl})`);
+  el.setAttribute(`gltf-model`, `url(${data.marker_3d})`);
   el.setAttribute(`class`, `cantap`);
   el.setAttribute(
     `animation`,
@@ -97,10 +97,10 @@ const madeEntityTarget = (assetUrl) => {
   );
   return el;
 };
-const targetComponent = ({ link, asset3d = null }) => {
+const targetComponent = ({ link, data = null }) => {
   return {
     async init() {
-      const target = madeEntityTarget(asset3d ?? `/lootbox.glb`);
+      const target = madeEntityTarget(data ?? `${data.marker_3d}`);
       const el = this.el;
       el.appendChild(target);
       el.addEventListener(`click`, () => {
