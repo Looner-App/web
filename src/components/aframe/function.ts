@@ -133,43 +133,41 @@ const getData = (data = []) => {
       const addMarker = () => {
         if (i < len) {
           const sw = data[i];
-          if (sw?.status !== `looted`) {
-            const target = madeMarker(sw);
-            target.addEventListener(`click`, async () => {
-              target.setAttribute(`animation-mixer`, `clip:tap coin`);
-              const id = sw?.id;
-              const isTargetAR = sw?.isTargetAR;
-              // Send PATCH request to the API endpoint
-              try {
-                if (isTargetAR) {
-                  window.location.href = `/augmented/${id}`;
-                  return;
-                }
-                const response = await fetch(`/api/users/claim`, {
-                  method: `PATCH`,
-                  headers: {
-                    'Content-Type': `application/json`,
-                  },
-                  body: JSON.stringify({ id }), // Pass the id in the request body
-                });
+          const target = madeMarker(sw);
+          target.addEventListener(`click`, async () => {
+            target.setAttribute(`animation-mixer`, `clip:tap coin`);
+            const id = sw?.id;
+            const isTargetAR = sw?.isTargetAR;
+            // Send PATCH request to the API endpoint
+            try {
+              if (isTargetAR) {
+                window.location.href = `/augmented/${id}`;
+                return;
+              }
+              const response = await fetch(`/api/users/claim`, {
+                method: `PATCH`,
+                headers: {
+                  'Content-Type': `application/json`,
+                },
+                body: JSON.stringify({ id }), // Pass the id in the request body
+              });
 
-                if (!response.ok) {
-                  // Show alert and redirect to the login page if the request fails
-                  alert(`Failed to claim user. Please log in to continue.`);
-                  window.location.href = `/`; // Redirect to the login page
-                } else {
-                  target.setAttribute(`visible`, false);
-                }
-              } catch (error) {
-                console.error(`Error during the fetch request:`, error);
+              if (!response.ok) {
+                // Show alert and redirect to the login page if the request fails
                 alert(`Failed to claim user. Please log in to continue.`);
                 window.location.href = `/`; // Redirect to the login page
+              } else {
+                target.setAttribute(`visible`, false);
               }
-            });
-            fragment.appendChild(target);
-            i++;
-            requestAnimationFrame(addMarker);
-          }
+            } catch (error) {
+              console.error(`Error during the fetch request:`, error);
+              alert(`Failed to claim user. Please log in to continue.`);
+              window.location.href = `/`; // Redirect to the login page
+            }
+          });
+          fragment.appendChild(target);
+          i++;
+          requestAnimationFrame(addMarker);
         } else {
           this.lightshipMap.appendChild(fragment);
         }
