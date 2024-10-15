@@ -20,3 +20,5 @@ or
 
 1. run `docker build -t looner-web:latest -f Dockerfile .` **(only if running local, prod use ghcr image instead)**
 1. run `docker-compose up -d`
+
+
