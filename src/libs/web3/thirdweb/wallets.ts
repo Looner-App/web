@@ -1,6 +1,12 @@
 import { createWallet, walletConnect, inAppWallet } from 'thirdweb/wallets';
 import { thirdwebChains } from '../chains/config';
 
+export const walletInApp = inAppWallet({
+  auth: {
+    options: [`email`, `google`, `telegram`],
+  },
+});
+
 export const wallets = [
   createWallet(`io.metamask`),
   createWallet(`com.coinbase.wallet`, {
@@ -16,11 +22,7 @@ export const wallets = [
       callbackURL: `${process.env.NEXT_PUBLIC_SITE_URL}/account`,
     },
   }),
-  inAppWallet({
-    auth: {
-      options: [`email`, `google`, `telegram`],
-    },
-  }),
+  walletInApp,
   walletConnect(),
 ];
 
