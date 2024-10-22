@@ -104,6 +104,31 @@ const Aframe = ({ data = [] }: any) => {
   if (!permissions.geoPermission.geo) {
     return <Loader />;
   }
+  const generateItem = async () => {
+    if (typeof window !== `undefined` && `geolocation` in navigator) {
+      navigator.geolocation.getCurrentPosition(async (position) => {
+        const { latitude, longitude } = position.coords;
+        try {
+          const response = await fetch(`/custom/generate-item`, {
+            method: `POST`,
+            headers: {
+              'Content-Type': `application/json`,
+            },
+            body: JSON.stringify({ lat: latitude, lng: longitude }),
+            credentials: `include`,
+          });
+          if (!response.ok) {
+            throw new Error(`Failed to generate item`);
+          }
+          const data = await response.json();
+          console.log(`Generated item:`, data);
+        } catch (error) {
+          console.error(`Error generating item:`, error);
+        }
+      });
+    }
+  };
+  generateItem();
 
   return (
     <AFrameScene
