@@ -1,6 +1,6 @@
 'use client';
 
-import { ConnectButton } from 'thirdweb/react';
+import { ConnectButton, AutoConnect } from 'thirdweb/react';
 import { wallets } from '@/libs/web3/thirdweb/wallets';
 import { useRouter } from 'next/navigation';
 import { thirdwebChains } from '../../chains/config';
@@ -18,96 +18,92 @@ export const SignInButton = () => {
   const { data: walletName, client } = useWalletName();
 
   return (
-    <Button type="default" className="button-wallet">
-      <ConnectButton
+    <>
+      <AutoConnect
         client={client}
         wallets={wallets}
-        theme={`dark`}
         chain={thirdwebChains[0]}
-        chains={thirdwebChains}
-        connectButton={{
-          label: `Connect`,
-          style: {
-            backgroundColor: `transparent !important`,
-          },
-        }}
-        detailsButton={{
-          style: {
-            padding: `0px !important`,
-            margin: `0px !important`,
-          },
-          render() {
-            return <>{walletName}</>;
-          },
-        }}
-        // detailsButton={{
-        //   style: {
-        //     background: `transparent !important`,
-        //   },
-        //   render: () => (
-        //     <button type="button">
-        //       {toEllipsis(activeWallet?.getAccount()?.address, 6, 6) ||
-        //         `Connect Wallet`}
-        //     </button>
-        //   ),
-        // }}
-        signInButton={{
-          label: `Sign In`,
-        }}
-        connectModal={{
-          size: `compact`,
-          showThirdwebBranding: false,
-        }}
-        auth={{
-          getLoginPayload: async ({ address, chainId }) => {
-            const { data } = await fetch(
-              `/api/users/auth?address=${address}&chainId=${chainId}`,
-              {
+      />
+      <Button type="default" className="button-wallet">
+        <ConnectButton
+          client={client}
+          wallets={wallets}
+          theme={`dark`}
+          chain={thirdwebChains[0]}
+          chains={thirdwebChains}
+          connectButton={{
+            label: `Connect`,
+            style: {
+              backgroundColor: `transparent !important`,
+            },
+          }}
+          detailsButton={{
+            style: {
+              padding: `0px !important`,
+              margin: `0px !important`,
+            },
+            render() {
+              return <>{walletName}</>;
+            },
+          }}
+          signInButton={{
+            label: `Sign In`,
+          }}
+          connectModal={{
+            size: `compact`,
+            showThirdwebBranding: false,
+          }}
+          auth={{
+            getLoginPayload: async ({ address, chainId }) => {
+              const { data } = await fetch(
+                `/api/users/auth?address=${address}&chainId=${chainId}`,
+                {
+                  method: `GET`,
+                },
+              ).then((res) => res.json());
+
+              return data;
+            },
+
+            doLogin: async (params) => {
+              const { data } = await fetch(`/api/users/auth`, {
+                method: `POST`,
+                headers: {
+                  'Content-Type': `application/json`,
+                },
+                body: JSON.stringify(params),
+              }).then((res) => res.json());
+
+              if (data.token) {
+                setTimeout(() => {
+                  router.push(`/account`);
+                  router.refresh();
+                }, 500);
+              }
+            },
+
+            isLoggedIn: async () => {
+              const { data } = await fetch(`/api/users/auth/account`, {
                 method: `GET`,
-              },
-            ).then((res) => res.json());
+              }).then((res) => res.json());
 
-            return data;
-          },
+              return data.isLoggedIn;
+            },
 
-          doLogin: async (params) => {
-            const { data } = await fetch(`/api/users/auth`, {
-              method: `POST`,
-              headers: {
-                'Content-Type': `application/json`,
-              },
-              body: JSON.stringify(params),
-            }).then((res) => res.json());
+            doLogout: async () => {
+              await fetch(`/api/users/auth/logout`, {
+                method: `POST`,
+              }).then((res) => res.json());
 
-            if (data.token) {
               setTimeout(() => {
-                router.push(`/account`);
+                router.push(`/`);
                 router.refresh();
               }, 500);
-            }
-          },
-
-          isLoggedIn: async () => {
-            const { data } = await fetch(`/api/users/auth/account`, {
-              method: `GET`,
-            }).then((res) => res.json());
-
-            return data.isLoggedIn;
-          },
-
-          doLogout: async () => {
-            await fetch(`/api/users/auth/logout`, {
-              method: `POST`,
-            }).then((res) => res.json());
-
-            setTimeout(() => {
-              router.push(`/`);
-              router.refresh();
-            }, 500);
-          },
-        }}
-      />
-    </Button>
+            },
+          }}
+        />
+      </Button>
+    </>
   );
 };
 
