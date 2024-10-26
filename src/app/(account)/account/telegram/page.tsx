@@ -58,7 +58,7 @@ function TelegramLoginContent() {
   );
 }
 
-export default async function Account() {
+export default function Account() {
   return (
     <Card cardVariant={`secondary`} className="bg-zinc-900">
       <TelegramLoginContent />
