@@ -15,31 +15,28 @@ function TelegramLoginContent() {
   const searchParams = useSearchParams();
   const { connect } = useConnect();
   const router = useRouter();
-  const [params, setParams] = useState({ signature: ``, message: `` });
+  const [params, setParams] = useState({ jwt: `` });
 
   useEffect(() => {
-    const signature = searchParams.get(`signature`) || ``;
-    const message = searchParams.get(`message`) || ``;
-    setParams({ signature, message });
-    console.log(`SearchParams:`, { signature, message });
+    const jwt = searchParams.get(`jwt`) || ``;
+    setParams({ jwt });
+    console.log(`SearchParams:`, { jwt });
   }, [searchParams]);
 
   useQuery({
-    queryKey: [`telegram-login`, params.signature, params.message],
+    queryKey: [`telegram-login`, params.jwt],
     queryFn: async () => {
-      if (!params.signature || !params.message) {
-        console.error(`Missing signature or message`);
+      if (!params.jwt) {
+        console.error(`Missing jwt`);
         return false;
       }
       try {
         await connect(async () => {
           await walletInApp.connect({
             client,
-            strategy: `auth_endpoint`,
-            payload: JSON.stringify({
-              signature: params.signature,
-              message: params.message,
-            }),
+            strategy: `jwt`,
+            jwt: params.jwt,
+            /// @todo: public key to env.variable
             encryptionKey: `AUTH_PHRASE`,
           });
           return walletInApp;
@@ -51,7 +48,7 @@ function TelegramLoginContent() {
         return false;
       }
     },
-    enabled: !!params.signature && !!params.message,
+    enabled: !!params.jwt,
   });
 
   return (
